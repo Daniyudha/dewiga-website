@@ -1,88 +1,232 @@
 @extends('layouts.app')
 
-@section('content')
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-12 d-flex justify-content-between">
-                    <h1 class="m-0">{{ __('Form Create') }}</h1>
-                    <a href="{{ route('admin.blogs.index') }}" class="btn btn-primary"> <i class="fa fa-arrow-left"></i> </a>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+@section('title', 'Create Blog - Admin Dewiga')
 
-    <!-- Main content -->
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card p-3">
-                        <form method="post" action="{{ route('admin.blogs.store') }}" enctype="multipart/form-data">
-                            @csrf 
-                            <div class="form-group row border-bottom pb-4">
-                                <label for="title" class="col-sm-2 col-form-label">Title</label>
-                                <div class="col-sm-10">
-                                <input type="text" class="form-control" name="title" value="{{ old('title') }}" id="title" placeholder="example: 5 tips travel">
-                                </div>
-                            </div>
-                            <div class="form-group row border-bottom pb-4">
-                                <label for="category_id" class="col-sm-2 col-form-label">Category</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control" name="category_id" id="category_id">
-                                        @foreach($categories as $category)
-                                            <option {{ (old('category_id') == $category->id) ? 'selected' : '' }} value="{{ $category->id }}">{{ $category->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row border-bottom pb-4">
-                                <label for="image" class="col-sm-2 col-form-label">Image</label>
-                                <div class="col-sm-10">
-                                    <input type="file" name="image" class="form-control" id="image">
-                                </div>
-                            </div>
-                            <div class="form-group row border-bottom pb-4">
-                                <label for="excerpt" class="col-sm-2 col-form-label">Excerpt</label>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" name="excerpt" id="excerpt" cols="30" rows="5" maxlength="160" placeholder="max: 160 character">{{ old('excerpt') }}</textarea>
-                                </div>
-                            </div>
-                            <div class="form-group row border-bottom pb-4">
-                                <label for="description" class="col-sm-2 col-form-label">Description</label>
-                                <div class="col-sm-10">
-                                    <textarea class="form-control" name="description" id="description" cols="30" rows="7">{{ old('description') }}</textarea>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-success">Save</button>
-                        </form>
+@push('styles')
+<link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.css">
+@endpush
+
+@section('content')
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+        <div>
+            <h1 class="text-2xl font-heading font-bold text-gray-900">{{ __('Create Blog') }}</h1>
+            <p class="text-sm text-gray-500 mt-1">Write a new blog article</p>
+        </div>
+        <a href="{{ route('admin.blogs.index') }}" class="admin-btn-secondary">
+            <i class="fas fa-arrow-left"></i>
+            {{ __('Back') }}
+        </a>
+    </div>
+
+    {{-- Form Card --}}
+    <div class="admin-card">
+        <div class="admin-card-body">
+            <form method="post" action="{{ route('admin.blogs.store') }}" enctype="multipart/form-data" class="space-y-6" novalidate>
+                @csrf
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {{-- Title (Indonesia) --}}
+                    <div class="admin-form-group">
+                        <label for="title_id" class="admin-form-label">
+                            {{ __('Title') }} (Indonesia) <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="title_id" name="title_id" value="{{ old('title_id') }}"
+                               class="admin-form-input @error('title_id') error @enderror"
+                               placeholder="e.g. Menjelajahi Surga Tersembunyi" required>
+                        @error('title_id')
+                            <p class="admin-form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Title (English) --}}
+                    <div class="admin-form-group">
+                        <label for="title_en" class="admin-form-label">
+                            {{ __('Title') }} (English) <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="title_en" name="title_en" value="{{ old('title_en') }}"
+                               class="admin-form-input @error('title_en') error @enderror"
+                               placeholder="e.g. Exploring the Hidden Paradise" required>
+                        @error('title_en')
+                            <p class="admin-form-error">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
-            </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {{-- Category --}}
+                    <div class="admin-form-group">
+                        <label for="category_id" class="admin-form-label">{{ __('Category') }} <span class="text-red-500">*</span></label>
+                        <select id="category_id" name="category_id" class="admin-form-select @error('category_id') error @enderror" required>
+                            <option value="">{{ __('Select Category') }}</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('category_id')
+                            <p class="admin-form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Image --}}
+                    <div class="admin-form-group">
+                        <label for="image" class="admin-form-label">{{ __('Image') }} <span class="text-red-500">*</span></label>
+                        <input type="file" id="image" name="image"
+                               class="admin-form-input @error('image') error @enderror" required>
+                        @error('image')
+                            <p class="admin-form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {{-- Excerpt (Indonesia) --}}
+                    <div class="admin-form-group">
+                        <label for="excerpt_id" class="admin-form-label">
+                            {{ __('Excerpt') }} (Indonesia) <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="excerpt_id" name="excerpt_id" value="{{ old('excerpt_id') }}"
+                               class="admin-form-input @error('excerpt_id') error @enderror"
+                               placeholder="Brief description (ID)" maxlength="160" required>
+                        <p class="text-xs text-gray-400 mt-1">Maximum 160 characters</p>
+                        @error('excerpt_id')
+                            <p class="admin-form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Excerpt (English) --}}
+                    <div class="admin-form-group">
+                        <label for="excerpt_en" class="admin-form-label">
+                            {{ __('Excerpt') }} (English) <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="excerpt_en" name="excerpt_en" value="{{ old('excerpt_en') }}"
+                               class="admin-form-input @error('excerpt_en') error @enderror"
+                               placeholder="Brief description (EN)" maxlength="160" required>
+                        <p class="text-xs text-gray-400 mt-1">Maximum 160 characters</p>
+                        @error('excerpt_en')
+                            <p class="admin-form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                {{-- Description (Indonesia) --}}
+                <div class="admin-form-group">
+                    <label for="description_id" class="admin-form-label">
+                        {{ __('Description') }} (Indonesia) <span class="text-red-500">*</span>
+                    </label>
+                    <textarea id="description_id" name="description_id" class="admin-form-textarea @error('description_id') error @enderror"
+                              placeholder="Write your blog content in Indonesian..." required>{{ old('description_id') }}</textarea>
+                    @error('description_id')
+                        <p class="admin-form-error">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Description (English) --}}
+                <div class="admin-form-group">
+                    <label for="description_en" class="admin-form-label">
+                        {{ __('Description') }} (English) <span class="text-red-500">*</span>
+                    </label>
+                    <textarea id="description_en" name="description_en" class="admin-form-textarea @error('description_en') error @enderror"
+                              placeholder="Write your blog content in English..." required>{{ old('description_en') }}</textarea>
+                    @error('description_en')
+                        <p class="admin-form-error">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Submit --}}
+                <div class="flex items-center gap-3 pt-2">
+                    <button type="submit" class="admin-btn-success">
+                        <i class="fas fa-save"></i>
+                        {{ __('Save') }}
+                    </button>
+                    <a href="{{ route('admin.blogs.index') }}" class="admin-btn-secondary">
+                        {{ __('Cancel') }}
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
-    <!-- /.content -->
 @endsection
 
-
-@section('styles')
-<style>
-.ck-editor__editable_inline {
-    min-height: 200px;
-}
-</style>
-@endsection
-
-@section('scripts')
-<script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
+@push('scripts')
+<script src="https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.umd.js"></script>
 <script>
-    ClassicEditor
-        .create( document.querySelector( '#description' ) )
-        .catch( error => {
-            console.error( error );
-        } );
+(function() {
+    'use strict';
+
+    var ckEditors = [];
+
+    function getPlugin(name) {
+        try {
+            return CKEDITOR[name];
+        } catch (e) {
+            return undefined;
+        }
+    }
+
+    function initEditor(elementId) {
+        try {
+            if (typeof CKEDITOR === 'undefined') {
+                console.warn('CKEditor not available');
+                return;
+            }
+            var EditorClass = CKEDITOR.ClassicEditor;
+            if (!EditorClass) {
+                console.warn('ClassicEditor not available');
+                return;
+            }
+            var el = document.querySelector('#' + elementId);
+            if (!el) {
+                console.warn('Element not found:', elementId);
+                return;
+            }
+            EditorClass.create(el, {
+                plugins: [
+                    'Essentials', 'Bold', 'Italic', 'Paragraph', 'Heading',
+                    'List', 'Link', 'BlockQuote',
+                    'Image', 'ImageUpload', 'ImageToolbar', 'ImageStyle',
+                    'SimpleUploadAdapter'
+                ].map(getPlugin).filter(Boolean),
+                toolbar: [ 'undo', 'redo', '|', 'bold', 'italic', '|', 'heading', '|', 'bulletedList', 'numberedList', '|', 'link', 'blockQuote', '|', 'imageUpload' ],
+                image: {
+                    toolbar: [ 'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight' ]
+                },
+                simpleUpload: {
+                    uploadUrl: '{{ route('admin.upload.image') }}',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    }
+                }
+            }).then(function(instance) {
+                ckEditors.push(instance);
+            }).catch(function(err) {
+                console.error('CKEditor init error for', elementId, ':', err);
+            });
+        } catch (err) {
+            console.error('CKEditor setup error for', elementId, ':', err);
+        }
+    }
+
+    initEditor('description_id');
+    initEditor('description_en');
+
+    setTimeout(function() {
+        var form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function() {
+                ckEditors.forEach(function(instance) {
+                    try {
+                        instance.updateSourceElement();
+                    } catch (e) {
+                        console.error('CKEditor sync error:', e);
+                    }
+                });
+            });
+        }
+    }, 500);
+})();
 </script>
-@endsection
+@endpush

@@ -1,2 +1,15 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# Sitemaps
+Sitemap: {{ url('/sitemap.xml') }}
+
+# Disallow admin paths
+Disallow: /admin
+Disallow: /login
+Disallow: /register
+Disallow: /password
+Disallow: /api
+
+# Crawl-delay
+Crawl-delay: 10

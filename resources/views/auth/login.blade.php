@@ -1,63 +1,91 @@
 @extends('layouts.guest')
 
-@section('content')
-    <div class="card-body login-card-body">
-        <p class="login-box-msg">Welcome to Login Page</p>
-        {{-- <p class="login-box-msg">{{ __('Login') }}</p> --}}
+@section('title', 'Login - Admin Dewiga')
 
-        <form action="{{ route('login') }}" method="post">
+@section('content')
+    <div class="space-y-6">
+        <div class="text-center">
+            <h2 class="text-xl font-heading font-bold text-gray-800">{{ __('Welcome Back') }}</h2>
+            <p class="text-sm text-gray-500 mt-1">{{ __('Sign in to your admin account') }}</p>
+        </div>
+
+        <form action="{{ route('login') }}" method="post" class="space-y-4">
             @csrf
 
-            <div class="input-group mb-3">
-                <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="{{ __('Email') }}" required autofocus>
-                <div class="input-group-append">
-                    <div class="input-group-text">
-                        <span class="fas fa-envelope"></span>
+            {{-- Email --}}
+            <div class="admin-form-group">
+                <label for="email" class="admin-form-label">{{ __('Email') }}</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                        <i class="fas fa-envelope"></i>
                     </div>
+                    <input type="email" id="email" name="email"
+                           class="admin-form-input pl-10 @error('email') error @enderror"
+                           placeholder="your@email.com" required autofocus>
                 </div>
                 @error('email')
-                <span class="error invalid-feedback">
-                    {{ $message }}
-                </span>
+                    <p class="admin-form-error">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="input-group mb-3">
-                <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="{{ __('Password') }}" required>
-                <div class="input-group-append">
-                    <div class="input-group-text">
-                        <span class="fas fa-lock"></span>
+            {{-- Password --}}
+            <div class="admin-form-group">
+                <label for="password" class="admin-form-label">{{ __('Password') }}</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                        <i class="fas fa-lock"></i>
                     </div>
+                    <input type="password" id="password" name="password"
+                           class="admin-form-input pl-10 pr-10 @error('password') error @enderror"
+                           placeholder="Enter your password" required>
+                    <button type="button" id="togglePassword"
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                    </button>
                 </div>
                 @error('password')
-                <span class="error invalid-feedback">
-                    {{ $message }}
-                </span>
+                    <p class="admin-form-error">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="row">
-                <div class="col-8">
-                    <div class="icheck-primary">
-                        <input type="checkbox" id="remember" name="remember">
-                        <label for="remember">
-                            {{ __('Remember Me') }}
-                        </label>
-                    </div>
-                </div>
-                <!-- /.col -->
-                <div class="col-4">
-                    <button type="submit" class="btn btn-primary btn-block">{{ __('Login') }}</button>
-                </div>
-                <!-- /.col -->
+            @section('scripts')
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const toggleBtn = document.getElementById('togglePassword');
+                        const passwordInput = document.getElementById('password');
+                        const icon = document.getElementById('togglePasswordIcon');
+
+                        if (toggleBtn && passwordInput && icon) {
+                            toggleBtn.addEventListener('click', function() {
+                                const isPassword = passwordInput.type === 'password';
+                                passwordInput.type = isPassword ? 'text' : 'password';
+                                icon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+                            });
+                        }
+                    });
+                </script>
+            @endsection
+
+            {{-- Remember Me --}}
+            <div class="flex items-center gap-2">
+                <input type="checkbox" id="remember" name="remember"
+                       class="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500">
+                <label for="remember" class="text-sm text-gray-600 cursor-pointer">{{ __('Remember Me') }}</label>
             </div>
+
+            {{-- Submit --}}
+            <button type="submit" class="admin-btn-primary w-full">
+                <i class="fas fa-sign-in-alt"></i>
+                {{ __('Login') }}
+            </button>
         </form>
 
         @if (Route::has('password.request'))
-            <p class="mb-1">
-                <a href="{{ route('password.request') }}">{{ __('Forgot Your Password?') }}</a>
-            </p>
+            <div class="text-center">
+                <a href="{{ route('password.request') }}" class="text-sm text-primary-600 hover:text-primary-700 hover:underline">
+                    {{ __('Forgot Your Password?') }}
+                </a>
+            </div>
         @endif
     </div>
-    <!-- /.login-card-body -->
 @endsection

@@ -35,8 +35,20 @@ class TravelPackageController extends Controller
     public function store(TravelPackageRequest $request)
     {
         if($request->validated()) {
-            $slug = Str::slug($request->location, '-');
+            $slug = Str::slug($request->location_en ?? $request->location, '-');
             $travel_package = TravelPackage::create($request->validated() + ['slug' => $slug ]);
+
+            // Handle gallery image upload
+            if($request->hasFile('image')) {
+                $images = $request->file('image')->store(
+                    'travel_package/gallery', 'public'
+                );
+                Gallery::create([
+                    'name' => $request->image_name ?? 'Gallery Image',
+                    'images' => $images,
+                    'travel_package_id' => $travel_package->id
+                ]);
+            }
         }
 
         return redirect()->route('admin.travel_packages.edit', [$travel_package])->with([
@@ -61,7 +73,7 @@ class TravelPackageController extends Controller
     public function update(TravelPackageRequest $request, TravelPackage $travel_package)
     {
         if($request->validated()) {
-            $slug = Str::slug($request->location, '-');
+            $slug = Str::slug($request->location_en ?? $request->location, '-');
             $travel_package->update($request->validated() + ['slug' => $slug]);
         }
 

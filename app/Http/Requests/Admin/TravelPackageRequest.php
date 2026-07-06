@@ -24,19 +24,25 @@ class TravelPackageRequest extends FormRequest
         switch($this->method()) {
             case 'POST' : {
                 return [
-                    'type' => 'required',
-                    'location' => 'required',
+                    'type_id' => 'required',
+                    'type_en' => 'required',
+                    'location_id' => 'required',
+                    'location_en' => 'required',
                     'price' => 'required',
-                    'description' => 'required'
+                    'description_id' => 'required',
+                    'description_en' => 'required'
                 ];
             }
             case 'PUT':
             case 'PATCH': {
                 return [
-                    'type' => 'required',
-                    'location' => 'required',
+                    'type_id' => 'required',
+                    'type_en' => 'required',
+                    'location_id' => 'required',
+                    'location_en' => 'required',
                     'price' => 'required',
-                    'description' => 'required'
+                    'description_id' => 'required',
+                    'description_en' => 'required'
                 ];
             }
         }

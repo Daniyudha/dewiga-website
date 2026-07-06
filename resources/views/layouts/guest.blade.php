@@ -1,44 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Desa Wisata Gabugan | Natural Rural Feel</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@yield('title', 'Desa Wisata Gabugan - Admin Login')</title>
 
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('css/fontawesome.min.css') }}">
-    <!-- icheck bootstrap -->
-    <link rel="stylesheet" href="{{ asset('css/icheck-bootstrap.min.css') }}">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
-    <!-- custom style -->
-    <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
     {{-- Favicon --}}
     <link rel="shortcut icon" href="{{ asset('frontend/assets/favicon/favicon.ico') }}" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('frontend/assets/favicon/apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('frontend/assets/favicon/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('frontend/assets/favicon/favicon-16x16.png') }}">
     <link rel="manifest" href="{{ asset('frontend/assets/favicon/site.webmanifest') }}">
-</head>
-<body class="hold-transition login-page">
-<div class="login-box">
-    {{-- <div class="login-logo">
-        <a href="/">Dewiga Admin</a>
-    </div> --}}
-    <!-- /.login-logo -->
-    <div class="card">
-        @yield('content')
-    </div>
-</div>
-<!-- /.login-box -->
 
-@vite('resources/js/app.js')
-<!-- Bootstrap 4 -->
-<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-<!-- AdminLTE App -->
-<script src="{{ asset('js/adminlte.min.js') }}" defer></script>
+    {{-- Font Awesome --}}
+    <link rel="stylesheet" href="{{ asset('css/fontawesome.min.css') }}">
+
+    @vite('resources/css/admin.css')
+
+    @yield('styles')
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            {{-- Header with brand --}}
+            <div class="auth-card-header">
+                <a href="{{ url('/') }}" class="inline-flex items-center gap-3">
+                    <img src="{{ asset('images/brand-logo.png') }}" alt="Dewiga"
+                         class="w-10 h-10 brightness-0 invert">
+                    <span class="font-heading text-2xl font-bold text-white">DEWIGA</span>
+                </a>
+                <p class="text-primary-100 text-sm mt-1">Admin Panel</p>
+            </div>
+
+            {{-- Content --}}
+            <div class="auth-card-body">
+                @yield('content')
+            </div>
+
+            {{-- Footer --}}
+            <div class="border-t border-gray-100 px-6 py-4 text-center">
+                <p class="text-xs text-gray-400">
+                    &copy; {{ date('Y') }} Desa Wisata Gabugan. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    @vite('resources/js/app.js')
+    @yield('scripts')
 </body>
 </html>

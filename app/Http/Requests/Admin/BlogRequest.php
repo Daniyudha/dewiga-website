@@ -24,20 +24,26 @@ class BlogRequest extends FormRequest
         switch($this->method()) {
             case 'POST' : {
                 return [
-                    'title' => 'required',
-                    'excerpt' => 'required',
+                    'title_id' => 'required',
+                    'title_en' => 'required',
+                    'excerpt_id' => 'required',
+                    'excerpt_en' => 'required',
                     'image' => ['required', 'image', 'mimes:png,jpg,jpeg'],
-                    'description' => 'required',
+                    'description_id' => 'required',
+                    'description_en' => 'required',
                     'category_id' => 'required'
                 ];
             }
             case 'PUT':
             case 'PATCH': {
                 return [
-                    'title' => 'required',
-                    'excerpt' => 'required',
+                    'title_id' => 'required',
+                    'title_en' => 'required',
+                    'excerpt_id' => 'required',
+                    'excerpt_en' => 'required',
                     'image' => ['image', 'mimes:png,jpg,jpeg'],
-                    'description' => 'required',
+                    'description_id' => 'required',
+                    'description_en' => 'required',
                     'category_id' => 'required'
                 ];
             }

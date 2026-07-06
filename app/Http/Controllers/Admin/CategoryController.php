@@ -34,7 +34,7 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request)
     {
         if($request->validated()) {
-            $slug = Str::slug($request->name, '-');
+            $slug = Str::slug($request->name_en ?? $request->name, '-');
             category::create($request->validated() + ['slug' => $slug]);
         }
 
@@ -66,7 +66,7 @@ class CategoryController extends Controller
     public function update(CategoryRequest $request, Category $category)
     {
         if($request->validated()) {
-            $slug = Str::slug($request->name, '-');
+            $slug = Str::slug($request->name_en ?? $request->name, '-');
             $category->update($request->validated() + ['slug' => $slug]);
         }
 

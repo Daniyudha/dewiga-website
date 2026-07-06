@@ -24,13 +24,15 @@ class CategoryRequest extends FormRequest
         switch($this->method()) {
             case 'POST' : {
                 return [
-                    'name' => ['required','unique:categories']
+                    'name_id' => 'required',
+                    'name_en' => ['required','unique:categories,name_en']
                 ];
             }
             case 'PUT':
             case 'PATCH': {
                 return [
-                    'name' => ['required','unique:categories,name,'. $this->route()->category->id]
+                    'name_id' => 'required',
+                    'name_en' => ['required','unique:categories,name_en,'. $this->route()->category->id]
                 ];
             }
         }

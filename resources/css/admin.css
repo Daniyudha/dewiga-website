@@ -1,0 +1,401 @@
+/* ===== Google Fonts ===== */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== Base Layer ===== */
+@layer base {
+    body {
+        font-family: 'Poppins', sans-serif;
+        @apply bg-gray-100 text-gray-800 antialiased;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Playfair Display', serif;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+        @apply bg-gray-200;
+    }
+    ::-webkit-scrollbar-thumb {
+        @apply bg-gray-400 rounded-full;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        @apply bg-gray-500;
+    }
+}
+
+/* ===== Components ===== */
+@layer components {
+    /* --- Admin Sidebar --- */
+    .admin-sidebar {
+        @apply fixed top-0 left-0 z-40 h-full w-64 bg-primary-800 text-white
+               transform -translate-x-full transition-all duration-300 ease-in-out
+               lg:translate-x-0;
+    }
+    .admin-sidebar.open {
+        @apply translate-x-0;
+    }
+
+    /* Minimized sidebar state */
+    .admin-sidebar.minimized {
+        @apply w-[68px];
+    }
+    .admin-sidebar.minimized .nav-link span:not(.nav-icon) {
+        @apply hidden;
+    }
+    .admin-sidebar.minimized .nav-link {
+        @apply justify-center px-0;
+    }
+    .admin-sidebar.minimized .nav-link .nav-icon {
+        @apply w-10 h-10 flex items-center justify-center rounded-lg text-lg;
+    }
+    .admin-sidebar.minimized .nav-link:hover .nav-icon {
+        @apply bg-primary-700;
+    }
+    .admin-sidebar.minimized .treeview-toggle .treeview-icon {
+        @apply hidden;
+    }
+    .admin-sidebar.minimized .nav-treeview {
+        @apply hidden;
+    }
+    .admin-sidebar.minimized .brand-text {
+        @apply hidden;
+    }
+    .admin-sidebar.minimized .brand-logo {
+        @apply mx-auto;
+    }
+    .admin-sidebar.minimized .sidebar-user-name,
+    .admin-sidebar.minimized .sidebar-user-role {
+        @apply hidden;
+    }
+    .admin-sidebar.minimized .sidebar-user-avatar {
+        @apply mx-auto;
+    }
+    .admin-sidebar.minimized .sidebar-footer {
+        @apply hidden;
+    }
+    .admin-sidebar.minimized .sidebar-brand {
+        @apply justify-center px-0;
+    }
+
+    /* Main wrapper expanded state */
+    .main-wrapper {
+        @apply min-h-screen flex flex-col transition-all duration-300;
+    }
+    .main-wrapper.sidebar-expanded {
+        @apply lg:ml-64;
+    }
+    .main-wrapper.sidebar-minimized {
+        @apply lg:ml-[68px];
+    }
+
+    .sidebar-overlay {
+        @apply fixed inset-0 bg-black/50 z-30 lg:hidden;
+    }
+
+    /* --- Sidebar Navigation --- */
+    .nav-sidebar .nav-item {
+        @apply mb-0.5;
+    }
+    .nav-sidebar .nav-link {
+        @apply flex items-center gap-3 px-4 py-2.5 text-sm text-white/70 rounded-lg 
+               transition-colors duration-200 hover:bg-primary-700 hover:text-white;
+    }
+    .nav-sidebar .nav-link.active {
+        @apply bg-primary-600 text-white font-medium shadow-sm;
+    }
+    .nav-sidebar .nav-link .nav-icon {
+        @apply w-5 h-5 flex-shrink-0;
+    }
+    .nav-sidebar .nav-treeview {
+        @apply ml-8 pl-2 border-l border-primary-600/40 space-y-0.5 overflow-hidden 
+               transition-all duration-300 max-h-0;
+    }
+    .nav-sidebar .nav-treeview.open {
+        @apply max-h-96 pb-1;
+    }
+    .nav-sidebar .nav-treeview .nav-link {
+        @apply text-xs py-2 text-white/60 hover:text-white;
+    }
+    .nav-sidebar .nav-treeview .nav-link.active {
+        @apply text-white font-medium;
+    }
+
+    /* --- Admin Cards --- */
+    .admin-card {
+        @apply bg-white rounded-xl shadow-card border border-gray-100 overflow-hidden;
+    }
+    .admin-card-header {
+        @apply px-5 py-4 border-b border-gray-100 flex items-center justify-between;
+    }
+    .admin-card-body {
+        @apply p-5;
+    }
+    .admin-card-footer {
+        @apply px-5 py-3 border-t border-gray-100 bg-gray-50/50;
+    }
+
+    /* --- Admin Buttons --- */
+    .admin-btn {
+        @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium 
+               rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 
+               focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+    .admin-btn-primary {
+        @apply admin-btn bg-primary-600 text-white hover:bg-primary-700 
+               focus:ring-primary-500 shadow-sm;
+    }
+    .admin-btn-secondary {
+        @apply admin-btn bg-white text-gray-700 border border-gray-300 
+               hover:bg-gray-50 focus:ring-primary-500;
+    }
+    .admin-btn-success {
+        @apply admin-btn bg-emerald-600 text-white hover:bg-emerald-700 
+               focus:ring-emerald-500 shadow-sm;
+    }
+    .admin-btn-danger {
+        @apply admin-btn bg-red-600 text-white hover:bg-red-700 
+               focus:ring-red-500 shadow-sm;
+    }
+    .admin-btn-info {
+        @apply admin-btn bg-sky-600 text-white hover:bg-sky-700 
+               focus:ring-sky-500 shadow-sm;
+    }
+    .admin-btn-warning {
+        @apply admin-btn bg-amber-500 text-white hover:bg-amber-600 
+               focus:ring-amber-400 shadow-sm;
+    }
+    .admin-btn-sm {
+        @apply px-3 py-1.5 text-xs;
+    }
+    .admin-btn-xs {
+        @apply px-2 py-1 text-xs;
+    }
+
+    /* --- Admin Tables --- */
+    .admin-table {
+        @apply w-full text-sm;
+    }
+    .admin-table thead {
+        @apply bg-gray-50 border-b border-gray-200;
+    }
+    .admin-table thead th {
+        @apply px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider;
+    }
+    .admin-table tbody {
+        @apply divide-y divide-gray-100;
+    }
+    .admin-table tbody tr {
+        @apply transition-colors duration-150 hover:bg-primary-50/50;
+    }
+    .admin-table tbody td {
+        @apply px-4 py-3 text-sm text-gray-700;
+    }
+
+    /* --- Admin Forms --- */
+    .admin-form-group {
+        @apply space-y-1.5;
+    }
+    .admin-form-label {
+        @apply block text-sm font-medium text-gray-700;
+    }
+    .admin-form-input {
+        @apply w-full px-3 py-2 text-sm border border-gray-300 rounded-lg 
+               transition-colors duration-200
+               focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500
+               placeholder:text-gray-400;
+    }
+    .admin-form-input.error {
+        @apply border-red-400 focus:ring-red-500 focus:border-red-500;
+    }
+    .admin-form-textarea {
+        @apply admin-form-input resize-y min-h-[100px];
+    }
+    .admin-form-select {
+        @apply admin-form-input appearance-none bg-white;
+    }
+    .admin-form-error {
+        @apply text-xs text-red-500 mt-1;
+    }
+
+    /* --- Admin Badges --- */
+    .admin-badge {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    }
+    .admin-badge-green {
+        @apply admin-badge bg-emerald-100 text-emerald-800;
+    }
+    .admin-badge-red {
+        @apply admin-badge bg-red-100 text-red-800;
+    }
+    .admin-badge-yellow {
+        @apply admin-badge bg-amber-100 text-amber-800;
+    }
+    .admin-badge-blue {
+        @apply admin-badge bg-sky-100 text-sky-800;
+    }
+    .admin-badge-gray {
+        @apply admin-badge bg-gray-100 text-gray-800;
+    }
+
+    /* --- Admin Pagination --- */
+    .admin-pagination {
+        @apply flex items-center justify-between gap-4;
+    }
+    .admin-pagination nav {
+        @apply flex items-center gap-1;
+    }
+    .admin-pagination a,
+    .admin-pagination span {
+        @apply inline-flex items-center justify-center w-9 h-9 text-sm rounded-lg 
+               transition-colors duration-200;
+    }
+    .admin-pagination a:not(.disabled) {
+        @apply text-gray-700 hover:bg-primary-100 hover:text-primary-700;
+    }
+    .admin-pagination span:not(.disabled) {
+        @apply text-gray-400 cursor-default;
+    }
+    .admin-pagination .active {
+        @apply bg-primary-600 text-white hover:bg-primary-700;
+    }
+
+    /* --- Flash Messages --- */
+    .admin-alert {
+        @apply px-4 py-3 rounded-lg text-sm flex items-center justify-between gap-3;
+    }
+    .admin-alert-success {
+        @apply admin-alert bg-emerald-50 text-emerald-800 border border-emerald-200;
+    }
+    .admin-alert-danger {
+        @apply admin-alert bg-red-50 text-red-800 border border-red-200;
+    }
+    .admin-alert-warning {
+        @apply admin-alert bg-amber-50 text-amber-800 border border-amber-200;
+    }
+    .admin-alert-info {
+        @apply admin-alert bg-sky-50 text-sky-800 border border-sky-200;
+    }
+
+    /* --- Profile Dropdown --- */
+    .profile-dropdown {
+        @apply absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 
+               py-1 z-50 opacity-0 invisible transition-all duration-200 
+               transform -translate-y-1;
+    }
+    .profile-dropdown.open {
+        @apply opacity-100 visible translate-y-0;
+    }
+    .profile-dropdown a {
+        @apply block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors;
+    }
+    .profile-dropdown .divider {
+        @apply border-t border-gray-100 my-1;
+    }
+
+    /* --- CKEditor Fix --- */
+    .ck-editor__editable {
+        min-height: 200px !important;
+    }
+    .ck.ck-editor {
+        @apply w-full;
+    }
+    .ck.ck-toolbar {
+        @apply rounded-t-lg !important;
+    }
+    .ck.ck-editor__main > .ck-editor__editable {
+        @apply rounded-b-lg !important;
+    }
+
+    /* --- Stat Cards --- */
+    .stat-card {
+        @apply bg-white rounded-xl shadow-card p-5 border border-gray-100 
+               flex items-center gap-4 transition-all duration-200 hover:shadow-card-hover;
+    }
+    .stat-card-icon {
+        @apply w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0;
+    }
+    .stat-card-value {
+        @apply text-2xl font-bold font-heading text-gray-900;
+    }
+    .stat-card-label {
+        @apply text-sm text-gray-500;
+    }
+
+    /* --- Guest / Auth Pages --- */
+    .auth-wrapper {
+        @apply min-h-screen flex items-center justify-center bg-gradient-to-br 
+               from-primary-900 via-primary-800 to-primary-700 p-4;
+    }
+    .auth-card {
+        @apply bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden;
+    }
+    .auth-card-header {
+        @apply bg-primary-600 px-6 py-6 text-center;
+    }
+    .auth-card-body {
+        @apply px-6 py-8;
+    }
+
+    /* --- Image Thumbnail --- */
+    .admin-thumb {
+        @apply w-12 h-12 rounded-lg object-cover border border-gray-200;
+    }
+}
+
+/* ===== Utilities ===== */
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}
+
+/* ===== Delete Confirmation Modal ===== */
+.modal-overlay {
+    @apply fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+.modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+.modal-box {
+    @apply bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden;
+    transform: scale(0.95);
+    transition: transform 0.2s ease;
+}
+.modal-overlay.open .modal-box {
+    transform: scale(1);
+}
+.modal-header {
+    @apply px-6 py-4 bg-red-50 border-b border-red-100 flex items-center gap-3;
+}
+.modal-header-icon {
+    @apply w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0;
+}
+.modal-header h3 {
+    @apply font-heading font-semibold text-gray-900;
+}
+.modal-body {
+    @apply px-6 py-5 text-sm text-gray-600;
+}
+.modal-footer {
+    @apply px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-end gap-3;
+}
+
+/* ===== Sidebar Minimize Toggle Icon ===== */
+.sidebar-toggle-btn {
+    @apply p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors;
+}
+.sidebar-toggle-btn:hover {
+    @apply bg-gray-100;
+}

@@ -1,71 +1,74 @@
 @extends('layouts.app')
 
+@section('title', 'Bookings - Admin Dewiga')
+
 @section('content')
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-12 justify-content-between d-flex">
-                    <h1 class="m-0">{{ __('Booking') }}</h1>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+        <div>
+            <h1 class="text-2xl font-heading font-bold text-gray-900">{{ __('Bookings') }}</h1>
+            <p class="text-sm text-gray-500 mt-1">Manage customer bookings</p>
+        </div>
     </div>
-    <!-- /.content-header -->
 
-    <!-- Main content -->
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-
-                    <div class="card">
-                        <div class="card-body p-0">
-
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Number Phone</th>
-                                        <th>Date</th>
-                                        <th>Travel Package</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($bookings as $booking)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $booking->name }}</td>
-                                        <td>{{ $booking->email }}</td>
-                                        <td>{{ $booking->number_phone }}</td>
-                                        <td>{{ $booking->date }}</td>
-                                        <td>{{ $booking->travel_package->location }}</td>
-                                        <td>
-                                            <form onclick="return confirm('are you sure ?');" class="d-inline-block" action="{{ route('admin.bookings.destroy', [$booking]) }}" method="post">
-                                                @csrf 
-                                                @method('delete')
-                                                <button class="btn btn-sm btn-danger"> <i class="fa fa-trash"></i> </button>
-                                            </form>                              
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.card-body -->
-
-                        <div class="card-footer clearfix">
-                            {{ $bookings->links() }}
-                        </div>
-                    </div>
-
-                </div>
+    {{-- Table Card --}}
+    <div class="admin-card">
+        <div class="overflow-x-auto">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>{{ __('Name') }}</th>
+                        <th>{{ __('Email') }}</th>
+                        <th>{{ __('Number Phone') }}</th>
+                        <th>{{ __('Date') }}</th>
+                        <th>{{ __('Travel Package') }}</th>
+                        <th class="text-center">{{ __('Action') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($bookings as $booking)
+                        <tr>
+                            <td class="font-medium text-gray-900">{{ $loop->iteration }}</td>
+                            <td class="font-medium">{{ $booking->name }}</td>
+                            <td class="text-gray-500">{{ $booking->email }}</td>
+                            <td>{{ $booking->number_phone }}</td>
+                            <td>{{ \Carbon\Carbon::parse($booking->date)->format('d M Y') }}</td>
+                            <td>
+                                @if($booking->travel_package)
+                                    <span class="admin-badge-blue">{{ $booking->travel_package->type }} - {{ $booking->travel_package->location }}</span>
+                                @else
+                                    <span class="admin-badge-gray">{{ __('General Inquiry') }}</span>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="flex items-center justify-center">
+                                    <form method="POST" action="{{ route('admin.bookings.destroy', [$booking]) }}" class="inline">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="button" onclick="showDeleteModal(this.closest('form'))" class="admin-btn-danger admin-btn-sm">
+                                            <i class="fas fa-trash"></i>
+                                            {{ __('Delete') }}
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center py-8 text-gray-500">
+                                <i class="fas fa-inbox text-3xl text-gray-300 block mb-2"></i>
+                                {{ __('No bookings found.') }}
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        @if($bookings->hasPages())
+            <div class="admin-card-footer">
+                {{ $bookings->links() }}
             </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+        @endif
     </div>
-    <!-- /.content -->
 @endsection

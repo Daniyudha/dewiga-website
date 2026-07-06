@@ -41,7 +41,7 @@ class BlogController extends Controller
             $image = $request->file('image')->store(
                 'blog/images', 'public'
             );
-            $slug = Str::slug($request->title, '-');
+            $slug = Str::slug($request->title_en ?? $request->title, '-');
 
             Blog::create($request->except('image') + ['slug' => $slug, 'image' => $image]);
         }
@@ -76,7 +76,7 @@ class BlogController extends Controller
     public function update(BlogRequest $request, Blog $blog)
     {
         if($request->validated()) {
-            $slug = Str::slug($request->title, '-');
+            $slug = Str::slug($request->title_en ?? $request->title, '-');
             if($request->image) {
                 File::delete('storage/'. $blog->image);
                 $image = $request->file('image')->store(

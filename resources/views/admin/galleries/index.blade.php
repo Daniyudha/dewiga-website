@@ -1,69 +1,62 @@
 @extends('layouts.app')
 
+@section('title', 'Travel Packages - Admin Dewiga')
+
 @section('content')
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-12 justify-content-between d-flex">
-                    <h1 class="m-0">{{ __('Travel Package') }}</h1>
-                    <a href="{{ route('admin.travel_packages.create') }}" class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> </a>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+        <div>
+            <h1 class="text-2xl font-heading font-bold text-gray-900">{{ __('Travel Packages') }}</h1>
+            <p class="text-sm text-gray-500 mt-1">Manage gallery images for travel packages</p>
+        </div>
     </div>
-    <!-- /.content-header -->
 
-    <!-- Main content -->
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-
-                    <div class="card">
-                        <div class="card-body p-0">
-
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Type</th>
-                                        <th>Location</th>
-                                        <th>Price</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($travel_packages as $travel_package)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $travel_package->type }}</td>
-                                        <td>{{ $travel_package->location }}</td>
-                                        <td>{{ $travel_package->price }}</td>
-                                        <td>
-                                            <a href="{{ route('admin.travel_packages.edit', [$travel_package]) }}" class="btn btn-sm btn-info"> <i class="fa fa-edit"></i> </a>              
-                                            <form onclick="return confirm('are you sure ?');" class="d-inline-block" action="{{ route('admin.travel_packages.destroy', [$travel_package]) }}" method="post">
-                                                @csrf 
-                                                @method('delete')
-                                                <button class="btn btn-sm btn-danger"> <i class="fa fa-trash"></i> </button>
-                                            </form>                              
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- /.card-body -->
-
-                        <div class="card-footer clearfix">
-                            {{ $travel_packages->links() }}
-                        </div>
-                    </div>
-
-                </div>
+    {{-- Table Card --}}
+    <div class="admin-card">
+        <div class="overflow-x-auto">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>{{ __('Type') }}</th>
+                        <th>{{ __('Location') }}</th>
+                        <th>{{ __('Price') }}</th>
+                        <th class="text-center">{{ __('Action') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($travel_packages as $item)
+                        <tr>
+                            <td class="font-medium text-gray-900">{{ $loop->iteration }}</td>
+                            <td>
+                                <span class="admin-badge-blue">{{ $item->type }}</span>
+                            </td>
+                            <td>{{ $item->location }}</td>
+                            <td class="font-medium text-primary-700">{{ formatPrice($item->price) }}</td>
+                            <td>
+                                <div class="flex items-center justify-center">
+                                    <a href="{{ route('admin.travel_packages.edit', [$item]) }}" class="admin-btn-info admin-btn-sm">
+                                        <i class="fas fa-images"></i>
+                                        {{ __('Manage Gallery') }}
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center py-8 text-gray-500">
+                                <i class="fas fa-inbox text-3xl text-gray-300 block mb-2"></i>
+                                {{ __('No travel packages found.') }}
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        @if($travel_packages->hasPages())
+            <div class="admin-card-footer">
+                {{ $travel_packages->links() }}
             </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+        @endif
     </div>
-    <!-- /.content -->
 @endsection

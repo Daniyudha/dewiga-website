@@ -11,6 +11,16 @@ class Category extends Model
 
     protected $guarded = ['id'];
 
+    /**
+     * Get the name in the current locale.
+     */
+    public function getNameAttribute($value)
+    {
+        $locale = app()->getLocale();
+        $localeField = 'name_' . $locale;
+        return $this->attributes[$localeField] ?? $value;
+    }
+
     public function blogs()
     {
         return $this->hasMany(Blog::class);

@@ -1,17 +1,13 @@
 import lodash from 'lodash';
-import Popper from '@popperjs/core/dist/umd/popper.js';
 import jQuery from 'jquery';
 import axios from 'axios';
-import 'bootstrap';
 
 window._ = lodash;
-/**
- * We'll load jQuery and the Bootstrap jQuery plugin which provides support
- * for JavaScript based Bootstrap features such as modals and tabs. This
- * code may be modified to fit the specific needs of your application.
- */
 
-window.Popper = Popper;
+/**
+ * We'll load jQuery which provides support for JavaScript that may depend on it
+ * (e.g., CKEditor initializes properly with jQuery available).
+ */
 window.$ = window.jQuery = jQuery;
 
 /**
@@ -19,7 +15,6 @@ window.$ = window.jQuery = jQuery;
  * to our Laravel back-end. This library automatically handles sending the
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
-
 window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';

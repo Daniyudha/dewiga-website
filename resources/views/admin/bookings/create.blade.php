@@ -1,40 +1,46 @@
 @extends('layouts.app')
 
-@section('content')
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-12 d-flex justify-content-between">
-                    <h1 class="m-0">{{ __('Form Create') }}</h1>
-                    <a href="{{ route('admin.categories.index') }}" class="btn btn-primary"> <i class="fa fa-arrow-left"></i> </a>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+@section('title', 'Create Booking - Admin Dewiga')
 
-    <!-- Main content -->
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card p-3">
-                        <form method="post" action="{{ route('admin.categories.store') }}">
-                            @csrf 
-                            <div class="form-group row border-bottom pb-4">
-                                <label for="name" class="col-sm-2 col-form-label">Name</label>
-                                <div class="col-sm-10">
-                                <input type="text" class="form-control" name="name" value="{{ old('name') }}" id="name" placeholder="example: Bali">
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-success">Save</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+@section('content')
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+        <div>
+            <h1 class="text-2xl font-heading font-bold text-gray-900">{{ __('Create Booking') }}</h1>
+            <p class="text-sm text-gray-500 mt-1">Add a new booking manually</p>
+        </div>
+        <a href="{{ route('admin.bookings.index') }}" class="admin-btn-secondary">
+            <i class="fas fa-arrow-left"></i>
+            {{ __('Back') }}
+        </a>
     </div>
-    <!-- /.content -->
+
+    {{-- Form Card --}}
+    <div class="admin-card">
+        <div class="admin-card-body">
+            <form method="post" action="{{ route('admin.bookings.store') }}" class="space-y-6">
+                @csrf
+
+                <div class="admin-form-group">
+                    <label for="name" class="admin-form-label">{{ __('Name') }} <span class="text-red-500">*</span></label>
+                    <input type="text" id="name" name="name" value="{{ old('name') }}"
+                           class="admin-form-input @error('name') error @enderror"
+                           placeholder="Customer name" required>
+                    @error('name')
+                        <p class="admin-form-error">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="flex items-center gap-3 pt-2">
+                    <button type="submit" class="admin-btn-success">
+                        <i class="fas fa-save"></i>
+                        {{ __('Save') }}
+                    </button>
+                    <a href="{{ route('admin.bookings.index') }}" class="admin-btn-secondary">
+                        {{ __('Cancel') }}
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection

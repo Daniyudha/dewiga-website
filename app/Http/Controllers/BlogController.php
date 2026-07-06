@@ -9,11 +9,20 @@ use App\Models\TravelPackage;
 
 class BlogController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $blogs = Blog::latest()->get();
+        $query = Blog::latest();
 
-        return view('blogs.index', compact('blogs'));
+        if ($request->category) {
+            $query->whereHas('category', function ($q) use ($request) {
+                $q->where('slug', $request->category);
+            });
+        }
+
+        $blogs = $query->get();
+        $categories = Category::all();
+
+        return view('blogs.index', compact('blogs', 'categories'));
     }
 
     public function show(Blog $blog)
@@ -27,12 +36,5 @@ class BlogController extends Controller
         $blog->incrementReadCount();
 
         return view('blogs.show', compact('blog','travel_packages','relatedBlogs','categories'));
-    }
-
-    public function category(Category $category)
-    {
-        $blogs = Blog::where('category_id', $category->id)->get();
-
-        return view('blogs.category', compact('blogs', 'category'));
     }
 }
