@@ -13,16 +13,16 @@
                     <a href="{{ $logo->url }}"
                        target="_blank"
                        rel="noopener noreferrer"
-                       class="opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300"
+                       class="hover:opacity-80 transition-all duration-300 max-w-[160px]"
                        title="{{ $logo->name }}">
-                        <img class="lazy_img max-h-14 md:max-h-16 w-auto"
+                        <img class="lazy_img max-h-14 md:max-h-16 w-full object-contain"
                              data-src="{{ asset('storage/' . $logo->image) }}"
                              alt="{{ $logo->name }}" />
                     </a>
                 @else
-                    <div class="opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300"
+                    <div class="hover:opacity-80 transition-all duration-300 max-w-[160px]"
                          title="{{ $logo->name }}">
-                        <img class="lazy_img max-h-14 md:max-h-16 w-auto"
+                        <img class="lazy_img max-h-14 md:max-h-16 w-full object-contain"
                              data-src="{{ asset('storage/' . $logo->image) }}"
                              alt="{{ $logo->name }}" />
                     </div>
