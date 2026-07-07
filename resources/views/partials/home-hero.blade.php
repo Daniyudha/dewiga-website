@@ -35,14 +35,14 @@
                 @lang('messages.hero.cta_contact')
             </a>
         </div>
+    </div>
 
-        {{-- Pagination Dots (pill shape — active dot becomes elongated) --}}
-        <div class="hero__pagination absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
-            <button type="button" class="hero__dot h-2.5 w-2.5 rounded-full bg-white/50 hover:bg-white hover:w-6 transition-all duration-500 ease-out" data-index="0" aria-label="Slide 1"></button>
-            <button type="button" class="hero__dot h-2.5 w-2.5 rounded-full bg-white/50 hover:bg-white hover:w-6 transition-all duration-500 ease-out" data-index="1" aria-label="Slide 2"></button>
-            <button type="button" class="hero__dot h-2.5 w-2.5 rounded-full bg-white/50 hover:bg-white hover:w-6 transition-all duration-500 ease-out" data-index="2" aria-label="Slide 3"></button>
-            <button type="button" class="hero__dot h-2.5 w-2.5 rounded-full bg-white/50 hover:bg-white hover:w-6 transition-all duration-500 ease-out" data-index="3" aria-label="Slide 4"></button>
-            <button type="button" class="hero__dot h-2.5 w-2.5 rounded-full bg-white/50 hover:bg-white hover:w-6 transition-all duration-500 ease-out" data-index="4" aria-label="Slide 5"></button>
-        </div>
+    {{-- Pagination Dots (diluar hero__container agar tidak terpengaruh flex) --}}
+    <div class="hero__pagination absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-30">
+        <button type="button" class="hero__dot h-2.5 w-2.5 rounded-full bg-white/50 hover:bg-white hover:w-6 transition-all duration-500 ease-out" data-index="0" aria-label="Slide 1"></button>
+        <button type="button" class="hero__dot h-2.5 w-2.5 rounded-full bg-white/50 hover:bg-white hover:w-6 transition-all duration-500 ease-out" data-index="1" aria-label="Slide 2"></button>
+        <button type="button" class="hero__dot h-2.5 w-2.5 rounded-full bg-white/50 hover:bg-white hover:w-6 transition-all duration-500 ease-out" data-index="2" aria-label="Slide 3"></button>
+        <button type="button" class="hero__dot h-2.5 w-2.5 rounded-full bg-white/50 hover:bg-white hover:w-6 transition-all duration-500 ease-out" data-index="3" aria-label="Slide 4"></button>
+        <button type="button" class="hero__dot h-2.5 w-2.5 rounded-full bg-white/50 hover:bg-white hover:w-6 transition-all duration-500 ease-out" data-index="4" aria-label="Slide 5"></button>
     </div>
 </section>
