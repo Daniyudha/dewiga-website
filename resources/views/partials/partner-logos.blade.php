@@ -15,18 +15,20 @@
                        rel="noopener noreferrer"
                        class="opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300"
                        title="{{ $logo->name }}">
-                        <img class="lazy_img max-h-14 md:max-h-16"
-                             style="width: auto; max-width: 140px;"
-                             data-src="{{ asset('storage/' . $logo->image) }}"
-                             alt="{{ $logo->name }}" />
+                        <div class="h-14 md:h-16 w-32 flex items-center justify-center">
+                            <img class="lazy_img h-full w-full object-contain"
+                                 data-src="{{ asset('storage/' . $logo->image) }}"
+                                 alt="{{ $logo->name }}" />
+                        </div>
                     </a>
                 @else
                     <div class="opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300"
                          title="{{ $logo->name }}">
-                        <img class="lazy_img max-h-14 md:max-h-16"
-                             style="width: auto; max-width: 140px;"
-                             data-src="{{ asset('storage/' . $logo->image) }}"
-                             alt="{{ $logo->name }}" />
+                        <div class="h-14 md:h-16 w-32 flex items-center justify-center">
+                            <img class="lazy_img h-full w-full object-contain"
+                                 data-src="{{ asset('storage/' . $logo->image) }}"
+                                 alt="{{ $logo->name }}" />
+                        </div>
                     </div>
                 @endif
             @endforeach
