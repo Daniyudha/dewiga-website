@@ -15,7 +15,7 @@
                        rel="noopener noreferrer"
                        class="hover:opacity-80 transition-all duration-300"
                        title="{{ $logo->name }}">
-                        <div class="h-18 md:h-20 w-32 flex items-center justify-center">
+                        <div class="h-20 w-auto flex items-center justify-center">
                             <img class="lazy_img h-full w-full object-contain"
                                  data-src="{{ asset('storage/' . $logo->image) }}"
                                  alt="{{ $logo->name }}" />
@@ -24,7 +24,7 @@
                 @else
                     <div class="hover:opacity-80 transition-all duration-300"
                          title="{{ $logo->name }}">
-                        <div class="h-18 md:h-20 w-32 flex items-center justify-center">
+                        <div class="h-20 w-auto flex items-center justify-center">
                             <img class="lazy_img h-full w-full object-contain"
                                  data-src="{{ asset('storage/' . $logo->image) }}"
                                  alt="{{ $logo->name }}" />
