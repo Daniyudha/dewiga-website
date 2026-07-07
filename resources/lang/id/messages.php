@@ -371,6 +371,12 @@ return [
         'package_message' => 'Halo, saya tertarik dengan paket :name. Bisakah saya mendapatkan informasi lebih lanjut?',
     ],
 
+    // Logos Section
+    'logos' => [
+        'subtitle' => 'Mitra & Dukungan',
+        'title' => 'Didukung Oleh',
+    ],
+
     // SEO / Meta
     'seo' => [
         'home_title' => 'Desa Wisata Gabugan | Rural Culture Experience',

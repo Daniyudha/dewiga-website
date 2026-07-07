@@ -19,7 +19,7 @@ class BlogController extends Controller
             });
         }
 
-        $blogs = $query->get();
+        $blogs = $query->paginate(9)->withQueryString();
         $categories = Category::all();
 
         return view('blogs.index', compact('blogs', 'categories'));

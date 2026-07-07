@@ -8,6 +8,7 @@
 @section('og_type', 'article')
 @section('twitter_title', $blog->title)
 @section('twitter_description', strip_tags($blog->excerpt))
+@section('twitter_image', Storage::url($blog->image))
 
 @section('schema')
 <script type="application/ld+json">

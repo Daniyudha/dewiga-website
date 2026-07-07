@@ -6,6 +6,8 @@
 @section('og_description', __('messages.seo.packages_desc'))
 @section('twitter_title', __('messages.seo.packages_title'))
 @section('twitter_description', __('messages.seo.packages_desc'))
+@section('og_image', asset('frontend/assets/img/package-top.jpg'))
+@section('twitter_image', asset('frontend/assets/img/package-top.jpg'))
 
 @section('content')
     {{-- HERO --}}
@@ -39,7 +41,7 @@
                 <div class="flex flex-wrap gap-4 mt-8">
                     <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-5 py-4">
                         <h4 class="text-white text-2xl font-bold">
-                            {{ $travel_packages->count() }}+
+                            {{ $travel_packages->total() }}+
                         </h4>
                         <span class="text-white/70 text-sm">
                             @lang('messages.nav.packages')
@@ -71,7 +73,7 @@
                     </h2>
                 </div>
                 <div class="text-sm text-primary-500">
-                    @lang('messages.packages.showing', ['count' => $travel_packages->count()])
+                    @lang('messages.packages.showing', ['count' => $travel_packages->total()])
                 </div>
             </div>
 
@@ -132,6 +134,44 @@
                         </article>
                     @endforeach
                 </div>
+
+                {{-- Pagination --}}
+                @if ($travel_packages->hasPages())
+                <div class="mt-14 flex justify-center">
+                    <nav class="pagination" role="navigation" aria-label="Pagination">
+                        {{-- Previous --}}
+                        @if ($travel_packages->onFirstPage())
+                            <span class="pagination-link pagination-disabled" aria-disabled="true">
+                                <i class="bx bx-chevron-left"></i>
+                            </span>
+                        @else
+                            <a href="{{ $travel_packages->previousPageUrl() }}" class="pagination-link" rel="prev">
+                                <i class="bx bx-chevron-left"></i>
+                            </a>
+                        @endif
+
+                        {{-- Page Numbers --}}
+                        @foreach ($travel_packages->getUrlRange(1, $travel_packages->lastPage()) as $page => $url)
+                            @if ($page == $travel_packages->currentPage())
+                                <span class="pagination-link pagination-active" aria-current="page">{{ $page }}</span>
+                            @else
+                                <a href="{{ $url }}" class="pagination-link">{{ $page }}</a>
+                            @endif
+                        @endforeach
+
+                        {{-- Next --}}
+                        @if ($travel_packages->hasMorePages())
+                            <a href="{{ $travel_packages->nextPageUrl() }}" class="pagination-link" rel="next">
+                                <i class="bx bx-chevron-right"></i>
+                            </a>
+                        @else
+                            <span class="pagination-link pagination-disabled" aria-disabled="true">
+                                <i class="bx bx-chevron-right"></i>
+                            </span>
+                        @endif
+                    </nav>
+                </div>
+                @endif
             @else
                 <div class="text-center py-12">
                     <p class="text-primary-500">@lang('messages.packages.empty')</p>

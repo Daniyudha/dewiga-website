@@ -371,6 +371,12 @@ return [
         'package_message' => 'Hello, I am interested in the :name package. Can I get more information?',
     ],
 
+    // Logos Section
+    'logos' => [
+        'subtitle' => 'Partners & Support',
+        'title' => 'Supported By',
+    ],
+
     // SEO / Meta
     'seo' => [
         'home_title' => 'Gabugan Tourism Village | Rural Culture Experience',

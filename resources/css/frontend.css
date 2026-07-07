@@ -669,3 +669,25 @@
 .value__accordion-header:hover{
     background:#f8fafc;
 }
+
+/* =========================
+   PAGINATION
+========================= */
+
+.pagination {
+    @apply flex items-center gap-2;
+}
+
+.pagination-link {
+    @apply inline-flex items-center justify-center w-11 h-11 rounded-xl text-sm font-medium transition-all duration-200;
+    @apply bg-white text-primary-700 border border-primary-200/60;
+    @apply hover:bg-primary hover:text-white hover:border-primary hover:shadow-md;
+}
+
+.pagination-active {
+    @apply bg-primary text-white border-primary shadow-md;
+}
+
+.pagination-disabled {
+    @apply text-primary-300 border-primary-100 bg-primary-50/50 cursor-not-allowed hover:bg-primary-50/50 hover:text-primary-300 hover:border-primary-100 hover:shadow-none;
+}

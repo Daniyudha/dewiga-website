@@ -7,6 +7,7 @@
 @section('og_image', $travel_package->galleries->first() ? Storage::url($travel_package->galleries->first()->images) : asset('frontend/assets/img/hero.jpg'))
 @section('twitter_title', $travel_package->location . ' - Desa Wisata Gabugan')
 @section('twitter_description', strip_tags(substr($travel_package->description, 0, 160)))
+@section('twitter_image', $travel_package->galleries->first() ? Storage::url($travel_package->galleries->first()->images) : asset('frontend/assets/img/package-top.jpg'))
 
 @section('schema')
 <script type="application/ld+json">

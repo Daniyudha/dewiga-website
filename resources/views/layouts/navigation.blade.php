@@ -84,6 +84,14 @@
             <span>{{ __('Testimonials') }}</span>
         </a>
     </div>
+
+    {{-- Partner Logos --}}
+    <div class="nav-item">
+        <a href="{{ route('admin.partner_logos.index') }}" class="nav-link">
+            <i class="nav-icon fas fa-images"></i>
+            <span>{{ __('Partner Logos') }}</span>
+        </a>
+    </div>
 </nav>
 
 {{-- Footer credit --}}

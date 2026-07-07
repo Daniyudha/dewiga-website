@@ -22,6 +22,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
         Route::put('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
+        // Partner Logos
+        Route::resource('partner_logos', \App\Http\Controllers\Admin\PartnerLogoController::class)->except('show');
+        Route::post('partner_logos/reorder', [\App\Http\Controllers\Admin\PartnerLogoController::class, 'reorder'])->name('partner_logos.reorder');
+
         // CKEditor image upload
         Route::post('upload-image', [\App\Http\Controllers\Admin\UploadController::class, 'image'])->name('upload.image');
     });

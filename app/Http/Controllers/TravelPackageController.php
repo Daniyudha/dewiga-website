@@ -9,7 +9,7 @@ class TravelPackageController extends Controller
 {
     public function index()
     {
-        $travel_packages = TravelPackage::with('galleries')->get();
+        $travel_packages = TravelPackage::with('galleries')->paginate(9);
 
         return view('travel_packages.index', compact('travel_packages'));
     }

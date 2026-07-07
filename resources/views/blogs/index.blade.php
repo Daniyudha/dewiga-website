@@ -4,6 +4,8 @@
 @section('meta_description', __('messages.seo.blog_desc'))
 @section('og_title', __('messages.seo.blog_title'))
 @section('og_description', __('messages.seo.blog_desc'))
+@section('og_image', asset('frontend/assets/img/top-blog.jpg'))
+@section('twitter_image', asset('frontend/assets/img/top-blog.jpg'))
 
 @section('content')
     {{-- HERO BLOG --}}
@@ -77,7 +79,7 @@
                     </p>
 
                     <p class="font-semibold">
-                        {{ $blogs->count() }}+
+                        {{ $blogs->total() }}+
                     </p>
 
                 </div>
@@ -210,6 +212,44 @@
                     </article>
                 @endforeach
             </div>
+
+            {{-- Pagination --}}
+            @if ($blogs->hasPages())
+            <div class="mt-14 flex justify-center">
+                <nav class="pagination" role="navigation" aria-label="Pagination">
+                    {{-- Previous --}}
+                    @if ($blogs->onFirstPage())
+                        <span class="pagination-link pagination-disabled" aria-disabled="true">
+                            <i class="bx bx-chevron-left"></i>
+                        </span>
+                    @else
+                        <a href="{{ $blogs->previousPageUrl() }}" class="pagination-link" rel="prev">
+                            <i class="bx bx-chevron-left"></i>
+                        </a>
+                    @endif
+
+                    {{-- Page Numbers --}}
+                    @foreach ($blogs->getUrlRange(1, $blogs->lastPage()) as $page => $url)
+                        @if ($page == $blogs->currentPage())
+                            <span class="pagination-link pagination-active" aria-current="page">{{ $page }}</span>
+                        @else
+                            <a href="{{ $url }}" class="pagination-link">{{ $page }}</a>
+                        @endif
+                    @endforeach
+
+                    {{-- Next --}}
+                    @if ($blogs->hasMorePages())
+                        <a href="{{ $blogs->nextPageUrl() }}" class="pagination-link" rel="next">
+                            <i class="bx bx-chevron-right"></i>
+                        </a>
+                    @else
+                        <span class="pagination-link pagination-disabled" aria-disabled="true">
+                            <i class="bx bx-chevron-right"></i>
+                        </span>
+                    @endif
+                </nav>
+            </div>
+            @endif
         @else
             <div class="bg-white rounded-[32px] p-16 text-center shadow-lg">
                 <i class="bx bx-news text-6xl text-primary/30 mb-4"></i>

@@ -20,7 +20,7 @@
     <meta property="og:description" content="@yield('og_description', __('messages.seo.home_desc'))" />
     <meta property="og:url" content="@yield('og_url', url()->current())" />
     <meta property="og:site_name" content="Desa Wisata Gabugan" />
-    <meta property="og:image" content="@yield('og_image', asset('frontend/assets/img/hero.jpg'))" />
+    <meta property="og:image" content="@yield('og_image', asset('frontend/assets/img/hero1.jpg'))" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
 
@@ -28,7 +28,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="@yield('twitter_title', __('messages.seo.home_title'))" />
     <meta name="twitter:description" content="@yield('twitter_description', __('messages.seo.home_desc'))" />
-    <meta name="twitter:image" content="@yield('twitter_image', asset('frontend/assets/img/hero.jpg'))" />
+    <meta name="twitter:image" content="@yield('twitter_image', asset('frontend/assets/img/hero1.jpg'))" />
 
     {{-- hreflang alternates --}}
     @if (App::getLocale() !== 'id')
