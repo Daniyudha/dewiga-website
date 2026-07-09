@@ -5,8 +5,8 @@
 @section('content')
     <div class="space-y-6">
         <div class="text-center">
-            <h2 class="text-xl font-heading font-bold text-gray-800">{{ __('Welcome Back') }}</h2>
-            <p class="text-sm text-gray-500 mt-1">{{ __('Sign in to your admin account') }}</p>
+            <h2 class="text-xl font-heading font-bold text-gray-800">{{ __('Selamat Datang') }}</h2>
+            <p class="text-sm text-gray-500 mt-1">{{ __('Masuk ke akun admin Anda') }}</p>
         </div>
 
         <form action="{{ route('login') }}" method="post" class="space-y-4">
@@ -48,24 +48,6 @@
                 @enderror
             </div>
 
-            @section('scripts')
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        const toggleBtn = document.getElementById('togglePassword');
-                        const passwordInput = document.getElementById('password');
-                        const icon = document.getElementById('togglePasswordIcon');
-
-                        if (toggleBtn && passwordInput && icon) {
-                            toggleBtn.addEventListener('click', function() {
-                                const isPassword = passwordInput.type === 'password';
-                                passwordInput.type = isPassword ? 'text' : 'password';
-                                icon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
-                            });
-                        }
-                    });
-                </script>
-            @endsection
-
             {{-- Remember Me --}}
             <div class="flex items-center gap-2">
                 <input type="checkbox" id="remember" name="remember"
@@ -74,7 +56,7 @@
             </div>
 
             {{-- Submit --}}
-            <button type="submit" class="admin-btn-primary w-full">
+            <button type="submit" class="admin-btn-primary w-full text-base py-2.5">
                 <i class="fas fa-sign-in-alt"></i>
                 {{ __('Login') }}
             </button>
@@ -88,4 +70,22 @@
             </div>
         @endif
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            const icon = document.getElementById('togglePasswordIcon');
+
+            if (toggleBtn && passwordInput && icon) {
+                toggleBtn.addEventListener('click', function() {
+                    const isPassword = passwordInput.type === 'password';
+                    passwordInput.type = isPassword ? 'text' : 'password';
+                    icon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+                });
+            }
+        });
+    </script>
 @endsection

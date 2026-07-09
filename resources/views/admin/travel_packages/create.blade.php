@@ -121,6 +121,9 @@
                             @error('image')
                                 <p class="admin-form-error">{{ $message }}</p>
                             @enderror
+                            <div id="image-preview" class="mt-2 hidden">
+                                <img src="" alt="Preview" class="w-32 h-20 rounded-lg object-cover border border-gray-200">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -141,6 +144,21 @@
 @endsection
 
 @push('scripts')
+<script>
+// Image preview
+document.getElementById('image').addEventListener('change', function(e) {
+    const preview = document.getElementById('image-preview');
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.querySelector('img').src = e.target.result;
+            preview.classList.remove('hidden');
+        }
+        reader.readAsDataURL(file);
+    }
+});
+</script>
 <script src="https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.umd.js"></script>
 <script>
 (function() {

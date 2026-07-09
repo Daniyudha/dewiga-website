@@ -24,7 +24,7 @@
                         <th>{{ __('Lang') }}</th>
                         <th>{{ __('Status') }}</th>
                         <th>{{ __('Date') }}</th>
-                        <th class="text-center">{{ __('Action') }}</th>
+                        <th class="!text-center">{{ __('Action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -66,15 +66,14 @@
                                 {{ $testimonial->created_at->format('d M Y') }}
                             </td>
                             <td>
-                                <div class="flex items-center justify-center gap-2">
+                                <div class="flex items-center justify-center gap-4">
                                     {{-- Toggle Active/Inactive --}}
                                     <form method="POST" action="{{ route('admin.testimonials.toggle', [$testimonial]) }}" class="inline">
                                         @csrf
                                         @method('patch')
                                         <button type="submit"
-                                                class="admin-btn-sm {{ $testimonial->is_active ? 'admin-btn-warning' : 'admin-btn-success' }}">
+                                                class="{{ $testimonial->is_active ? 'text-amber-600 hover:text-amber-800' : 'text-green-600 hover:text-green-800' }} transition-colors">
                                             <i class="fas {{ $testimonial->is_active ? 'fa-eye-slash' : 'fa-eye' }}"></i>
-                                            {{ $testimonial->is_active ? __('Hide') : __('Show') }}
                                         </button>
                                     </form>
 
@@ -82,9 +81,8 @@
                                     <form method="POST" action="{{ route('admin.testimonials.destroy', [$testimonial]) }}" class="inline">
                                         @csrf
                                         @method('delete')
-                                        <button type="button" onclick="showDeleteModal(this.closest('form'))" class="admin-btn-danger admin-btn-sm">
+                                        <button type="button" onclick="showDeleteModal(this.closest('form'))" class="text-red-600 hover:text-red-800 transition-colors">
                                             <i class="fas fa-trash"></i>
-                                            {{ __('Delete') }}
                                         </button>
                                     </form>
                                 </div>

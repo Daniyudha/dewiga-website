@@ -12,6 +12,7 @@ return [
         'about_us' => 'Tentang Kami',
         'homestay' => 'Homestay',
         'impact' => 'Dampak Sosial',
+        'activities' => 'Aktivitas',
     ],
 
     // Logo & Branding
@@ -100,6 +101,8 @@ return [
         'submit_testimonial' => 'Kirim Testimoni',
         'footer_link' => 'Kirim Testimoni',
         'read_more' => 'Baca Selengkapnya',
+        'visitor' => 'Pengunjung',
+        'full_testimonial' => 'Testimoni Lengkap',
     ],
 
     // Statistics
@@ -350,6 +353,7 @@ return [
     // Footer
     'footer' => [
         'description' => 'Visi kami adalah memberikan pelayanan terbaik dan berbagi pengalaman terbaik bagi banyak orang',
+        'home' => 'Beranda Utama',
         'about' => 'Tentang',
         'about_us' => 'Tentang Kami',
         'news_blog' => 'Berita & Blog',
@@ -361,6 +365,19 @@ return [
         'copyright' => '© Desa Wisata Gabugan. 2024. Hak Cipta Dilindungi.',
         'built_by' => 'Dibuat dengan cinta oleh',
         'whatsapp' => 'WhatsApp',
+        'menu' => 'Menu',
+        'quick_links' => 'Pintasan Informasi',
+        'secretariat' => 'Sekretariat Desa',
+        'operational_hours' => 'Jam Operasional',
+        'every_day' => 'Setiap Hari',
+        'hours' => '08:00 - 17:00 WIB',
+        'homestay_24h' => '*Homestay 24 Jam (sesuai pesanan)',
+        'follow_social' => 'Ikuti Media Sosial',
+        'address' => 'Dusun Gabugan, Desa Donokerto, Kecamatan Turi, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55551',
+        'phone' => '+62 813 2885 6252 (Sekretariat Desa)',
+        'email' => 'edpdewiga@gmail.com',
+        'copyright_full' => '© :year Desa Wisata Gabugan Sleman. All rights reserved.',
+        'powered_by' => 'Powered by',
     ],
 
     // WhatsApp
@@ -371,10 +388,61 @@ return [
         'package_message' => 'Halo, saya tertarik dengan paket :name. Bisakah saya mendapatkan informasi lebih lanjut?',
     ],
 
+    // Homepage Hero Highlights
+    'hero_highlights' => [
+        'location' => 'Turi, Sleman, DIY',
+        'location_desc' => 'Lokasi Asri & Sejuk',
+        'salak' => 'Salak Gading',
+        'salak_desc' => 'Petik Pohon Organik',
+        'homestay' => 'Joglo & Limasan',
+        'homestay_desc' => 'Homestay Otentik',
+        'guide' => 'Pemandu Lokal',
+        'guide_desc' => 'Ramah Berpengalaman',
+    ],
+
+    // Homepage Value Section
+    'home_value' => [
+        'badge_tracking' => 'Tracking Sungai',
+        'badge_wayang' => 'Wayang Kulit & Gamelan',
+        'extra_desc' => 'Gabugan tidak hanya menawarkan keindahan lanskap alam persawahan. Di sini, setiap pengunjung diajak untuk melebur bersama keseharian warga—belajar bercocok tanam tradisional, memanen salak pondoh langsung dari pohon, hingga mendalami harmoni gamelan di pendopo kami.',
+        'cards' => [
+            'edu_tourism' => 'Wisata Edukasi',
+            'live_in' => 'Live In Desa',
+            'agriculture' => 'Pertanian & Peternakan',
+            'local_culture' => 'Budaya Lokal',
+        ],
+        'popular_desc' => 'Dirancang khusus untuk rombongan keluarga, study tour sekolah, maupun gathering perusahaan untuk meresapi kearifan lokal pedesaan Sleman secara langsung.',
+        'per_person' => '/orang',
+        'empty_packages' => 'Belum ada paket wisata tersedia.',
+    ],
+
+    // AI Assistant CTA
+    'ai_cta' => [
+        'title' => 'Rencanakan Kunjungan Anda Bersama "Mas Pandu"',
+        'desc' => 'Butuh itinerary khusus untuk rombongan sekolah atau butuh informasi ketersediaan homestay? Tanyakan langsung pada asisten pintar virtual kami secara instan.',
+        'button' => 'Mulai Obrolan Sekarang',
+    ],
+
+    // FAQ
+    'faq' => [
+        'subtitle' => 'Tanya Jawab Umum',
+        'title' => 'Pertanyaan yang Sering Diajukan (FAQ)',
+        'q1' => 'Di mana lokasi tepatnya Desa Wisata Gabugan?',
+        'a1' => 'Desa Wisata Gabugan terletak di Dusun Gabugan, Desa Donokerto, Kecamatan Turi, Kabupaten Sleman, Daerah Istimewa Yogyakarta. Berjarak kurang lebih 17 km (45 menit perjalanan darat) ke arah utara dari pusat Kota Yogyakarta.',
+        'q2' => 'Apakah harus memesan paket wisata terlebih dahulu?',
+        'a2' => 'Ya, kami sangat menyarankan Anda melakukan pemesanan paket wisata minimal H-3 untuk kunjungan harian, dan H-7 untuk kunjungan rombongan besar atau menginap (Live-In) agar kami dapat menyiapkan pemandu lokal serta homestay terbaik.',
+        'q3' => 'Fasilitas apa saja yang tersedia di homestay?',
+        'a3' => 'Seluruh homestay kami telah bersertifikasi CHSE, dilengkapi dengan tempat tidur bersih, kamar mandi dalam yang higienis, air mineral, teh/kopi hangat, dan tentu saja keramahan keluarga lokal yang akan menjamu Anda layaknya keluarga sendiri.',
+        'q4' => 'Apakah tempat ini cocok untuk rombongan anak sekolah atau korporat?',
+        'a4' => 'Sangat cocok. Kami memiliki pendopo berkapasitas besar serta lapangan outbound terbuka. Kami juga sering memfasilitasi program Live-In LDKS sekolah menengah dan program Corporate Social Responsibility (CSR) perusahaan.',
+        'q5' => 'Bagaimana dengan akses jalan menuju ke sana?',
+        'a5' => 'Akses jalan menuju Desa Wisata Gabugan sudah beraspal halus dan ramah untuk dilalui kendaraan mulai dari motor, mobil pribadi, hingga bus pariwisata berukuran besar (Big Bus) dengan area parkir yang sangat memadai.',
+    ],
+
     // Logos Section
     'logos' => [
-        'subtitle' => 'Mitra & Dukungan',
-        'title' => 'Didukung Oleh',
+        'subtitle' => 'Partners & Support',
+        'title' => 'Supported By',
     ],
 
     // SEO / Meta

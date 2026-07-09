@@ -26,7 +26,7 @@
                         <th>{{ __('Image') }}</th>
                         <th>{{ __('Excerpt') }}</th>
                         <th>{{ __('Category') }}</th>
-                        <th class="text-center">{{ __('Action') }}</th>
+                        <th class="!text-center">{{ __('Action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,17 +54,15 @@
                                 @endif
                             </td>
                             <td>
-                                <div class="flex items-center justify-center gap-2">
-                                    <a href="{{ route('admin.blogs.edit', [$blog]) }}" class="admin-btn-info admin-btn-sm">
+                                <div class="flex items-center justify-center gap-4">
+                                    <a href="{{ route('admin.blogs.edit', [$blog]) }}" class="text-blue-600 hover:text-blue-800 transition-colors">
                                         <i class="fas fa-edit"></i>
-                                        {{ __('Edit') }}
                                     </a>
                                     <form method="POST" action="{{ route('admin.blogs.destroy', [$blog]) }}" class="inline">
                                         @csrf
                                         @method('delete')
-                                        <button type="button" onclick="showDeleteModal(this.closest('form'))" class="admin-btn-danger admin-btn-sm">
+                                        <button type="button" onclick="showDeleteModal(this.closest('form'))" class="text-red-600 hover:text-red-800 transition-colors">
                                             <i class="fas fa-trash"></i>
-                                            {{ __('Delete') }}
                                         </button>
                                     </form>
                                 </div>
@@ -86,7 +84,7 @@
         </div>
         @if($blogs->hasPages())
             <div class="admin-card-footer">
-                {{ $blogs->links() }}
+                {{ $blogs->links('vendor.pagination.tailwind') }}
             </div>
         @endif
     </div>

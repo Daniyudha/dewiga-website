@@ -17,7 +17,7 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $blogs = Blog::latest()->with('category')->paginate(5);
+        $blogs = Blog::latest()->with('category')->paginate(10);
 
         return view('admin.blogs.index', compact('blogs'));
     }
@@ -27,7 +27,7 @@ class BlogController extends Controller
      */
     public function create()
     {
-        $categories = Category::get(['name', 'id']);
+        $categories = Category::get(['name', 'name_id', 'name_en', 'id']);
 
         return view('admin.blogs.create', compact('categories'));
     }
@@ -65,7 +65,7 @@ class BlogController extends Controller
      */
     public function edit(Blog $blog)
     {
-        $categories = Category::get(['name','id']);
+        $categories = Category::get(['name', 'name_id', 'name_en', 'id']);
 
         return view('admin.blogs.edit', compact('blog','categories'));
     }

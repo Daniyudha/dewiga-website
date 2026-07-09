@@ -41,6 +41,16 @@ class Blog extends Model
         return $this->attributes[$localeField] ?? $value;
     }
 
+    /**
+     * Get meta_keywords in the current locale.
+     */
+    public function getMetaKeywordsAttribute($value)
+    {
+        $locale = app()->getLocale();
+        $localeField = 'meta_keywords_' . $locale;
+        return $this->attributes[$localeField] ?? $value;
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);

@@ -21,7 +21,7 @@
                         <th>{{ __('Type') }}</th>
                         <th>{{ __('Location') }}</th>
                         <th>{{ __('Price') }}</th>
-                        <th class="text-center">{{ __('Action') }}</th>
+                        <th class="!text-center">{{ __('Action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,9 +35,8 @@
                             <td class="font-medium text-primary-700">{{ formatPrice($item->price) }}</td>
                             <td>
                                 <div class="flex items-center justify-center">
-                                    <a href="{{ route('admin.travel_packages.edit', [$item]) }}" class="admin-btn-info admin-btn-sm">
+                                    <a href="{{ route('admin.travel_packages.edit', [$item]) }}" class="text-primary-600 hover:text-primary-800 transition-colors">
                                         <i class="fas fa-images"></i>
-                                        {{ __('Manage Gallery') }}
                                     </a>
                                 </div>
                             </td>
@@ -55,7 +54,7 @@
         </div>
         @if($travel_packages->hasPages())
             <div class="admin-card-footer">
-                {{ $travel_packages->links() }}
+                {{ $travel_packages->links("vendor.pagination.tailwind") }}
             </div>
         @endif
     </div>

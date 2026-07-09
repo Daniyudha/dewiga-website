@@ -101,17 +101,26 @@
         id="header"
         class="absolute top-0 left-0 w-full z-50 transition-all duration-500"
     >
-        <nav class="container-custom flex items-center justify-between h-16 lg:h-20">
+        <nav class="container mx-auto px-6 flex items-center justify-between h-16 lg:h-20">
 
             {{-- Logo --}}
             <a
                 href="{{ route('homepage') }}"
                 class="flex items-center gap-3 shrink-0"
             >
+                {{-- Logo putih untuk hero (default) --}}
                 <img
+                    id="logo-white"
+                    src="{{ asset('frontend/assets/img/brand-logo-white.png') }}"
+                    alt="Desa Wisata Gabugan"
+                    class="h-4 lg:h-12 w-auto block"
+                >
+                {{-- Logo gelap untuk scroll --}}
+                <img
+                    id="logo-dark"
                     src="{{ asset('frontend/assets/img/brand-logo.png') }}"
                     alt="Desa Wisata Gabugan"
-                    class="w-10 lg:w-20 h-auto"
+                    class="w-10 lg:w-20 h-auto hidden"
                 >
 
                 <div class="hidden sm:block logo-text transition-all duration-300">
@@ -179,6 +188,11 @@
                     @lang('messages.nav.blog')
                 </a>
 
+                <a href="{{ route('activities.index') }}"
+                class="nav-link-desktop {{ request()->routeIs('activities.*') ? 'active-nav' : '' }}">
+                    @lang('messages.nav.activities')
+                </a>
+
                 <a href="{{ route('gallery') }}"
                 class="nav-link-desktop {{ request()->routeIs('gallery') ? 'active-nav' : '' }}">
                     @lang('messages.nav.gallery')
@@ -235,7 +249,7 @@
                     href="https://api.whatsapp.com/send?phone=6281328856252&text={{ urlencode(__('messages.whatsapp.default_message')) }}"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="hidden xl:flex items-center gap-2 bg-primary hover:bg-primary-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition"
+                    class="hidden xl:flex items-center gap-2 bg-[#00a877] hover:bg-[#008c6a] text-white px-4 py-2 rounded-xl text-sm font-medium transition"
                 >
                     <i class="bx bxl-whatsapp text-lg"></i>
                     <span>@lang('messages.whatsapp.cta')</span>
@@ -269,7 +283,7 @@
             <div class="flex items-center justify-between px-6 h-16 border-b">
 
                 <h3 class="font-semibold text-lg">
-                    Menu
+                    @lang('messages.footer.menu')
                 </h3>
 
                 <button
@@ -307,6 +321,14 @@
                         class="mobile-nav-link">
                             <i class="bx bx-book"></i>
                             @lang('messages.nav.blog')
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('activities.index') }}"
+                        class="mobile-nav-link">
+                            <i class="bx bx-run"></i>
+                            @lang('messages.nav.activities')
                         </a>
                     </li>
 
@@ -433,86 +455,101 @@
         </div>
     @endif
 
-    {{-- FOOTER --}}
-    <footer class="relative overflow-hidden bg-gradient-to-br from-primary-900 via-primary-900 to-primary-800 text-primary-300 pt-16 pb-8">
-        <div class="absolute inset-0 opacity-[0.08]">
-            <div class="absolute -top-20 -right-20 w-96 h-96 bg-secondary rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-20 -left-20 w-96 h-96 bg-secondary rounded-full blur-3xl"></div>
-        </div>
-        <div class="container-custom relative z-10">
-            {{-- Main footer grid --}}
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-                {{-- Column 1: Logo + Description --}}
-                <div class="sm:col-span-2 lg:col-span-1">
-                    <a href="{{ route('homepage') }}" class="inline-block mb-4">
-                        <img class="max-w-[130px] h-auto"
-                             src="{{ asset('frontend/assets/img/brand-logo-outline.png') }}"
-                             alt="Desa Wisata Gabugan">
-                    </a>
-                    <p class="text-sm leading-relaxed text-primary-300/80">
-                        @lang('messages.footer.description')
+    {{-- SECTION 9: FOOTER --}}
+    <footer class="bg-[#032419] text-neutral-300 pt-24 pb-8 border-t border-white/5">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 mb-16">
+                
+                <div class="md:col-span-3 lg:col-span-3 xl:col-span-3">
+                    <div class="flex items-center gap-3 mb-6">
+                        <a href="{{ route('homepage') }}" class="inline-block">
+                            <img class="max-w-[130px] h-auto"
+                                 src="{{ asset('frontend/assets/img/brand-logo-outline.png') }}"
+                                 alt="Desa Wisata Gabugan">
+                        </a>
+                        <div>
+                            <div class="block lg:hidden xl:block logo-text transition-all duration-300">
+                                @if(App::isLocale('id'))
+                                    <span class="text-md block">@lang('messages.logo.small')</span>
+                                @endif
+                                <h1 class="font-semibold text-2xl leading-none">GABUGAN</h1>
+                                @if(App::isLocale('en'))
+                                    <span class="text-md block">@lang('messages.logo.small')</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-neutral-400 text-sm leading-relaxed font-light">
+                        Destinasi wisata budaya, edukasi, dan agrowisata Salak Pondoh premium terkemuka di lereng Gunung Merapi, Sleman, Yogyakarta. Menyuguhkan kearifan lokal yang tulus bagi setiap peziarah budaya.
                     </p>
                 </div>
 
-                {{-- Column 2: About --}}
-                <div>
-                    <h3 class="font-heading text-stone-100 font-semibold text-lg mb-4">@lang('messages.footer.about')</h3>
-                    <ul class="space-y-3">
-                        <li><a href="{{ route('about-us') }}" class="text-sm text-primary-300/70 hover:text-secondary transition-colors">@lang('messages.nav.about_us')</a></li>
-                        <li><a href="{{ route('homestay') }}" class="text-sm text-primary-300/70 hover:text-secondary transition-colors">@lang('messages.nav.homestay')</a></li>
-                        <li><a href="{{ route('impact') }}" class="text-sm text-primary-300/70 hover:text-secondary transition-colors">@lang('messages.nav.impact')</a></li>
-                        <li><a href="{{ route('gallery') }}" class="text-sm text-primary-300/70 hover:text-secondary transition-colors">@lang('messages.nav.gallery')</a></li>
-                        <li><a href="{{ route('blog.index') }}" class="text-sm text-primary-300/70 hover:text-secondary transition-colors">@lang('messages.footer.news_blog')</a></li>
-                        <li><a href="{{ route('testimonials.create') }}" class="text-sm text-primary-300/70 hover:text-secondary transition-colors">@lang('messages.testimonials.footer_link')</a></li>
+                <div class="md:col-span-3 lg:col-span-3 xl:col-span-3">
+                    <h4 class="font-serif text-white font-semibold text-lg mb-6">@lang('messages.footer.quick_links')</h4>
+                    <ul class="space-y-3.5 text-sm">
+                        <li><a href="{{ route('homepage') }}" class="hover:text-[#00c887] transition">@lang('messages.footer.home')</a></li>
+                        <li><a href="{{ route('about-us') }}" class="hover:text-[#00c887] transition">@lang('messages.nav.about_us')</a></li>
+                        <li><a href="{{ route('impact') }}" class="hover:text-[#00c887] transition">@lang('messages.nav.impact')</a></li>
+                        <li><a href="{{ route('homestay') }}" class="hover:text-[#00c887] transition">@lang('messages.nav.homestay')</a></li>
+                        <li><a href="{{ route('travel_package.index') }}" class="hover:text-[#00c887] transition">@lang('messages.nav.packages')</a></li>
+                        <li><a href="{{ route('blog.index') }}" class="hover:text-[#00c887] transition">@lang('messages.footer.news_blog')</a></li>
+                        <li><a href="{{ route('gallery') }}" class="hover:text-[#00c887] transition">@lang('messages.nav.gallery')</a></li>
+                        <li><a href="{{ route('contact') }}" class="hover:text-[#00c887] transition">@lang('messages.nav.contact')</a></li>
+                        <li><a href="{{ route('testimonials.create') }}" class="hover:text-[#00c887] transition">@lang('messages.testimonials.footer_link')</a></li>
                     </ul>
                 </div>
 
-                {{-- Column 3: Company --}}
-                <div>
-                    <h3 class="font-heading text-stone-100 font-semibold text-lg mb-4">@lang('messages.footer.company')</h3>
-                    <ul class="space-y-3">
-                        <li><a href="{{ route('travel_package.index') }}" class="text-sm text-primary-300/70 hover:text-secondary transition-colors">@lang('messages.footer.packages')</a></li>
-                        <li><a href="{{ route('contact') }}" class="text-sm text-primary-300/70 hover:text-secondary transition-colors">@lang('messages.nav.contact')</a></li>
+                <div class="md:col-span-3 lg:col-span-3 xl:col-span-3">
+                    <h4 class="font-serif text-white font-semibold text-lg mb-6">@lang('messages.footer.secretariat')</h4>
+                    <ul class="space-y-4 text-sm font-light">
+                        <li class="flex items-start gap-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#00c887] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                            <span>Dusun Gabugan, Desa Donokerto, Kecamatan Turi, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55551</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#00c887] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                            <span>+62 813 2885 6252 (Sekretariat Desa)</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#00c887] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                            <span>edpdewiga@gmail.com</span>
+                        </li>
                     </ul>
                 </div>
 
-                {{-- Column 4: Support + Social --}}
-                <div>
-                    <h3 class="font-heading text-stone-100 font-semibold text-lg mb-4">@lang('messages.footer.support')</h3>
-                    <ul class="space-y-3 mb-6">
-                        <li><a href="{{ route('contact') }}" class="text-sm text-primary-300/70 hover:text-secondary transition-colors">@lang('messages.nav.contact')</a></li>
-                        <li><a href="https://api.whatsapp.com/send?phone=6281328856252&text={{ urlencode(__('messages.whatsapp.default_message')) }}"
-                               target="_blank" rel="noopener noreferrer"
-                               class="text-sm text-primary-300/70 hover:text-secondary transition-colors">@lang('messages.footer.whatsapp')</a></li>
-                    </ul>
-                    <h3 class="font-heading text-stone-100 font-semibold text-lg mb-4">@lang('messages.footer.follow_us')</h3>
-                    <div class="flex items-center gap-3">
-                        <a href="https://web.facebook.com/desa.gabugan" target="_blank" rel="noopener noreferrer"
-                           class="inline-flex items-center justify-center w-9 h-9 bg-primary-800 text-primary-300 rounded-full hover:bg-secondary hover:text-primary-900 transition-all text-lg">
-                            <i class="bx bxl-facebook-circle"></i>
-                        </a>
-                        <a href="https://www.instagram.com/desawisatagabugan/" target="_blank" rel="noopener noreferrer"
-                           class="inline-flex items-center justify-center w-9 h-9 bg-primary-800 text-primary-300 rounded-full hover:bg-secondary hover:text-primary-900 transition-all text-lg">
-                            <i class="bx bxl-instagram-alt"></i>
-                        </a>
-                        <a href="https://api.whatsapp.com/send?phone=6281328856252&text={{ urlencode(__('messages.whatsapp.default_message')) }}"
-                           target="_blank" rel="noopener noreferrer"
-                           class="inline-flex items-center justify-center w-9 h-9 bg-primary-800 text-primary-300 rounded-full hover:bg-secondary hover:text-primary-900 transition-all text-lg">
-                            <i class="bx bxl-whatsapp"></i>
-                        </a>
+                <div class="md:col-span-3 lg:col-span-3 xl:col-span-3">
+                    <h4 class="font-serif text-white font-semibold text-lg mb-6">@lang('messages.footer.operational_hours')</h4>
+                    <div class="flex items-start gap-3 text-sm font-light mb-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#00c887] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <div>
+                            <span class="font-semibold text-white block">@lang('messages.footer.every_day')</span>
+                            <span>@lang('messages.footer.hours')</span>
+                            <span class="text-[10px] text-[#00c887] block mt-1">@lang('messages.footer.homestay_24h')</span>
+                        </div>
                     </div>
+
+                    <h4 class="font-serif text-white font-semibold text-sm mb-4">@lang('messages.footer.follow_social')</h4>
+                    <a href="https://instagram.com/desawisatagabugan" target="_blank" class="inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white border border-white/10 px-4 py-2 rounded-xl text-xs font-semibold transition mb-2">
+                        <i class="bx bxl-instagram text-[#00c887]"></i>
+                        @desawisatagabugan
+                    </a>
+                    <a href="https://facebook.com/desa.gabugan" target="_blank" class="inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white border border-white/10 px-4 py-2 rounded-xl text-xs font-semibold transition mb-2">
+                        <i class="bx bxl-facebook-circle text-[#00c887]"></i>
+                        @desa.gabugan
+                    </a>
+                    <a href="https://api.whatsapp.com/send?phone=6281328856252&text={{ urlencode(__('messages.whatsapp.default_message')) }}" target="_blank" class="inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white border border-white/10 px-4 py-2 rounded-xl text-xs font-semibold transition mb-2">
+                        <i class="bx bxl-whatsapp text-[#00c887]"></i>
+                        @Jatmiko
+                    </a>
                 </div>
             </div>
 
-            {{-- Footer bottom bar --}}
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-12 pt-6 border-t border-primary-800 text-xs text-primary-400">
-                <span>&copy; {{ date('Y') }} @lang('messages.footer.copyright')</span>
-                <span>
-                    Powered by
-                    <a href="https://www.gegacreative.com/" target="_blank" rel="noopener noreferrer"
-                   class="text-blue-400 hover:text-blue-500 transition-colors font-medium">
-                    Gega Creative
-                </a></span>
+            <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-neutral-500">
+                <p>@lang('messages.footer.copyright_full', ['year' => date('Y')])</p>
+                <p class="flex items-center gap-1">
+                    @lang('messages.footer.powered_by') <a href="https://www.gegacreative.com" target="_blank" class="text-[#00a7c8] hover:text-[#00a7c8]/80 transition">PT Gega Creative Ideas</a> 
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" /></svg>
+                </p>
             </div>
         </div>
     </footer>
@@ -521,6 +558,11 @@
     <a href="#" class="fixed -bottom-[20%] right-8 w-10 h-10 bg-primary text-white rounded-lg shadow-card flex items-center justify-center text-xl z-[50] opacity-0 invisible transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover" id="scroll-up" aria-label="Scroll to top">
         <i class="bx bx-chevrons-up"></i>
     </a>
+
+    {{-- AI Chat Assistant (3 partials: data, html, scripts) --}}
+    @include('partials.ai-chat-data')
+    @include('partials.ai-chat')
+    @include('partials.ai-chat-scripts')
 
     {{-- Scripts --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.js"></script>
@@ -554,6 +596,8 @@
         });
 
         const header = document.getElementById('header');
+        const logoWhite = document.getElementById('logo-white');
+        const logoDark = document.getElementById('logo-dark');
 
         let lastState = false;
 
@@ -567,6 +611,15 @@
                     'scroll-header',
                     isScrolled
                 );
+
+                // Toggle logo
+                if (isScrolled) {
+                    logoWhite?.classList.add('hidden');
+                    logoDark?.classList.remove('hidden');
+                } else {
+                    logoWhite?.classList.remove('hidden');
+                    logoDark?.classList.add('hidden');
+                }
 
                 lastState = isScrolled;
             }
@@ -672,3 +725,4 @@
     @stack('script-alt')
 </body>
 </html>
+

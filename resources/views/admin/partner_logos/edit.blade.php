@@ -50,6 +50,9 @@
                     @error('image')
                         <p class="admin-form-error">{{ $message }}</p>
                     @enderror
+                    <div id="image-preview" class="mt-2 hidden">
+                        <img src="" alt="Preview" class="h-16 w-auto object-contain border border-gray-200 rounded-lg p-2 bg-gray-50">
+                    </div>
                 </div>
 
                 {{-- URL --}}
@@ -103,3 +106,20 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+document.getElementById('image').addEventListener('change', function(e) {
+    const preview = document.getElementById('image-preview');
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.querySelector('img').src = e.target.result;
+            preview.classList.remove('hidden');
+        }
+        reader.readAsDataURL(file);
+    }
+});
+</script>
+@endpush

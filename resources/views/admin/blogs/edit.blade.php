@@ -60,7 +60,7 @@
                             <option value="">{{ __('Select Category') }}</option>
                             @foreach($categories as $category)
                                 <option value="{{ $category->id }}" {{ ($blog->category_id ?? old('category_id')) == $category->id ? 'selected' : '' }}>
-                                    {{ $category->name }}
+                                    {{ $category->name_id ?? $category->name }}
                                 </option>
                             @endforeach
                         </select>
@@ -82,6 +82,9 @@
                         @error('image')
                             <p class="admin-form-error">{{ $message }}</p>
                         @enderror
+                        <div id="image-preview" class="mt-2 hidden">
+                            <img src="" alt="Preview" class="w-24 h-16 rounded-lg object-cover border border-gray-200">
+                        </div>
                     </div>
                 </div>
 
@@ -135,6 +138,49 @@
                     @enderror
                 </div>
 
+                {{-- SEO - Meta Keywords --}}
+                <div class="border-t border-gray-200 pt-6 mt-6">
+                    <div class="flex items-center gap-2 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <h3 class="text-lg font-heading font-semibold text-gray-800">{{ __('SEO') }}</h3>
+                        <span class="text-xs text-gray-400 font-normal">({{ __('Keywords for search engines') }})</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {{-- Meta Keywords (Indonesia) --}}
+                        <div class="admin-form-group">
+                            <label for="meta_keywords_id" class="admin-form-label">
+                                {{ __('Meta Keywords') }} (Indonesia)
+                                <span class="text-xs text-gray-400 font-normal">— pisahkan dengan koma</span>
+                            </label>
+                            <input type="text" id="meta_keywords_id" name="meta_keywords_id" value="{{ old('meta_keywords_id', $blog->meta_keywords_id) }}"
+                                   class="admin-form-input"
+                                   placeholder="desa wisata gabugan, sleman, agrowisata, salak pondoh">
+                            @error('meta_keywords_id')
+                                <p class="admin-form-error">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        {{-- Meta Keywords (English) --}}
+                        <div class="admin-form-group">
+                            <label for="meta_keywords_en" class="admin-form-label">
+                                {{ __('Meta Keywords') }} (English)
+                                <span class="text-xs text-gray-400 font-normal">— separate by commas</span>
+                            </label>
+                            <input type="text" id="meta_keywords_en" name="meta_keywords_en" value="{{ old('meta_keywords_en', $blog->meta_keywords_en) }}"
+                                   class="admin-form-input"
+                                   placeholder="gabugan tourism village, sleman, agro tourism">
+                            @error('meta_keywords_en')
+                                <p class="admin-form-error">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-3">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Meta Description otomatis diambil dari Excerpt. OG Image otomatis menggunakan Image blog.
+                    </p>
+                </div>
+
                 {{-- Submit --}}
                 <div class="flex items-center gap-3 pt-2">
                     <button type="submit" class="admin-btn-success">
@@ -151,6 +197,21 @@
 @endsection
 
 @push('scripts')
+<script>
+// Image preview
+document.getElementById('image').addEventListener('change', function(e) {
+    const preview = document.getElementById('image-preview');
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.querySelector('img').src = e.target.result;
+            preview.classList.remove('hidden');
+        }
+        reader.readAsDataURL(file);
+    }
+});
+</script>
 <script src="https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.umd.js"></script>
 <script>
 (function() {

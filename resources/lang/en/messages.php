@@ -12,6 +12,7 @@ return [
         'about_us' => 'About Us',
         'homestay' => 'Homestay',
         'impact' => 'Community Impact',
+        'activities' => 'Activities',
     ],
 
     // Logo & Branding
@@ -100,6 +101,8 @@ return [
         'submit_testimonial' => 'Submit Your Testimonial',
         'footer_link' => 'Submit Testimonial',
         'read_more' => 'Read More',
+        'visitor' => 'Visitor',
+        'full_testimonial' => 'Full Testimonial',
     ],
 
     // Statistics
@@ -350,6 +353,7 @@ return [
     // Footer
     'footer' => [
         'description' => 'Our vision is to provide the best service and share the best experience for many people',
+        'home' => 'Home',
         'about' => 'About',
         'about_us' => 'About Us',
         'news_blog' => 'News & Blog',
@@ -361,6 +365,19 @@ return [
         'copyright' => '© Desa Wisata Gabugan. 2024. All rights reserved.',
         'built_by' => 'Built with love by',
         'whatsapp' => 'WhatsApp',
+        'menu' => 'Menu',
+        'quick_links' => 'Quick Links',
+        'secretariat' => 'Village Secretariat',
+        'operational_hours' => 'Operational Hours',
+        'every_day' => 'Every Day',
+        'hours' => '08:00 - 17:00 WIB',
+        'homestay_24h' => '*Homestay 24 Hours (by request)',
+        'follow_social' => 'Follow Social Media',
+        'address' => 'Gabugan Hamlet, Donokerto Village, Turi District, Sleman Regency, Special Region of Yogyakarta 55551',
+        'phone' => '+62 813 2885 6252 (Village Secretariat)',
+        'email' => 'edpdewiga@gmail.com',
+        'copyright_full' => '© :year Gabugan Tourism Village Sleman. All rights reserved.',
+        'powered_by' => 'Powered by',
     ],
 
     // WhatsApp
@@ -369,6 +386,57 @@ return [
         'cta' => 'Book Your Experience',
         'ask_now' => 'Ask Now',
         'package_message' => 'Hello, I am interested in the :name package. Can I get more information?',
+    ],
+
+    // Homepage Hero Highlights
+    'hero_highlights' => [
+        'location' => 'Turi, Sleman, DIY',
+        'location_desc' => 'Cool & Scenic Location',
+        'salak' => 'Salak Gading',
+        'salak_desc' => 'Organic Fruit Picking',
+        'homestay' => 'Joglo & Limasan',
+        'homestay_desc' => 'Authentic Homestay',
+        'guide' => 'Local Guide',
+        'guide_desc' => 'Friendly & Experienced',
+    ],
+
+    // Homepage Value Section
+    'home_value' => [
+        'badge_tracking' => 'River Tracking',
+        'badge_wayang' => 'Wayang Kulit & Gamelan',
+        'extra_desc' => 'Gabugan not only offers the beauty of rice field landscapes. Here, every visitor is invited to blend in with the daily lives of the residents—learning traditional farming, picking salak pondoh directly from the tree, to exploring the harmony of gamelan in our pendopo.',
+        'cards' => [
+            'edu_tourism' => 'Educational Tourism',
+            'live_in' => 'Live In Village',
+            'agriculture' => 'Agriculture & Farming',
+            'local_culture' => 'Local Culture',
+        ],
+        'popular_desc' => 'Specially designed for family groups, school study tours, or corporate gatherings to experience the local wisdom of Sleman\'s rural village directly.',
+        'per_person' => '/person',
+        'empty_packages' => 'No packages available at the moment.',
+    ],
+
+    // AI Assistant CTA
+    'ai_cta' => [
+        'title' => 'Plan Your Visit with "Mas Pandu"',
+        'desc' => 'Need a special itinerary for a school group or need information about homestay availability? Ask our virtual smart assistant directly instantly.',
+        'button' => 'Start Chat Now',
+    ],
+
+    // FAQ
+    'faq' => [
+        'subtitle' => 'Frequently Asked Questions',
+        'title' => 'Frequently Asked Questions (FAQ)',
+        'q1' => 'Where exactly is Gabugan Tourism Village located?',
+        'a1' => 'Gabugan Tourism Village is located in Gabugan Hamlet, Donokerto Village, Turi District, Sleman Regency, Special Region of Yogyakarta. It is approximately 17 km (45 minutes by land) north of Yogyakarta city center.',
+        'q2' => 'Do I have to book a tour package in advance?',
+        'a2' => 'Yes, we highly recommend booking your tour package at least H-3 for day visits, and H-7 for large group visits or overnight stays (Live-In) so we can prepare local guides and the best homestays.',
+        'q3' => 'What facilities are available at the homestay?',
+        'a3' => 'All our homestays are CHSE certified, equipped with clean beds, hygienic private bathrooms, mineral water, warm tea/coffee, and of course the warmth of local families who will host you like family.',
+        'q4' => 'Is this place suitable for school or corporate groups?',
+        'a4' => 'Very suitable. We have a large-capacity pendopo and an open outbound field. We also frequently facilitate Live-In programs for middle school LDKS and Corporate Social Responsibility (CSR) programs.',
+        'q5' => 'What about the road access to get there?',
+        'a5' => 'The road access to Gabugan Tourism Village is smoothly paved and friendly for vehicles ranging from motorcycles, private cars, to large tourist buses (Big Bus) with very adequate parking areas.',
     ],
 
     // Logos Section

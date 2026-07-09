@@ -24,6 +24,14 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 
         // Partner Logos
         Route::resource('partner_logos', \App\Http\Controllers\Admin\PartnerLogoController::class)->except('show');
+        Route::resource('activities', \App\Http\Controllers\Admin\ActivityController::class)->except('show');
+        // Site Gallery
+        Route::get('site-galleries', [\App\Http\Controllers\Admin\SiteGalleryController::class, 'index'])->name('site-galleries.index');
+        Route::post('site-galleries/upload', [\App\Http\Controllers\Admin\SiteGalleryController::class, 'upload'])->name('site-galleries.upload');
+        Route::post('site-galleries/reorder', [\App\Http\Controllers\Admin\SiteGalleryController::class, 'reorder'])->name('site-galleries.reorder');
+        Route::post('site-galleries/{siteGallery}/title', [\App\Http\Controllers\Admin\SiteGalleryController::class, 'updateTitle'])->name('site-galleries.update-title');
+        Route::delete('site-galleries/{siteGallery}', [\App\Http\Controllers\Admin\SiteGalleryController::class, 'destroy'])->name('site-galleries.destroy');
+
         Route::post('partner_logos/reorder', [\App\Http\Controllers\Admin\PartnerLogoController::class, 'reorder'])->name('partner_logos.reorder');
 
         // CKEditor image upload
@@ -54,6 +62,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     // booking
     Route::post('booking', [App\Http\Controllers\BookingController::class, 'store'])->name('booking.store');
     Route::post('send-email', [App\Http\Controllers\ContactController::class, 'sendEmail'])->name('send.email');
+
+    // activities
+    Route::get('activities', [\App\Http\Controllers\ActivityController::class, 'index'])->name('activities.index');
+    Route::get('activities/{activity:slug}', [\App\Http\Controllers\ActivityController::class, 'show'])->name('activities.show');
 
     // testimonials
     Route::get('testimonials/create', [\App\Http\Controllers\TestimonialController::class, 'create'])->name('testimonials.create');

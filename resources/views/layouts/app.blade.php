@@ -13,6 +13,11 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('frontend/assets/favicon/favicon-16x16.png') }}">
     <link rel="manifest" href="{{ asset('frontend/assets/favicon/site.webmanifest') }}">
 
+    {{-- Google Fonts (same as frontend) --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     {{-- Font Awesome (kept for admin icons) --}}
     <link rel="stylesheet" href="{{ asset('css/fontawesome.min.css') }}">
 
@@ -49,7 +54,7 @@
                         </svg>
                     </button>
                     <a href="{{ route('admin.dashboard') }}" class="font-heading text-lg font-semibold text-primary-700 ml-2">
-                        Dewiga Admin
+                        DEWIGA Admin
                     </a>
                 </div>
 

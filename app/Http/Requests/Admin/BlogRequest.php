@@ -31,7 +31,9 @@ class BlogRequest extends FormRequest
                     'image' => ['required', 'image', 'mimes:png,jpg,jpeg'],
                     'description_id' => 'required',
                     'description_en' => 'required',
-                    'category_id' => 'required'
+                    'category_id' => 'required',
+                    'meta_keywords_id' => 'nullable',
+                    'meta_keywords_en' => 'nullable',
                 ];
             }
             case 'PUT':
@@ -44,7 +46,9 @@ class BlogRequest extends FormRequest
                     'image' => ['image', 'mimes:png,jpg,jpeg'],
                     'description_id' => 'required',
                     'description_en' => 'required',
-                    'category_id' => 'required'
+                    'category_id' => 'required',
+                    'meta_keywords_id' => 'nullable',
+                    'meta_keywords_en' => 'nullable',
                 ];
             }
         }

@@ -23,7 +23,7 @@
                         <th>{{ __('Number Phone') }}</th>
                         <th>{{ __('Date') }}</th>
                         <th>{{ __('Travel Package') }}</th>
-                        <th class="text-center">{{ __('Action') }}</th>
+                        <th class="!text-center">{{ __('Action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,9 +46,8 @@
                                     <form method="POST" action="{{ route('admin.bookings.destroy', [$booking]) }}" class="inline">
                                         @csrf
                                         @method('delete')
-                                        <button type="button" onclick="showDeleteModal(this.closest('form'))" class="admin-btn-danger admin-btn-sm">
+                                        <button type="button" onclick="showDeleteModal(this.closest('form'))" class="text-red-600 hover:text-red-800 transition-colors">
                                             <i class="fas fa-trash"></i>
-                                            {{ __('Delete') }}
                                         </button>
                                     </form>
                                 </div>
@@ -67,7 +66,7 @@
         </div>
         @if($bookings->hasPages())
             <div class="admin-card-footer">
-                {{ $bookings->links() }}
+                {{ $bookings->links("vendor.pagination.tailwind") }}
             </div>
         @endif
     </div>

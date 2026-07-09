@@ -85,6 +85,22 @@
         </a>
     </div>
 
+    {{-- Activities --}}
+    <div class="nav-item">
+        <a href="{{ route('admin.activities.index') }}" class="nav-link">
+            <i class="nav-icon fas fa-running"></i>
+            <span>{{ __('Activities') }}</span>
+        </a>
+    </div>
+
+    {{-- Site Gallery --}}
+    <div class="nav-item">
+        <a href="{{ route('admin.site-galleries.index') }}" class="nav-link">
+            <i class="nav-icon fas fa-camera"></i>
+            <span>{{ __('Site Gallery') }}</span>
+        </a>
+    </div>
+
     {{-- Partner Logos --}}
     <div class="nav-item">
         <a href="{{ route('admin.partner_logos.index') }}" class="nav-link">

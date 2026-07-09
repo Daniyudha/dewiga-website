@@ -86,7 +86,7 @@
     }
     /* Dark theme scroll-header overrides */
     .dark-theme .scroll-header {
-        @apply bg-white shadow-lg;
+        @apply bg-white shadow-lg opacity-95;
     }
 
     .dark-theme .scroll-header .nav__link {
@@ -317,8 +317,8 @@
     display: inline-flex;
     align-items: center;
 
-    padding: .75rem 1rem;
-    border-radius: .75rem;
+    /* padding: .75rem 1rem; */
+    /* border-radius: .75rem; */
 
     color: rgba(255,255,255,.85);
 
@@ -328,11 +328,12 @@
 }
 
 .nav-link-desktop:hover{
-    color: rgb(232 168 56 / var(--tw-text-opacity, 1));
+    color: #00c887;
+    border-bottom: 2px solid #00c887;
 }
 
 .active-nav{
-    color: rgb(232 168 56 / var(--tw-text-opacity, 1)) !important;
+    color: #00c887 !important;
 }
 
 /* =========================

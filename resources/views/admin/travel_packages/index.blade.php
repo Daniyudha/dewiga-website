@@ -25,7 +25,7 @@
                         <th>{{ __('Type') }}</th>
                         <th>{{ __('Location') }}</th>
                         <th>{{ __('Price') }}</th>
-                        <th class="text-center">{{ __('Action') }}</th>
+                        <th class="!text-center">{{ __('Action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,17 +38,15 @@
                             <td>{{ $item->location }}</td>
                             <td class="font-medium text-primary-700">{{ formatPrice($item->price) }}</td>
                             <td>
-                                <div class="flex items-center justify-center gap-2">
-                                    <a href="{{ route('admin.travel_packages.edit', [$item]) }}" class="admin-btn-info admin-btn-sm">
+                                <div class="flex items-center justify-center gap-4">
+                                    <a href="{{ route('admin.travel_packages.edit', [$item]) }}" class="text-blue-600 hover:text-blue-800 transition-colors">
                                         <i class="fas fa-edit"></i>
-                                        {{ __('Edit') }}
                                     </a>
                                     <form method="POST" action="{{ route('admin.travel_packages.destroy', [$item]) }}" class="inline">
                                         @csrf
                                         @method('delete')
-                                        <button type="button" onclick="showDeleteModal(this.closest('form'))" class="admin-btn-danger admin-btn-sm">
+                                        <button type="button" onclick="showDeleteModal(this.closest('form'))" class="text-red-600 hover:text-red-800 transition-colors">
                                             <i class="fas fa-trash"></i>
-                                            {{ __('Delete') }}
                                         </button>
                                     </form>
                                 </div>
@@ -70,7 +68,7 @@
         </div>
         @if($travel_packages->hasPages())
             <div class="admin-card-footer">
-                {{ $travel_packages->links() }}
+                {{ $travel_packages->links("vendor.pagination.tailwind") }}
             </div>
         @endif
     </div>
