@@ -403,6 +403,27 @@
     @apply px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-end gap-3;
 }
 
+/* ===== SortableJS Drag & Drop Styling ===== */
+.sortable-ghost {
+    opacity: 0.4;
+    background: #f0fdf4 !important;
+    border: 2px dashed #22c55e !important;
+    transform: scale(0.95);
+}
+
+.sortable-drag {
+    opacity: 0.9;
+    transform: scale(1.02);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3) !important;
+    border: 2px solid #22c55e !important;
+    background: white !important;
+}
+
+.slide-item.sortable-chosen {
+    border: 2px solid #16a34a !important;
+    box-shadow: 0 8px 25px -8px rgba(22, 163, 74, 0.4) !important;
+}
+
 /* ===== Sidebar Minimize Toggle Icon ===== */
 .sidebar-toggle-btn {
     @apply p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors;

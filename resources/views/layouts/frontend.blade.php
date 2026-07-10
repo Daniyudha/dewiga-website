@@ -60,7 +60,8 @@
     {{-- Tailwind Frontend CSS (via Vite) --}}
     @vite('resources/css/frontend.css')
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.css">
+    {{-- GLightbox CSS --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
 
     @stack('style-alt')
 
@@ -565,14 +566,38 @@
     @include('partials.ai-chat-scripts')
 
     {{-- Scripts --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.js"></script>
+    {{-- GLightbox --}}
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
     <script>
-        baguetteBox.run('.tz-gallery');
+        document.addEventListener('DOMContentLoaded', function() {
+            const lightbox = GLightbox({
+                selector: '.glightbox-item',
+                touchNavigation: true,
+                loop: true,
+                zoomable: true,
+                draggable: true,
+                openEffect: 'fade',
+                closeEffect: 'fade',
+                slideEffect: 'slide',
+                width: '90vw',
+                height: '90vh',
+                moreLength: 0,
+                descPosition: 'bottom',
+                slideAutoplay: false,
+                svg: {
+                    next: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>',
+                    prev: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>',
+                }
+            });
+        });
     </script>
 
     <script src="{{ asset('frontend/assets/libraries/scrollreveal.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/libraries/swiper-bundle.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/main.js') }}"></script>
+
+    {{-- Hero Slider Script --}}
+    @include('partials.scripts-hero-rotator')
 
     {{-- Contact Form AJAX --}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

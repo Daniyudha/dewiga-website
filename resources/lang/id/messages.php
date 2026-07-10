@@ -210,22 +210,6 @@ return [
         'see_all' => 'Lihat Semua Artikel',
     ],
 
-    // Gallery
-    'gallery' => [
-        'subtitle' => 'Galeri Kami',
-        'title' => 'Jelajahi Galeri',
-        'hero_subtitle' => 'Galeri',
-        'hero_desc' => 'Lihat galeri foto kegiatan dan keindahan Desa Wisata Gabugan',
-        'description' => 'Dokumentasi kegiatan, pengalaman wisata, budaya lokal, outbound, edukasi, serta berbagai momen berkesan yang telah diikuti oleh wisatawan di Desa Wisata Gabugan.',
-        'instagram_feed' => 'Instagram Feed',
-        'instagram_desc' => 'Ikuti aktivitas terbaru Desa Wisata Gabugan melalui Instagram.',
-        'cta_badge' => 'Desa Wisata Gabugan',
-        'cta_title' => 'Mari Rasakan Pengalaman Wisata yang Berbeda',
-        'cta_desc' => 'Nikmati wisata budaya, edukasi, outbound, dan berbagai aktivitas menarik bersama Desa Wisata Gabugan.',
-        'instagram_handle' => '@desawisatagabugan',
-        'cta_consult' => 'Konsultasi Wisata',
-    ],
-
     // Contact
     'contact' => [
         'subtitle' => 'Butuh Bantuan',
@@ -439,6 +423,36 @@ return [
         'a5' => 'Akses jalan menuju Desa Wisata Gabugan sudah beraspal halus dan ramah untuk dilalui kendaraan mulai dari motor, mobil pribadi, hingga bus pariwisata berukuran besar (Big Bus) dengan area parkir yang sangat memadai.',
     ],
 
+    // Gallery Section
+    'gallery' => [
+        'subtitle' => 'Galeri Foto',
+        'title' => 'Galeri Foto Desa Wisata Gabugan',
+        'description' => 'Momen-momen terbaik di Desa Wisata Gabugan',
+        'instagram_feed' => 'Instagram Feed',
+        'instagram_desc' => 'Ikuti kami di Instagram untuk foto dan video terbaru',
+        'instagram_handle' => '@desawisatagabugan',
+        'cta_badge' => 'Ada yang ingin ditanyakan?',
+        'cta_title' => 'Ingin Informasi Lebih Detail?',
+        'cta_desc' => 'Hubungi kami langsung melalui WhatsApp untuk konsultasi gratis tentang paket wisata, homestay, dan aktivitas seru di Desa Wisata Gabugan.',
+        'cta_consult' => 'Konsultasi Gratis via WhatsApp',
+    ],
+
+    // Activities Section
+    'activities' => [
+        'hero_badge' => 'Eksplorasi Aktivitas',
+        'hero_title' => 'Semua Aktivitas Seru',
+        'hero_desc' => 'Dari membajak sawah dengan kerbau hingga belajar gamelan Jawa — temukan pengalaman tak terlupakan di Desa Wisata Gabugan',
+        'detail_title' => 'Tentang Aktivitas Ini',
+        'sidebar_duration' => 'Durasi',
+        'sidebar_min_pax' => 'Min. Peserta',
+        'sidebar_includes' => 'Termasuk',
+        'btn_whatsapp' => 'Pesan via WhatsApp',
+        'btn_back' => '← Kembali ke Semua Aktivitas',
+        'related_title' => 'Aktivitas Lainnya',
+        'empty' => 'Belum ada aktivitas tersedia.',
+        'btn_detail' => 'Lihat Detail',
+    ],
+
     // Logos Section
     'logos' => [
         'subtitle' => 'Partners & Support',
@@ -459,5 +473,13 @@ return [
         'contact_desc' => 'Hubungi Desa Wisata Gabugan untuk informasi paket wisata, reservasi, dan kunjungan.',
         'about_title' => 'Tentang Kami | Desa Wisata Gabugan',
         'about_desc' => 'Pelajari lebih lanjut tentang Desa Wisata Gabugan, desa wisata mandiri di kaki Gunung Merapi.',
+    ],
+
+    // Video Section
+    'video' => [
+        'subtitle' => 'Video Profil',
+        'title' => 'Tonton Video Profil Desa Wisata Gabugan',
+        'desc' => 'Saksikan langsung keindahan dan aktivitas seru di Desa Wisata Gabugan melalui video berikut.',
+        'caption' => 'Video Profil Desa Wisata Gabugan',
     ],
 ];

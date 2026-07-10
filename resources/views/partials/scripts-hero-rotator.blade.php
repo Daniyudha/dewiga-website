@@ -1,51 +1,75 @@
-{{-- Hero Background Rotator Script with Pagination Dots --}}
+{{-- Hero Background Slider with Fade Transition & Pagination Dots --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const heroBgs = document.querySelectorAll('.hero__bg');
-    const heroDots = document.querySelectorAll('.hero__dot');
+    const slides = document.querySelectorAll('.hero__slide');
+    const dots = document.querySelectorAll('.hero__dot');
 
-    if (heroBgs.length > 1) {
-        let imageIndex = 0;
+    if (slides.length > 1) {
+        let currentIndex = 0;
         let intervalId;
+        const INTERVAL = 4000; // 4 detik per slide
 
         function goToSlide(index) {
-            heroBgs.forEach(img => img.classList.remove('show'));
-            heroBgs[index].classList.add('show');
-            heroDots.forEach(dot => {
-                dot.classList.remove('bg-white', 'w-6');
-                dot.classList.add('bg-white/50');
-                dot.style.width = '10px';
+            // Sembunyikan semua slide
+            slides.forEach(slide => {
+                slide.classList.remove('hero__slide--active');
+                slide.classList.add('opacity-0');
             });
-            heroDots[index].classList.remove('bg-white/50');
-            heroDots[index].classList.add('bg-white');
-            heroDots[index].style.width = '36px';
+
+            // Tampilkan slide yang dipilih
+            slides[index].classList.remove('opacity-0');
+            slides[index].classList.add('hero__slide--active');
+
+            // Update dots
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.remove('bg-white/50');
+                    dot.classList.add('bg-white');
+                    dot.style.width = '24px';
+                } else {
+                    dot.classList.remove('bg-white');
+                    dot.classList.add('bg-white/50');
+                    dot.style.width = '10px';
+                }
+            });
+
+            currentIndex = index;
+        }
+
+        function nextSlide() {
+            const next = (currentIndex + 1) % slides.length;
+            goToSlide(next);
         }
 
         function startAutoPlay() {
-            if (intervalId) clearInterval(intervalId);
-            intervalId = setInterval(function() {
-                imageIndex = (imageIndex + 1) % heroBgs.length;
-                goToSlide(imageIndex);
-            }, 3000);
+            stopAutoPlay();
+            intervalId = setInterval(nextSlide, INTERVAL);
         }
 
-        heroDots.forEach(function(dot) {
+        function stopAutoPlay() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+        }
+
+        // Click dots
+        dots.forEach(dot => {
             dot.addEventListener('click', function() {
                 const index = parseInt(this.dataset.index);
-                imageIndex = index;
-                goToSlide(index);
-                startAutoPlay();
+                if (index !== currentIndex) {
+                    goToSlide(index);
+                    startAutoPlay(); // Reset timer
+                }
             });
         });
 
+        // Pause on hover
         const heroSection = document.getElementById('hero');
-        heroSection.addEventListener('mouseenter', function() {
-            if (intervalId) clearInterval(intervalId);
-        });
-        heroSection.addEventListener('mouseleave', function() {
-            startAutoPlay();
-        });
+        heroSection.addEventListener('mouseenter', stopAutoPlay);
+        heroSection.addEventListener('mouseleave', startAutoPlay);
 
+        // Init
         goToSlide(0);
         startAutoPlay();
     }

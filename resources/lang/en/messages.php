@@ -210,22 +210,6 @@ return [
         'see_all' => 'See All Articles',
     ],
 
-    // Gallery
-    'gallery' => [
-        'subtitle' => 'Our Gallery',
-        'title' => 'Explore Our Gallery',
-        'hero_subtitle' => 'Gallery',
-        'hero_desc' => 'View photo gallery of activities and the beauty of Gabugan Tourism Village',
-        'description' => 'Documentation of activities, tourism experiences, local culture, outbound, education, and various memorable moments that have been enjoyed by visitors at Gabugan Tourism Village.',
-        'instagram_feed' => 'Instagram Feed',
-        'instagram_desc' => 'Follow the latest activities of Gabugan Tourism Village through Instagram.',
-        'cta_badge' => 'Gabugan Tourism Village',
-        'cta_title' => 'Experience a Different Kind of Tourism',
-        'cta_desc' => 'Enjoy cultural tourism, education, outbound, and various exciting activities with Gabugan Tourism Village.',
-        'instagram_handle' => '@desawisatagabugan',
-        'cta_consult' => 'Tour Consultation',
-    ],
-
     // Contact
     'contact' => [
         'subtitle' => 'Need Help',
@@ -439,6 +423,36 @@ return [
         'a5' => 'The road access to Gabugan Tourism Village is smoothly paved and friendly for vehicles ranging from motorcycles, private cars, to large tourist buses (Big Bus) with very adequate parking areas.',
     ],
 
+    // Gallery Section
+    'gallery' => [
+        'subtitle' => 'Photo Gallery',
+        'title' => 'Gabugan Tourism Village Photo Gallery',
+        'description' => 'Best moments at Gabugan Tourism Village',
+        'instagram_feed' => 'Instagram Feed',
+        'instagram_desc' => 'Follow us on Instagram for the latest photos and videos',
+        'instagram_handle' => '@desawisatagabugan',
+        'cta_badge' => 'Have Questions?',
+        'cta_title' => 'Need More Detailed Information?',
+        'cta_desc' => 'Contact us directly via WhatsApp for a free consultation about tour packages, homestays, and exciting activities at Gabugan Tourism Village.',
+        'cta_consult' => 'Free WhatsApp Consultation',
+    ],
+
+    // Activities Section
+    'activities' => [
+        'hero_badge' => 'Explore Activities',
+        'hero_title' => 'All Exciting Activities',
+        'hero_desc' => 'From plowing rice fields with buffalo to learning Javanese gamelan — discover unforgettable experiences at Gabugan Tourism Village',
+        'detail_title' => 'About This Activity',
+        'sidebar_duration' => 'Duration',
+        'sidebar_min_pax' => 'Min. Participants',
+        'sidebar_includes' => 'Includes',
+        'btn_whatsapp' => 'Book via WhatsApp',
+        'btn_back' => '← Back to All Activities',
+        'related_title' => 'Other Activities',
+        'empty' => 'No activities available yet.',
+        'btn_detail' => 'View Details',
+    ],
+
     // Logos Section
     'logos' => [
         'subtitle' => 'Partners & Support',
@@ -459,5 +473,13 @@ return [
         'contact_desc' => 'Contact Gabugan Tourism Village for tour package information, reservations, and visits.',
         'about_title' => 'About Us | Gabugan Tourism Village',
         'about_desc' => 'Learn more about Gabugan Tourism Village, an independent tourism village at the foot of Mount Merapi.',
+    ],
+
+    // Video Section
+    'video' => [
+        'subtitle' => 'Video Profile',
+        'title' => 'Watch Gabugan Tourism Village Profile Video',
+        'desc' => 'Witness the beauty and exciting activities at Gabugan Tourism Village through the following video.',
+        'caption' => 'Gabugan Tourism Village Profile Video',
     ],
 ];

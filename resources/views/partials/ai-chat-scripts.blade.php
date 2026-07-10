@@ -50,9 +50,10 @@ document.addEventListener('DOMContentLoaded', function() {
         div.className = 'flex items-start gap-3 ai-message';
         let cardsHtml = packages.map(p => {
             const img = p.image || 'https://images.unsplash.com/photo-1595855759920-86582396756a?q=80&w=200&auto=format&fit=crop';
+            const imgError = "this.onerror=null;this.src='https://images.unsplash.com/photo-1595855759920-86582396756a?q=80&w=200&auto=format&fit=crop'";
             return `<a href="${p.url}" target="_blank" class="block bg-white border border-neutral-200 rounded-xl overflow-hidden hover:shadow-md transition mb-2">
                 <div class="flex gap-3 p-2">
-                    <img src="${img}" class="w-16 h-16 rounded-lg object-cover shrink-0" alt="${p.type}">
+                    <img src="${img}" onerror="${imgError}" class="w-16 h-16 rounded-lg object-cover shrink-0" alt="${p.type}">
                     <div class="min-w-0">
                         <h4 class="text-xs font-bold text-[#053d2c] leading-tight">${p.type}</h4>
                         <p class="text-[10px] text-neutral-500 mt-0.5 line-clamp-2">${p.description}</p>

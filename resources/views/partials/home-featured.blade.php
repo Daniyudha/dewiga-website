@@ -16,7 +16,7 @@
             @foreach($featuredActivities as $i => $act)
             <a href="{{ route('activities.show', $act->slug) }}" class="bg-white border border-neutral-100 rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col h-full cursor-pointer">
                 <div class="relative h-44 overflow-hidden">
-                    <img src="{{ $act->image }}" alt="{{ $act->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <img src="{{ $act->image ? asset('storage/' . $act->image) : asset('frontend/assets/img/hero2.jpg') }}" alt="{{ $act->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
                     <div class="absolute bottom-3 left-4 w-10 h-10 bg-[#00a877] text-white flex items-center justify-center rounded-xl shadow-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>

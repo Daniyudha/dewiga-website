@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* Hero background rotator */
-.hero__bg.show {
+.hero__slide--active {
     opacity: 1 !important;
 }
 
@@ -691,4 +691,11 @@
 
 .pagination-disabled {
     @apply text-primary-300 border-primary-100 bg-primary-50/50 cursor-not-allowed hover:bg-primary-50/50 hover:text-primary-300 hover:border-primary-100 hover:shadow-none;
+}
+
+/* =========================
+   LIGHTBOX Package Gallery
+========================= */
+.gslide-title{
+    @apply text-lg font-semibold text-primary-900 mb-2 !important;
 }

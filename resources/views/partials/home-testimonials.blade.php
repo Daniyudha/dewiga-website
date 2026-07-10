@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 el: '.testimonial-pagination',
                 clickable: true,
                 renderBullet: function (index, className) {
-                    return '<span class="' + className + ' w-2.5 h-2.5 rounded-full bg-white/30 !opacity-100 hover:bg-white/60 transition-all duration-300"></span>';
+                    return '<span class="' + className + ' w-2.5 h-2.5 rounded-full !opacity-100 transition-all duration-300"></span>';
                 },
             },
             breakpoints: {
@@ -190,8 +190,18 @@ document.addEventListener('DOMContentLoaded', function() {
 .testimonial-swiper .swiper-slide > div {
     height: 100%;
 }
+.testimonial-swiper .swiper-pagination-bullet {
+    background: rgba(255, 255, 255, 0.3) !important;
+    width: 10px !important;
+    height: 10px !important;
+}
+.testimonial-swiper .swiper-pagination-bullet:hover {
+    background: rgba(255, 255, 255, 0.6) !important;
+}
 .testimonial-swiper .swiper-pagination-bullet-active {
-    @apply !bg-[#00c887] !w-8 !rounded-full;
+    background: #00c887 !important;
+    width: 32px !important;
+    border-radius: 999px !important;
 }
 .testimonial-text {
     display: -webkit-box;

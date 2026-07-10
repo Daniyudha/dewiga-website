@@ -9,8 +9,14 @@
     {{-- HERO --}}
     <section class="relative bg-neutral-900 overflow-hidden min-h-[55vh] flex items-center pt-24">
         <div class="absolute inset-0 z-0">
-            <img src="{{ asset('frontend/assets/img/gallery-top.jpg') }}" alt="@lang('messages.nav.gallery')" class="w-full h-full object-cover opacity-30">
-            <div class="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/40 to-black/40 z-10"></div>
+            @if($heroSetting && $heroSetting->slides->count() > 0)
+                <img src="{{ $heroSetting->slides->first()->image_url }}" alt="@lang('messages.nav.gallery')" class="w-full h-full object-cover opacity-30">
+            @elseif($heroSetting && $heroSetting->image_url)
+                <img src="{{ $heroSetting->image_url }}" alt="@lang('messages.nav.gallery')" class="w-full h-full object-cover opacity-30">
+            @else
+                <img src="{{ asset('frontend/assets/img/gallery-top.jpg') }}" alt="@lang('messages.nav.gallery')" class="w-full h-full object-cover opacity-30">
+            @endif
+            <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/90 via-emerald-950/60 to-black/60 z-10"></div>
         </div>
         <div class="container mx-auto px-6 relative z-10 text-center text-white mt-8">
             <div class="inline-flex items-center gap-2 bg-[#053d2c]/80 border border-[#00a877]/30 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider text-[#00c887] uppercase mb-5 mx-auto">
@@ -35,12 +41,7 @@
     @php $siteGalleries = \App\Models\SiteGallery::orderBy('order')->get(); @endphp
     @if($siteGalleries && $siteGalleries->count() > 0)
     <section class="pb-24 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-12">
-                <span class="text-[#00a877] font-semibold text-xs uppercase tracking-wider block mb-3">Galeri Foto</span>
-                <h2 class="font-serif text-3xl md:text-5xl font-bold text-[#053d2c]">Exciting Images</h2>
-                <p class="text-neutral-500 text-sm mt-2">Momen-momen terbaik di Desa Wisata Gabugan</p>
-            </div>
+        <div class="container mx-auto px-6 py-12">
             <div class="tz-gallery masonry-grid">
                 @foreach($siteGalleries as $item)
                 <div class="masonry-item break-inside-avoid mb-4">

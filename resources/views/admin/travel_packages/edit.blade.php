@@ -32,7 +32,7 @@
                             <tr>
                                 <th>{{ __('Name') }}</th>
                                 <th>{{ __('Image') }}</th>
-                                <th class="text-center">{{ __('Action') }}</th>
+                                <th class="!text-center">{{ __('Action') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,18 +51,16 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <div class="flex items-center justify-center gap-2">
+                                        <div class="flex items-center justify-center gap-4">
                                             <a href="{{ route('admin.travel_packages.galleries.edit', [$travel_package, $gallery]) }}"
-                                               class="admin-btn-warning admin-btn-sm">
+                                               class="text-blue-600 hover:text-blue-800 transition-colors">
                                                 <i class="fas fa-edit"></i>
-                                                {{ __('Edit') }}
                                             </a>
                                             <form method="POST" action="{{ route('admin.travel_packages.galleries.destroy', [$travel_package, $gallery]) }}" class="inline">
                                                 @csrf
                                                 @method('delete')
-                                                <button type="button" onclick="showDeleteModal(this.closest('form'))" class="admin-btn-danger admin-btn-sm">
+                                                <button type="button" onclick="showDeleteModal(this.closest('form'))" class="text-red-600 hover:text-red-800 transition-colors">
                                                     <i class="fas fa-trash"></i>
-                                                    {{ __('Delete') }}
                                                 </button>
                                             </form>
                                         </div>

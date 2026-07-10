@@ -94,32 +94,6 @@
 
         {{-- Content Area --}}
         <main class="flex-1 px-4 lg:px-6 py-6">
-            {{-- Flash Messages --}}
-            @if(count($errors) > 0)
-                <div class="admin-alert-danger mb-4" role="alert">
-                    <ul class="m-0 list-none space-y-1 flex-1">
-                        @foreach($errors->all() as $error)
-                            <li class="flex items-start gap-2">
-                                <i class="fas fa-exclamation-circle mt-0.5 flex-shrink-0"></i>
-                                <span>{{ $error }}</span>
-                            </li>
-                        @endforeach
-                    </ul>
-                    <button onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-600 flex-shrink-0">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            @endif
-
-            @if(session()->has('message'))
-                <div class="admin-alert-{{ session()->get('alert-type', 'info') }} mb-4" role="alert">
-                    <span>{{ session()->get('message') }}</span>
-                    <button onclick="this.parentElement.remove()" class="opacity-60 hover:opacity-100 flex-shrink-0">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            @endif
-
             @yield('content')
         </main>
 
@@ -141,7 +115,52 @@
     @vite('resources/js/app.js')
     @yield('scripts')
 
+    {{-- Global Toast Notification --}}
+    <div id="toastContainer" class="fixed top-4 right-4 z-[9999] flex flex-col gap-2 pointer-events-none"></div>
+
     <script>
+        // --- Global Toast Notification ---
+        function showToast(message, type) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `pointer-events-auto px-4 py-3 rounded-lg text-white text-sm font-medium shadow-lg transition-all duration-300 flex items-center gap-2 ${
+                type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+            }`;
+            toast.style.transform = 'translateX(120%)';
+            
+            const icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+            toast.innerHTML = `<i class="fas ${icon}"></i><span>${message}</span>`;
+            
+            container.appendChild(toast);
+            
+            requestAnimationFrame(() => {
+                toast.style.transform = 'translateX(0)';
+            });
+
+            setTimeout(() => {
+                toast.style.transform = 'translateX(120%)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Show flash messages from server
+        document.addEventListener('DOMContentLoaded', function() {
+            @if(session('success'))
+                showToast('{{ session('success') }}', 'success');
+            @endif
+            @if(session('error'))
+                showToast('{{ session('error') }}', 'error');
+            @endif
+            @if(session('message'))
+                showToast('{{ session('message') }}', '{{ session('alert-type', 'info') }}');
+            @endif
+            @if(count($errors) > 0)
+                @foreach($errors->all() as $error)
+                    showToast('{{ $error }}', 'error');
+                @endforeach
+            @endif
+        });
+
         // --- Sidebar Toggle ---
         function toggleSidebar() {
             const sidebar = document.getElementById('adminSidebar');

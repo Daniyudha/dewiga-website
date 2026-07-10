@@ -60,15 +60,32 @@
                         </div>
                     </div>
 
-                    {{-- Gallery --}}
+                    {{-- Gallery with Lightbox (Fancybox) --}}
                     @if($travel_package->galleries->count() > 1)
                     <div class="mt-8">
                         <h3 class="font-serif text-2xl font-bold text-[#053d2c] mb-6">Galeri</h3>
-                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="packageGallery">
                             @foreach($travel_package->galleries as $gallery)
-                                <div class="aspect-[4/3] rounded-2xl overflow-hidden">
-                                    <img src="{{ Storage::url($gallery->image) }}" alt="" class="w-full h-full object-cover hover:scale-110 transition duration-500">
-                                </div>
+                                <a href="{{ asset('storage/' . $gallery->images) }}" 
+                                   data-fancybox="package-gallery"
+                                   data-caption="{{ $gallery->name ?? $travel_package->title ?? $travel_package->type }}"
+                                   class="group relative aspect-[4/3] rounded-2xl overflow-hidden block shadow-md hover:shadow-xl transition-all duration-300">
+                                    <img src="{{ asset('storage/' . $gallery->images) }}" 
+                                         alt="{{ $gallery->name ?? $travel_package->title ?? $travel_package->type }}" 
+                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                    {{-- Hover overlay with zoom icon --}}
+                                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
+                                        <div class="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#053d2c]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    {{-- Image name badge --}}
+                                    <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                                        <span class="text-white text-xs font-medium truncate block">{{ $gallery->name ?? 'Gallery Image' }}</span>
+                                    </div>
+                                </a>
                             @endforeach
                         </div>
                     </div>
@@ -124,3 +141,26 @@
         </div>
     </section>
 @endsection
+
+@push('style-alt')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"/>
+@endpush
+
+@push('script-alt')
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof Fancybox !== 'undefined') {
+        Fancybox.bind('[data-fancybox="package-gallery"]', {
+            groupAll: true,
+            caption: function (fancybox, slide) {
+                return slide.triggerEl?.getAttribute('data-caption') || '';
+            },
+            Image: {
+                fit: 'contain',
+            }
+        });
+    }
+});
+</script>
+@endpush

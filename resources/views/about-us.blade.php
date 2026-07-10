@@ -10,8 +10,14 @@
     {{-- HERO --}}
     <section class="relative bg-neutral-900 overflow-hidden min-h-[60vh] flex items-center pt-24">
         <div class="absolute inset-0 z-0">
-            <img src="{{ asset('frontend/assets/img/about-top.jpg') }}" alt="@lang('messages.nav.about')" class="w-full h-full object-cover opacity-30">
-            <div class="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/40 to-black/40 z-10"></div>
+            @if($heroSetting && $heroSetting->slides->count() > 0)
+                <img src="{{ $heroSetting->slides->first()->image_url }}" alt="@lang('messages.nav.about')" class="w-full h-full object-cover ">
+            @elseif($heroSetting && $heroSetting->image_url)
+                <img src="{{ $heroSetting->image_url }}" alt="@lang('messages.nav.about')" class="w-full h-full object-cover ">
+            @else
+                <img src="{{ asset('frontend/assets/img/about-top.jpg') }}" alt="@lang('messages.nav.about')" class="w-full h-full object-cover ">
+            @endif
+            <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/90 via-emerald-950/60 to-black/60 z-10"></div>
         </div>
         <div class="container mx-auto px-6 relative z-10 text-center text-white mt-8">
             <div class="inline-flex items-center gap-2 bg-[#053d2c]/80 border border-[#00a877]/30 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider text-[#00c887] uppercase mb-5 mx-auto">

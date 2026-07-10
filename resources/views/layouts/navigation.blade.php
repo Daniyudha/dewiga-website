@@ -108,6 +108,14 @@
             <span>{{ __('Partner Logos') }}</span>
         </a>
     </div>
+
+    {{-- Hero Settings --}}
+    <div class="nav-item">
+        <a href="{{ route('admin.hero-settings.index') }}" class="nav-link">
+            <i class="nav-icon fas fa-sliders-h"></i>
+            <span>{{ __('Hero Settings') }}</span>
+        </a>
+    </div>
 </nav>
 
 {{-- Footer credit --}}

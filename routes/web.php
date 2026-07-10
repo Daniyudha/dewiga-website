@@ -34,6 +34,14 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 
         Route::post('partner_logos/reorder', [\App\Http\Controllers\Admin\PartnerLogoController::class, 'reorder'])->name('partner_logos.reorder');
 
+        // Hero Settings
+        Route::get('hero-settings', [\App\Http\Controllers\Admin\HeroSettingController::class, 'index'])->name('hero-settings.index');
+        Route::get('hero-settings/{heroSetting}', [\App\Http\Controllers\Admin\HeroSettingController::class, 'edit'])->name('hero-settings.edit');
+        Route::put('hero-settings/{heroSetting}', [\App\Http\Controllers\Admin\HeroSettingController::class, 'update'])->name('hero-settings.update');
+        Route::post('hero-settings/{heroSetting}/slides', [\App\Http\Controllers\Admin\HeroSettingController::class, 'uploadSlide'])->name('hero-settings.slides.upload');
+        Route::delete('hero-settings/{heroSetting}/slides/{heroSlide}', [\App\Http\Controllers\Admin\HeroSettingController::class, 'deleteSlide'])->name('hero-settings.slides.destroy');
+        Route::post('hero-settings/{heroSetting}/slides/reorder', [\App\Http\Controllers\Admin\HeroSettingController::class, 'reorderSlides'])->name('hero-settings.slides.reorder');
+
         // CKEditor image upload
         Route::post('upload-image', [\App\Http\Controllers\Admin\UploadController::class, 'image'])->name('upload.image');
     });

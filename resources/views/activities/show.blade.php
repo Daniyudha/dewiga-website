@@ -9,7 +9,7 @@
     <section class="relative bg-neutral-900 overflow-hidden min-h-[50vh] flex items-end pt-24">
         <div class="absolute inset-0 z-0">
             <img src="{{ $activity->image ? asset('storage/' . $activity->image) : asset('frontend/assets/img/hero2.jpg') }}" alt="{{ $activity->title }}" class="w-full h-full object-cover opacity-40">
-            <div class="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/40 to-black/40 z-10"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/90 via-emerald-950/60 to-black/60 z-10"></div>
         </div>
         <div class="relative z-10 container mx-auto px-6 pb-16">
             <div class="max-w-3xl">
@@ -45,7 +45,7 @@
                 {{-- Main Info --}}
                 <div class="md:col-span-2">
                     <div class="prose prose-lg max-w-none">
-                        <h2 class="font-serif text-2xl font-bold text-[#053d2c]">Tentang Aktivitas Ini</h2>
+                        <h2 class="font-serif text-2xl font-bold text-[#053d2c]">@lang('messages.activities.detail_title')</h2>
                         <p class="text-neutral-700 leading-relaxed">{{ $activity->description }}</p>
                     </div>
                 </div>
@@ -53,7 +53,8 @@
                 {{-- Sidebar --}}
                 <div class="space-y-6">
                     <div class="bg-[#f8fdfb] rounded-2xl p-6 border border-neutral-100">
-                        <h3 class="font-bold text-[#053d2c] text-lg mb-4">Informasi Aktivitas</h3>
+                        <h3 class="font-bold text-[#053d2c] text-lg mb-4">@lang('messages.activities.sidebar_duration')</h3>
+
                         <div class="space-y-3 text-sm">
                             @if($activity->duration)
                             <div class="flex items-center gap-3">
@@ -61,7 +62,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 </span>
                                 <div>
-                                    <p class="text-xs text-neutral-500">Durasi</p>
+                                    <p class="text-xs text-neutral-500">@lang('messages.activities.sidebar_duration')</p>
                                     <p class="font-semibold text-[#053d2c]">{{ $activity->duration }}</p>
                                 </div>
                             </div>
@@ -72,7 +73,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                 </span>
                                 <div>
-                                    <p class="text-xs text-neutral-500">Min. Peserta</p>
+                                    <p class="text-xs text-neutral-500">@lang('messages.activities.sidebar_min_pax')</p>
                                     <p class="font-semibold text-[#053d2c]">{{ $activity->min_pax }}</p>
                                 </div>
                             </div>
@@ -83,7 +84,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 </span>
                                 <div>
-                                    <p class="text-xs text-neutral-500">Termasuk</p>
+                                    <p class="text-xs text-neutral-500">@lang('messages.activities.sidebar_includes')</p>
                                     <p class="font-semibold text-[#053d2c] text-sm">{{ $activity->includes }}</p>
                                 </div>
                             </div>
@@ -94,11 +95,11 @@
                     <a href="https://api.whatsapp.com/send?phone=6281328856252&text={{ urlencode('Halo, saya tertarik dengan aktivitas: ' . $activity->title . ' di Desa Wisata Gabugan') }}"
                        target="_blank"
                        class="block w-full text-center bg-[#00a877] hover:bg-[#009065] text-white py-3.5 rounded-2xl font-semibold text-sm transition-all duration-300 shadow-sm hover:shadow-md">
-                        <i class="bx bxl-whatsapp mr-2"></i>Pesan via WhatsApp
+                        <i class="bx bxl-whatsapp mr-2"></i>@lang('messages.activities.btn_whatsapp')
                     </a>
 
                     <a href="{{ route('activities.index') }}" class="block w-full text-center bg-white border border-neutral-200 text-neutral-600 hover:text-[#00a877] hover:border-[#00a877] py-3 rounded-2xl font-medium text-sm transition-all">
-                        ← Kembali ke Semua Aktivitas
+                        @lang('messages.activities.btn_back')
                     </a>
                 </div>
             </div>
@@ -110,7 +111,7 @@
     @if($related->count() > 0)
     <section class="py-16 bg-[#f8fdfb]">
         <div class="container mx-auto px-6">
-            <h2 class="font-serif text-2xl font-bold text-[#053d2c] mb-8 text-center">Aktivitas Lainnya</h2>
+            <h2 class="font-serif text-2xl font-bold text-[#053d2c] mb-8 text-center">@lang('messages.activities.related_title')</h2>
             <div class="grid md:grid-cols-3 gap-6">
                 @foreach($related as $rel)
                 <a href="{{ route('activities.show', $rel->slug) }}" class="bg-white rounded-2xl overflow-hidden border border-neutral-100 shadow-sm hover:shadow-lg transition group">
