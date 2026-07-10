@@ -38,7 +38,7 @@
                         <p class="text-xs text-gray-400 mt-1">Recommended: JPG, PNG, WebP. Max 2MB.</p>
                         @error('image')<p class="admin-form-error">{{ $message }}</p>@enderror
                         <div id="image-preview" class="mt-2 hidden">
-                            <img src="" alt="Preview" class="w-32 h-24 rounded-lg object-cover border border-gray-200">
+                            <img src="" alt="Preview" class="w-60 h-45 rounded-lg object-cover border border-gray-200">
                         </div>
                     </div>
                     <div class="admin-form-group">
@@ -89,15 +89,39 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="admin-form-group">
-                        <label for="order" class="admin-form-label">{{ __('Order') }}</label>
-                        <input type="number" id="order" name="order" value="{{ old('order', 0) }}" class="admin-form-input" min="0">
-                        @error('order')<p class="admin-form-error">{{ $message }}</p>@enderror
-                    </div>
-                    <div class="admin-form-group">
                         <label class="admin-form-label flex items-center gap-2">
                             <input type="checkbox" name="is_featured" value="1" {{ old('is_featured') ? 'checked' : '' }} class="w-4 h-4 text-primary-600 rounded border-gray-300">
                             {{ __('Featured') }}
                         </label>
+                    </div>
+                </div>
+
+                {{-- Gallery Upload (optional) --}}
+                <div class="border-t border-gray-200 pt-6">
+                    <h3 class="text-lg font-heading font-semibold text-gray-800 mb-4">{{ __('Gallery Images') }} <span class="text-sm font-normal text-gray-400">({{ __('optional') }})</span></h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="admin-form-group">
+                            <label for="gallery_name_id" class="admin-form-label">{{ __('Image Name') }} (Indonesia)</label>
+                            <input type="text" id="gallery_name_id" name="gallery_name_id" value="{{ old('gallery_name_id') }}"
+                                   class="admin-form-input" placeholder="e.g. Aktivitas Seru">
+                            @error('gallery_name_id')<p class="admin-form-error">{{ $message }}</p>@enderror
+                        </div>
+                        <div class="admin-form-group">
+                            <label for="gallery_name_en" class="admin-form-label">{{ __('Image Name') }} (English)</label>
+                            <input type="text" id="gallery_name_en" name="gallery_name_en" value="{{ old('gallery_name_en') }}"
+                                   class="admin-form-input" placeholder="e.g. Fun Activity">
+                            @error('gallery_name_en')<p class="admin-form-error">{{ $message }}</p>@enderror
+                        </div>
+                        <div class="admin-form-group">
+                            <label for="gallery_image" class="admin-form-label">{{ __('Upload Image') }}</label>
+                            <input type="file" id="gallery_image" name="gallery_image"
+                                   class="admin-form-input @error('gallery_image') error @enderror">
+                            @error('gallery_image')<p class="admin-form-error">{{ $message }}</p>@enderror
+                            <div id="gallery-preview" class="mt-2 hidden">
+                                <img src="" alt="Preview" class="w-32 h-20 rounded-lg object-cover border border-gray-200">
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1">{{ __('You can add more images later in the edit page.') }}</p>
+                        </div>
                     </div>
                 </div>
 
@@ -114,6 +138,19 @@
 <script>
 document.getElementById('image').addEventListener('change', function(e) {
     const preview = document.getElementById('image-preview');
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.querySelector('img').src = e.target.result;
+            preview.classList.remove('hidden');
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+document.getElementById('gallery_image').addEventListener('change', function(e) {
+    const preview = document.getElementById('gallery-preview');
     const file = e.target.files[0];
     if (file) {
         const reader = new FileReader();

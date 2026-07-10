@@ -59,7 +59,7 @@ return [
     'featured' => [
         'subtitle' => 'Aktivitas Unggulan',
         'title' => 'Aktivitas Populer',
-        'cta' => 'Lihat Paket Wisata',
+        'cta' => 'Lihat Semua Aktivitas',
         'activities' => [
             'plowing' => 'Membajak Sawah',
             'plowing_desc' => 'Alami pengalaman membajak sawah tradisional dengan kerbau',
@@ -313,7 +313,7 @@ return [
         'hero_desc' => 'Bagaimana Desa Wisata Gabugan memberikan dampak positif bagi masyarakat',
         'section1_subtitle' => 'Dampak Ekonomi',
         'section1_title' => 'Pemberdayaan Ekonomi Masyarakat',
-        'section1_desc' => 'Desa Wisata Gabugan telah memberdayakan lebih dari 50 keluarga melalui program homestay dan berbagai kegiatan wisata. Masyarakat setempat mendapatkan penghasilan tambahan dari sektor pariwisata, menciptakan lapangan kerja baru, dan meningkatkan kesejahteraan ekonomi keluarga. Para ibu rumah tangga kini dapat berkontribusi secara ekonomi melalui penyediaan makanan, kerajinan tangan, dan jasa pemandu wisata.',
+        'section1_desc' => 'Desa Wisata Gabugan telah memberdayakan lebih dari 50 keluarga melalui program homestay dan berbagai kegiatan wisata. Masyarakat setempat mendapatkan penghasilan tambahan dari sektor pariwisata, menciptakan lapangan kerja baru, dan meningkatkan kesejahteraan ekonomi keluarga. Para ibu rumah tangga kini dapat berkontribusi secara ekonomi melalui penyediaan makanan, kerajinan tangan, dan jasa pemandu wisata, sehingga perempuan memiliki peran aktif dalam menggerakkan perekonomian desa. Karang taruna setempat juga dilibatkan sebagai pemandu wisata dan pendamping kegiatan, memberikan pengalaman berharga serta penghasilan bagi generasi muda. Sebagai wujud kepedulian sosial, kami juga menyisihkan 2,5% dari penghasilan untuk kegiatan amal dan membantu masyarakat yang kurang mampu di sekitar Desa Wisata Gabugan.',
         'section2_subtitle' => 'Dampak Sosial Budaya',
         'section2_title' => 'Melestarikan Budaya & Tradisi',
         'section2_desc' => 'Kehadiran wisatawan telah mendorong masyarakat untuk lebih aktif melestarikan budaya dan tradisi lokal. Kesenian tradisional seperti karawitan, wayang, dan gamelan kembali hidup dan diminati oleh generasi muda. Kegiatan gotong royong dan keramahan masyarakat semakin kuat karena interaksi positif dengan wisatawan dari berbagai daerah dan negara.',
@@ -378,7 +378,7 @@ return [
         'location_desc' => 'Lokasi Asri & Sejuk',
         'salak' => 'Salak Gading',
         'salak_desc' => 'Petik Pohon Organik',
-        'homestay' => 'Joglo & Limasan',
+        'homestay' => 'Homestay Desa',
         'homestay_desc' => 'Homestay Otentik',
         'guide' => 'Pemandu Lokal',
         'guide_desc' => 'Ramah Berpengalaman',
@@ -447,10 +447,14 @@ return [
         'sidebar_min_pax' => 'Min. Peserta',
         'sidebar_includes' => 'Termasuk',
         'btn_whatsapp' => 'Pesan via WhatsApp',
+        'btn_packages' => 'Lihat Paket Wisata',
         'btn_back' => '← Kembali ke Semua Aktivitas',
         'related_title' => 'Aktivitas Lainnya',
         'empty' => 'Belum ada aktivitas tersedia.',
         'btn_detail' => 'Lihat Detail',
+        'btn_view_more' => 'Lihat Lebih Banyak',
+        'btn_view_less' => 'Tampilkan Lebih Sedikit',
+        'showing' => 'Menampilkan :visible dari :total aktivitas',
     ],
 
     // Logos Section

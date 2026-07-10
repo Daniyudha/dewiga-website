@@ -175,7 +175,21 @@ const initLazyLoad = () => {
         threshold: 0.1
     };
 
-    const observer = new IntersectionObserver((entries, observer) => {
+        // Wrap lazy images with skeleton container
+        lazyImages.forEach(function(lazyImage) {
+            // Only if not already wrapped
+            if (!lazyImage.closest('.lazy_img-container')) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'lazy_img-container';
+                const skeleton = document.createElement('div');
+                skeleton.className = 'skeleton-green';
+                lazyImage.parentNode.insertBefore(wrapper, lazyImage);
+                wrapper.appendChild(lazyImage);
+                wrapper.appendChild(skeleton);
+            }
+        });
+
+        const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const lazyElement = entry.target;
@@ -198,7 +212,9 @@ const initLazyLoad = () => {
         });
     }, options);
 
-    lazyImages.forEach(lazyImage => {
+    // Get updated list (after wrapping)
+    const updatedLazyImages = document.querySelectorAll('.lazy_img:not(.loaded)');
+    updatedLazyImages.forEach(lazyImage => {
         observer.observe(lazyImage);
     });
 };

@@ -30,7 +30,8 @@
                     <table class="admin-table">
                         <thead>
                             <tr>
-                                <th>{{ __('Name') }}</th>
+                                <th>{{ __('Name') }} (ID)</th>
+                                <th>{{ __('Name') }} (EN)</th>
                                 <th>{{ __('Image') }}</th>
                                 <th class="!text-center">{{ __('Action') }}</th>
                             </tr>
@@ -38,7 +39,8 @@
                         <tbody>
                             @foreach($travel_package->galleries as $gallery)
                                 <tr>
-                                    <td class="font-medium">{{ $gallery->name }}</td>
+                                    <td class="font-medium">{{ $gallery->name_id ?? $gallery->name }}</td>
+                                    <td class="font-medium">{{ $gallery->name_en ?? $gallery->name }}</td>
                                     <td>
                                         @if($gallery->images && file_exists(public_path('storage/' . $gallery->images)))
                                             <a href="{{ asset('storage/' . $gallery->images) }}" target="_blank">
@@ -80,12 +82,20 @@
             {{-- Upload Form --}}
             <form method="post" action="{{ route('admin.travel_packages.galleries.store', [$travel_package]) }}" enctype="multipart/form-data" class="border-t border-gray-100 pt-4">
                 @csrf
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="admin-form-group">
-                        <label for="name" class="admin-form-label">{{ __('Image Name') }}</label>
-                        <input type="text" id="name" name="name" value="{{ old('name') }}"
-                               class="admin-form-input" placeholder="e.g. Sunset at Kuta">
-                        @error('name')
+                        <label for="name_id" class="admin-form-label">{{ __('Image Name') }} (Indonesia)</label>
+                        <input type="text" id="name_id" name="name_id" value="{{ old('name_id') }}"
+                               class="admin-form-input" placeholder="e.g. Sawah di Pagi Hari">
+                        @error('name_id')
+                            <p class="admin-form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="name_en" class="admin-form-label">{{ __('Image Name') }} (English)</label>
+                        <input type="text" id="name_en" name="name_en" value="{{ old('name_en') }}"
+                               class="admin-form-input" placeholder="e.g. Rice Field in the Morning">
+                        @error('name_en')
                             <p class="admin-form-error">{{ $message }}</p>
                         @enderror
                     </div>

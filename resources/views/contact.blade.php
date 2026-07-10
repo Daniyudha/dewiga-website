@@ -147,4 +147,7 @@
             </div>
         </div>
     </section>
+
+    {{-- FAQ (PERTANYAAN YANG SERING DIAJUKAN) --}}
+    @include('partials.home-faq')
 @endsection

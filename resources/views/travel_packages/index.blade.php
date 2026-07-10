@@ -76,7 +76,7 @@
                                     <div class="absolute bottom-5 left-5 right-5">
                                         <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-5 py-2">
                                             <div class="text-neutral-300 text-xs font-medium">@lang('messages.popular.start_from')</div>
-                                            <div class="text-xl font-bold text-white">{{ formatPrice($travel_package->price) }} /pax</div>
+                                            <div class="text-xl font-bold text-white">{{ formatPrice($travel_package->price) }} {{ __('messages.home_value.per_person') }}</div>
                                         </div>
                                     </div>
                                 </div>

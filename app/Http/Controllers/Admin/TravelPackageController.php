@@ -44,7 +44,8 @@ class TravelPackageController extends Controller
                     'travel_package/gallery', 'public'
                 );
                 Gallery::create([
-                    'name' => $request->image_name ?? 'Gallery Image',
+                    'name_id' => $request->image_name_id ?? 'Gallery Image',
+                    'name_en' => $request->image_name_en ?? 'Gallery Image',
                     'images' => $images,
                     'travel_package_id' => $travel_package->id
                 ]);

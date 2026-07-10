@@ -63,15 +63,15 @@
                     {{-- Gallery with Lightbox (Fancybox) --}}
                     @if($travel_package->galleries->count() > 1)
                     <div class="mt-8">
-                        <h3 class="font-serif text-2xl font-bold text-[#053d2c] mb-6">Galeri</h3>
+                        <h3 class="font-serif text-2xl font-bold text-[#053d2c] mb-6">@lang('messages.nav.gallery')</h3>
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="packageGallery">
                             @foreach($travel_package->galleries as $gallery)
                                 <a href="{{ asset('storage/' . $gallery->images) }}" 
                                    data-fancybox="package-gallery"
-                                   data-caption="{{ $gallery->name ?? $travel_package->title ?? $travel_package->type }}"
+                                   data-caption="{{ $gallery->name ?? ($travel_package->title ?? $travel_package->type) }}"
                                    class="group relative aspect-[4/3] rounded-2xl overflow-hidden block shadow-md hover:shadow-xl transition-all duration-300">
                                     <img src="{{ asset('storage/' . $gallery->images) }}" 
-                                         alt="{{ $gallery->name ?? $travel_package->title ?? $travel_package->type }}" 
+                                         alt="{{ $gallery->name ?? ($travel_package->title ?? $travel_package->type) }}" 
                                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                                     {{-- Hover overlay with zoom icon --}}
                                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
@@ -83,7 +83,7 @@
                                     </div>
                                     {{-- Image name badge --}}
                                     <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-                                        <span class="text-white text-xs font-medium truncate block">{{ $gallery->name ?? 'Gallery Image' }}</span>
+                                        <span class="text-white text-xs font-medium truncate block">{{ $gallery->name ?? __('messages.gallery.subtitle') }}</span>
                                     </div>
                                 </a>
                             @endforeach
@@ -96,20 +96,20 @@
                 <div class="space-y-6 lg:sticky lg:top-24 self-start">
                     <div class="bg-white rounded-[2rem] shadow-xl p-8 border border-neutral-100">
                         <span class="text-[10px] uppercase text-neutral-400 block tracking-wider mb-1">@lang('messages.popular.start_from')</span>
-                        <p class="font-serif text-4xl font-bold text-[#00a877] mb-6">{{ formatPrice($travel_package->price) }} <span class="text-sm text-neutral-500 font-sans font-normal">/orang</span></p>
+                        <p class="font-serif text-4xl font-bold text-[#00a877] mb-6">{{ formatPrice($travel_package->price) }} <span class="text-sm text-neutral-500 font-sans font-normal">{{ __('messages.home_value.per_person') }}</span></p>
 
                         <div class="space-y-4 mb-8">
                             <div class="flex items-center gap-3 text-sm">
                                 <div class="w-10 h-10 rounded-xl bg-[#e8fbf3] flex items-center justify-center text-[#00a877]"><i class="bx bx-map"></i></div>
                                 <div>
-                                    <p class="text-neutral-500 text-xs">Lokasi</p>
+                                    <p class="text-neutral-500 text-xs">@lang('messages.packages.location')</p>
                                     <p class="font-semibold text-[#053d2c]">{{ $travel_package->location }}</p>
                                 </div>
                             </div>
                             <div class="flex items-center gap-3 text-sm">
                                 <div class="w-10 h-10 rounded-xl bg-[#e8fbf3] flex items-center justify-center text-[#00a877]"><i class="bx bx-tag"></i></div>
                                 <div>
-                                    <p class="text-neutral-500 text-xs">Tipe</p>
+                                    <p class="text-neutral-500 text-xs">@lang('messages.packages.type')</p>
                                     <p class="font-semibold text-[#053d2c]">{{ $travel_package->type }}</p>
                                 </div>
                             </div>
@@ -130,8 +130,8 @@
     <section class="pb-24 bg-white">
         <div class="container mx-auto px-6">
             <div class="bg-gradient-to-br from-[#053d2c] to-[#043424] rounded-[2rem] p-12 md:p-16 text-center text-white">
-                <h2 class="font-serif text-white text-3xl md:text-4xl font-bold mb-4">Tertarik dengan paket ini?</h2>
-                <p class="text-neutral-300 max-w-2xl mx-auto mb-8 font-light">Hubungi kami sekarang untuk konsultasi dan pemesanan paket wisata.</p>
+                <h2 class="font-serif text-white text-3xl md:text-4xl font-bold mb-4">@lang('messages.packages.cta_title')</h2>
+                <p class="text-neutral-300 max-w-2xl mx-auto mb-8 font-light">@lang('messages.packages.cta_desc')</p>
                 <a href="https://api.whatsapp.com/send?phone=6281328856252&text={{ urlencode(__('messages.whatsapp.default_message')) }}" target="_blank"
                    class="inline-flex items-center gap-2 bg-[#00a877] hover:bg-[#009065] text-white px-8 py-4 rounded-full font-medium transition duration-300">
                     <i class="bx bxl-whatsapp text-xl"></i>

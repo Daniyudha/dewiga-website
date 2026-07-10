@@ -105,12 +105,20 @@
                 {{-- Gallery Image Upload --}}
                 <div class="border-t border-gray-200 pt-6">
                     <h3 class="text-lg font-heading font-semibold text-gray-800 mb-4">{{ __('Gallery Image') }}</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="admin-form-group">
-                            <label for="image_name" class="admin-form-label">{{ __('Image Name') }}</label>
-                            <input type="text" id="image_name" name="image_name" value="{{ old('image_name') }}"
-                                   class="admin-form-input" placeholder="e.g. Sunset at Kuta">
-                            @error('image_name')
+                            <label for="image_name_id" class="admin-form-label">{{ __('Image Name') }} (Indonesia)</label>
+                            <input type="text" id="image_name_id" name="image_name_id" value="{{ old('image_name_id') }}"
+                                   class="admin-form-input" placeholder="e.g. Sawah di Pagi Hari">
+                            @error('image_name_id')
+                                <p class="admin-form-error">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="admin-form-group">
+                            <label for="image_name_en" class="admin-form-label">{{ __('Image Name') }} (English)</label>
+                            <input type="text" id="image_name_en" name="image_name_en" value="{{ old('image_name_en') }}"
+                                   class="admin-form-input" placeholder="e.g. Rice Field in the Morning">
+                            @error('image_name_en')
                                 <p class="admin-form-error">{{ $message }}</p>
                             @enderror
                         </div>

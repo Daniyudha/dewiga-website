@@ -25,6 +25,8 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         // Partner Logos
         Route::resource('partner_logos', \App\Http\Controllers\Admin\PartnerLogoController::class)->except('show');
         Route::resource('activities', \App\Http\Controllers\Admin\ActivityController::class)->except('show');
+        Route::resource('activities.galleries', \App\Http\Controllers\Admin\ActivityGalleryController::class)->except(['create', 'index', 'show']);
+        Route::post('activities/reorder', [\App\Http\Controllers\Admin\ActivityController::class, 'reorder'])->name('activities.reorder');
         // Site Gallery
         Route::get('site-galleries', [\App\Http\Controllers\Admin\SiteGalleryController::class, 'index'])->name('site-galleries.index');
         Route::post('site-galleries/upload', [\App\Http\Controllers\Admin\SiteGalleryController::class, 'upload'])->name('site-galleries.upload');

@@ -19,7 +19,7 @@
 
         {{-- Swiper --}}
         @if($travel_packages && $travel_packages->count() > 0)
-        <div class="swiper packages-swiper !overflow-visible pb-16">
+        <div class="swiper packages-swiper !overflow-visible">
             <div class="swiper-wrapper">
                 @foreach ($travel_packages as $package)
                 <div class="swiper-slide !h-auto">

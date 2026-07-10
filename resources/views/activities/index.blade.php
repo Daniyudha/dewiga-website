@@ -46,9 +46,10 @@
     <section class="pb-24 bg-[#f8fdfb]">
         <div class="container mx-auto px-6">
             @if($activities && $activities->count() > 0)
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @foreach($activities as $act)
-                <div class="bg-white rounded-[2rem] overflow-hidden border border-neutral-100 shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col">
+            @php $initialCount = 9; $totalCount = $activities->count(); @endphp
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="activitiesGrid">
+                @foreach($activities as $index => $act)
+                <div class="bg-white rounded-[2rem] overflow-hidden border border-neutral-100 shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col {{ $index >= $initialCount ? 'hidden activity-hidden' : '' }}">
                     <a href="{{ route('activities.show', $act->slug) }}" class="block relative h-52 overflow-hidden shrink-0">
                         <img src="{{ $act->image ? asset('storage/' . $act->image) : asset('frontend/assets/img/hero2.jpg') }}" alt="{{ $act->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
@@ -87,6 +88,23 @@
                 </div>
                 @endforeach
             </div>
+
+            @if($totalCount > $initialCount)
+            <div class="text-center mt-12" id="viewMoreContainer"
+                 data-view-more="@lang('messages.activities.btn_view_more')"
+                 data-view-less="@lang('messages.activities.btn_view_less')">
+                <button onclick="toggleActivities()" id="viewMoreBtn" class="inline-flex items-center gap-2 bg-[#00a877] hover:bg-[#009065] text-white font-semibold px-8 py-4 rounded-full transition-all duration-300 shadow-md hover:shadow-lg">
+                    <span id="viewMoreText">@lang('messages.activities.btn_view_more')</span>
+                    <svg id="viewMoreIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <p class="text-neutral-500 text-sm mt-3">
+                    @lang('messages.activities.showing', ['visible' => $initialCount, 'total' => $totalCount])
+                </p>
+            </div>
+            @endif
+
             @else
             <div class="text-center py-16">
                 <p class="text-neutral-500">@lang('messages.activities.empty')</p>
@@ -95,4 +113,59 @@
         </div>
     </section>
 @endsection
-</write_to_file>
+
+@push('script-alt')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let expanded = false;
+    const hiddenItems = document.querySelectorAll('.activity-hidden');
+    const container = document.getElementById('viewMoreContainer');
+    const icon = document.getElementById('viewMoreIcon');
+    const text = document.getElementById('viewMoreText');
+    const btn = document.getElementById('viewMoreBtn');
+
+    if (!btn || !container) return;
+
+    const viewMore = container.getAttribute('data-view-more');
+    const viewLess = container.getAttribute('data-view-less');
+
+    window.toggleActivities = function() {
+        if (!expanded) {
+            hiddenItems.forEach(function(item) {
+                item.classList.remove('hidden');
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                setTimeout(function() {
+                    item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, 50);
+            });
+            text.textContent = viewLess;
+            icon.style.transform = 'rotate(180deg)';
+            expanded = true;
+        } else {
+            hiddenItems.forEach(function(item) {
+                item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                setTimeout(function() {
+                    item.classList.add('hidden');
+                    item.style.opacity = '';
+                    item.style.transform = '';
+                    item.style.transition = '';
+                }, 300);
+            });
+            text.textContent = viewMore;
+            icon.style.transform = 'rotate(0deg)';
+
+            setTimeout(function() {
+                container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 400);
+
+            expanded = false;
+        }
+    };
+});
+</script>
+@endpush

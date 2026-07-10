@@ -694,7 +694,51 @@
 }
 
 /* =========================
-   LIGHTBOX Package Gallery
+    SKELETON LOADING
+========================= */
+.skeleton-green {
+    background: linear-gradient(90deg, rgba(0,168,119,0.08) 25%, rgba(0,168,119,0.18) 50%, rgba(0,168,119,0.08) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.8s ease-in-out infinite;
+    border-radius: inherit;
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes skeleton-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.lazy_img {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.lazy_img.loaded {
+    opacity: 1;
+}
+
+.lazy_img-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.lazy_img-container .skeleton-green {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.lazy_img-container .lazy_img.loaded + .skeleton-green,
+.lazy_img-container .lazy_img.loaded ~ .skeleton-green {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+/* =========================
+    LIGHTBOX Package Gallery
 ========================= */
 .gslide-title{
     @apply text-lg font-semibold text-primary-900 mb-2 !important;

@@ -6,7 +6,7 @@
 
 @section('content')
     {{-- HERO --}}
-    <section class="relative bg-neutral-900 overflow-hidden min-h-[50vh] flex items-end pt-24">
+    <section class="relative bg-neutral-900 overflow-hidden min-h-[60vh] flex items-end pt-24">
         <div class="absolute inset-0 z-0">
             <img src="{{ $activity->image ? asset('storage/' . $activity->image) : asset('frontend/assets/img/hero2.jpg') }}" alt="{{ $activity->title }}" class="w-full h-full object-cover opacity-40">
             <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/90 via-emerald-950/60 to-black/60 z-10"></div>
@@ -28,7 +28,6 @@
                     @endif
                 </div>
                 <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 text-white">{{ $activity->title }}</h1>
-                <p class="text-neutral-300 text-base max-w-2xl leading-relaxed">{{ $activity->description }}</p>
             </div>
         </div>
         <div class="absolute bottom-0 left-0 right-0 z-10 overflow-hidden">
@@ -48,6 +47,38 @@
                         <h2 class="font-serif text-2xl font-bold text-[#053d2c]">@lang('messages.activities.detail_title')</h2>
                         <p class="text-neutral-700 leading-relaxed">{{ $activity->description }}</p>
                     </div>
+
+                    {{-- Masonry Gallery --}}
+                    @if($activity->galleries && $activity->galleries->count() > 0)
+                    <div class="mt-12">
+                        <h3 class="font-serif text-2xl font-bold text-[#053d2c] mb-6">@lang('messages.nav.gallery')</h3>
+                        <div class="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4" id="activityGallery">
+                            @foreach($activity->galleries as $gallery)
+                                <a href="{{ asset('storage/' . $gallery->image) }}" 
+                                   data-fancybox="activity-gallery"
+                                   data-caption="{{ $gallery->name ?? $activity->title }}"
+                                   class="group relative block rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 break-inside-avoid">
+                                    <img src="{{ asset('storage/' . $gallery->image) }}" 
+                                         alt="{{ $gallery->name ?? $activity->title }}" 
+                                         class="w-full h-auto object-cover group-hover:scale-110 transition-transform duration-500">
+                                    {{-- Hover overlay --}}
+                                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
+                                        <div class="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#053d2c]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    @if($gallery->name)
+                                    <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                                        <span class="text-white text-xs font-medium truncate block">{{ $gallery->name }}</span>
+                                    </div>
+                                    @endif
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
                 </div>
 
                 {{-- Sidebar --}}
@@ -98,6 +129,10 @@
                         <i class="bx bxl-whatsapp mr-2"></i>@lang('messages.activities.btn_whatsapp')
                     </a>
 
+                    <a href="{{ route('travel_package.index') }}" class="block w-full text-center bg-[#053d2c] hover:bg-[#0a5a3e] text-white py-3.5 rounded-2xl font-semibold text-sm transition-all duration-300 shadow-sm hover:shadow-md">
+                        <i class="bx bx-backpack mr-2"></i>@lang('messages.activities.btn_packages')
+                    </a>
+
                     <a href="{{ route('activities.index') }}" class="block w-full text-center bg-white border border-neutral-200 text-neutral-600 hover:text-[#00a877] hover:border-[#00a877] py-3 rounded-2xl font-medium text-sm transition-all">
                         @lang('messages.activities.btn_back')
                     </a>
@@ -128,3 +163,26 @@
     </section>
     @endif
 @endsection
+
+@push('style-alt')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"/>
+@endpush
+
+@push('script-alt')
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof Fancybox !== 'undefined') {
+        Fancybox.bind('[data-fancybox="activity-gallery"]', {
+            groupAll: true,
+            caption: function (fancybox, slide) {
+                return slide.triggerEl?.getAttribute('data-caption') || '';
+            },
+            Image: {
+                fit: 'contain',
+            }
+        });
+    }
+});
+</script>
+@endpush

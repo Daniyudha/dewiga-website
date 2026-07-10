@@ -90,9 +90,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="admin-form-group">
-                        <label for="order" class="admin-form-label">{{ __('Order') }}</label>
-                        <input type="number" id="order" name="order" value="{{ old('order', $activity->order) }}" class="admin-form-input" min="0">
-                        @error('order')<p class="admin-form-error">{{ $message }}</p>@enderror
+                        <p class="text-sm text-gray-500 mb-1">{{ __('Order') }}: <strong>{{ $activity->order }}</strong> <span class="text-gray-400">({{ __('auto') }})</span></p>
                     </div>
                     <div class="admin-form-group">
                         <label class="admin-form-label flex items-center gap-2">
@@ -106,6 +104,92 @@
                     <button type="submit" class="admin-btn-success"><i class="fas fa-save"></i> {{ __('Update') }}</button>
                     <a href="{{ route('admin.activities.index') }}" class="admin-btn-secondary">{{ __('Cancel') }}</a>
                 </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- Gallery Management Section --}}
+    <div class="admin-card mt-6">
+        <div class="admin-card-header">
+            <h2 class="font-heading font-semibold text-gray-800">{{ __('Gallery Images') }}</h2>
+        </div>
+        <div class="admin-card-body">
+            @if($activity->galleries && $activity->galleries->count() > 0)
+                <div class="overflow-x-auto mb-4">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>{{ __('Name') }} (ID)</th>
+                                <th>{{ __('Name') }} (EN)</th>
+                                <th>{{ __('Image') }}</th>
+                                <th class="!text-center">{{ __('Action') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($activity->galleries as $gallery)
+                                <tr>
+                                    <td class="font-medium">{{ $gallery->name_id ?? '-' }}</td>
+                                    <td class="font-medium">{{ $gallery->name_en ?? '-' }}</td>
+                                    <td>
+                                        <img src="{{ asset('storage/' . $gallery->image) }}" alt="{{ $gallery->name_id }}" class="admin-thumb">
+                                    </td>
+                                    <td>
+                                        <div class="flex items-center justify-center gap-4">
+                                            <a href="{{ route('admin.activities.galleries.edit', [$activity, $gallery]) }}"
+                                               class="text-blue-600 hover:text-blue-800 transition-colors">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="POST" action="{{ route('admin.activities.galleries.destroy', [$activity, $gallery]) }}" class="inline">
+                                                @csrf
+                                                @method('delete')
+                                                <button type="button" onclick="showDeleteModal(this.closest('form'))" class="text-red-600 hover:text-red-800 transition-colors">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <div class="text-center py-6 text-gray-500">
+                    <i class="fas fa-images text-3xl text-gray-300 block mb-2"></i>
+                    <p>{{ __('No gallery images yet.') }}</p>
+                </div>
+            @endif
+
+            {{-- Upload Form --}}
+            <form method="post" action="{{ route('admin.activities.galleries.store', [$activity]) }}" enctype="multipart/form-data" class="border-t border-gray-100 pt-4">
+                @csrf
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="admin-form-group">
+                        <label for="name_id" class="admin-form-label">{{ __('Image Name') }} (Indonesia)</label>
+                        <input type="text" id="name_id" name="name_id" value="{{ old('name_id') }}"
+                               class="admin-form-input" placeholder="e.g. Aktivitas Seru">
+                        @error('name_id')<p class="admin-form-error">{{ $message }}</p>@enderror
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="name_en" class="admin-form-label">{{ __('Image Name') }} (English)</label>
+                        <input type="text" id="name_en" name="name_en" value="{{ old('name_en') }}"
+                               class="admin-form-input" placeholder="e.g. Fun Activity">
+                        @error('name_en')<p class="admin-form-error">{{ $message }}</p>@enderror
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="image" class="admin-form-label">{{ __('Upload Image') }}</label>
+                        <input type="file" id="gallery_image" name="image"
+                               class="admin-form-input @error('image') error @enderror">
+                        @error('image')<p class="admin-form-error">{{ $message }}</p>@enderror
+                        <div id="gallery-preview" class="mt-2 hidden">
+                            <img src="" alt="Preview" class="w-32 h-20 rounded-lg object-cover border border-gray-200">
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="admin-btn-primary mt-4">
+                    <i class="fas fa-upload"></i>
+                    {{ __('Upload') }}
+                </button>
             </form>
         </div>
     </div>

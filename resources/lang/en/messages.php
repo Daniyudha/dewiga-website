@@ -59,7 +59,7 @@ return [
     'featured' => [
         'subtitle' => 'Featured Activities',
         'title' => 'Popular Activities',
-        'cta' => 'See Tour Packages',
+        'cta' => 'See All Activities',
         'activities' => [
             'plowing' => 'Plowing Rice Fields',
             'plowing_desc' => 'Experience traditional rice field plowing with buffalo',
@@ -313,7 +313,7 @@ return [
         'hero_desc' => 'How Gabugan Tourism Village creates positive impact for the community',
         'section1_subtitle' => 'Economic Impact',
         'section1_title' => 'Community Economic Empowerment',
-        'section1_desc' => 'Gabugan Tourism Village has empowered more than 50 families through homestay programs and various tourism activities. Local residents earn additional income from the tourism sector, creating new jobs and improving family economic welfare. Housewives can now contribute economically through food provision, handicrafts, and tour guide services.',
+        'section1_desc' => 'Gabugan Tourism Village has empowered more than 50 families through homestay programs and various tourism activities. Local residents earn additional income from the tourism sector, creating new jobs and improving family economic welfare. Housewives can now contribute economically through food provision, handicrafts, and tour guide services, giving women an active role in driving the village economy. The local youth organization (Karang Taruna) is also involved as tour guides and activity facilitators, providing valuable experience and income for the younger generation. As a form of social responsibility, we also set aside 2.5% of our income for charitable activities and to help underprivileged communities around Gabugan Tourism Village.',
         'section2_subtitle' => 'Socio-Cultural Impact',
         'section2_title' => 'Preserving Culture & Traditions',
         'section2_desc' => 'The presence of tourists has encouraged the community to be more active in preserving local culture and traditions. Traditional arts such as karawitan, wayang, and gamelan have come back to life and are of interest to the younger generation. Mutual cooperation and community hospitality have grown stronger through positive interactions with visitors from various regions and countries.',
@@ -378,7 +378,7 @@ return [
         'location_desc' => 'Cool & Scenic Location',
         'salak' => 'Salak Gading',
         'salak_desc' => 'Organic Fruit Picking',
-        'homestay' => 'Joglo & Limasan',
+        'homestay' => 'Local Homestay',
         'homestay_desc' => 'Authentic Homestay',
         'guide' => 'Local Guide',
         'guide_desc' => 'Friendly & Experienced',
@@ -447,10 +447,14 @@ return [
         'sidebar_min_pax' => 'Min. Participants',
         'sidebar_includes' => 'Includes',
         'btn_whatsapp' => 'Book via WhatsApp',
+        'btn_packages' => 'View Tour Packages',
         'btn_back' => '← Back to All Activities',
         'related_title' => 'Other Activities',
         'empty' => 'No activities available yet.',
         'btn_detail' => 'View Details',
+        'btn_view_more' => 'View More',
+        'btn_view_less' => 'Show Less',
+        'showing' => 'Showing :visible of :total activities',
     ],
 
     // Logos Section

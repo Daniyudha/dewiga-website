@@ -38,4 +38,9 @@ class Activity extends Model
         $localeField = 'includes_' . $locale;
         return $this->attributes[$localeField] ?? $value;
     }
+
+    public function galleries()
+    {
+        return $this->hasMany(ActivityGallery::class)->orderBy('order');
+    }
 }
