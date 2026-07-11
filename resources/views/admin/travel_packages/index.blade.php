@@ -22,8 +22,8 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>{{ __('Type') }}</th>
-                        <th>{{ __('Location') }}</th>
+                        <th>{{ __('Duration') }}</th>
+                        <th>{{ __('Title') }}</th>
                         <th>{{ __('Price') }}</th>
                         <th class="!text-center">{{ __('Action') }}</th>
                     </tr>

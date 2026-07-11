@@ -28,20 +28,20 @@
                 {{-- Type --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="admin-form-group">
-                        <label for="type_id" class="admin-form-label">{{ __('Type') }} (Indonesia) <span class="text-red-500">*</span></label>
+                        <label for="type_id" class="admin-form-label">{{ __('Durasi') }} (Indonesia) <span class="text-red-500">*</span></label>
                         <input type="text" id="type_id" name="type_id" value="{{ old('type_id') }}"
                                class="admin-form-input @error('type_id') error @enderror"
-                               placeholder="e.g. Budaya" required>
+                               placeholder="e.g. 3 hari 2 malam" required>
                         @error('type_id')
                             <p class="admin-form-error">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div class="admin-form-group">
-                        <label for="type_en" class="admin-form-label">{{ __('Type') }} (English) <span class="text-red-500">*</span></label>
+                        <label for="type_en" class="admin-form-label">{{ __('Duration') }} (English) <span class="text-red-500">*</span></label>
                         <input type="text" id="type_en" name="type_en" value="{{ old('type_en') }}"
                                class="admin-form-input @error('type_en') error @enderror"
-                               placeholder="e.g. Culture" required>
+                               placeholder="e.g. 3 days 2 nights" required>
                         @error('type_en')
                             <p class="admin-form-error">{{ $message }}</p>
                         @enderror
@@ -51,7 +51,7 @@
                 {{-- Title (Location) --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="admin-form-group">
-                        <label for="location_id" class="admin-form-label">{{ __('Title') }} (Indonesia) <span class="text-red-500">*</span></label>
+                        <label for="location_id" class="admin-form-label">{{ __('Judul') }} (Indonesia) <span class="text-red-500">*</span></label>
                         <input type="text" id="location_id" name="location_id" value="{{ old('location_id') }}"
                                class="admin-form-input @error('location_id') error @enderror"
                                placeholder="e.g. Live In" required>
@@ -84,7 +84,7 @@
 
                 {{-- Description (Indonesia) --}}
                 <div class="admin-form-group">
-                    <label for="description_id" class="admin-form-label">{{ __('Description') }} (Indonesia) <span class="text-red-500">*</span></label>
+                    <label for="description_id" class="admin-form-label">{{ __('Deskripsi') }} (Indonesia) <span class="text-red-500">*</span></label>
                     <textarea id="description_id" name="description_id" class="admin-form-textarea @error('description_id') error @enderror"
                               placeholder="Describe the travel package in Indonesian..." required>{{ old('description_id') }}</textarea>
                     @error('description_id')

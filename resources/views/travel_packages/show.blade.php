@@ -22,8 +22,8 @@
         <div class="relative z-10 container mx-auto px-6 pb-16">
             <div class="max-w-4xl">
                 <span class="inline-flex items-center gap-2 bg-[#00a877] text-white px-5 py-2 rounded-full text-sm font-semibold mb-6">{{ $travel_package->type }}</span>
-                <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-white">{{ $travel_package->title ?? $travel_package->type }}</h1>
-                <p class="text-neutral-200 text-base md:text-lg font-medium max-w-2xl leading-relaxed font-light">{{ $travel_package->location }}</p>
+                <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-white">{{ $travel_package->title ?? $travel_package->location }}</h1>
+                {{-- <p class="text-neutral-200 text-base md:text-lg font-medium max-w-2xl leading-relaxed font-light">{{ $travel_package->location }}</p> --}}
             </div>
         </div>
         <div class="absolute bottom-0 left-0 right-0 z-10 overflow-hidden">
@@ -54,7 +54,8 @@
                 <div>
                     <div class="bg-white rounded-[2rem] shadow-xl p-8 md:p-10">
                         <span class="text-[#00a877] font-semibold text-sm uppercase tracking-wider block mb-3">@lang('messages.popular.subtitle')</span>
-                        <h2 class="font-serif text-3xl md:text-4xl font-bold text-[#053d2c] mb-6">{{ $travel_package->title ?? $travel_package->type }}</h2>
+                        <span class="inline-flex items-center gap-2 bg-[#00a877] text-white px-4 py-1 rounded-full text-sm font-semibold mb-2 mt-2">{{ $travel_package->type }}</span>
+                        <h2 class="font-serif text-3xl md:text-4xl font-bold text-[#053d2c] mb-6">{{ $travel_package->title ?? $travel_package->location }}</h2>
                         <div class="prose max-w-none text-neutral-600 leading-relaxed">
                             {!! $travel_package->description !!}
                         </div>
@@ -100,16 +101,16 @@
 
                         <div class="space-y-4 mb-8">
                             <div class="flex items-center gap-3 text-sm">
-                                <div class="w-10 h-10 rounded-xl bg-[#e8fbf3] flex items-center justify-center text-[#00a877]"><i class="bx bx-map"></i></div>
+                                <div class="w-10 h-10 rounded-xl bg-[#e8fbf3] flex items-center justify-center text-[#00a877]"><i class="bx bx-package text-xl"></i></div>
                                 <div>
-                                    <p class="text-neutral-500 text-xs">@lang('messages.packages.location')</p>
+                                    <p class="text-neutral-500 text-xs">@lang('messages.packages.package_title')</p>
                                     <p class="font-semibold text-[#053d2c]">{{ $travel_package->location }}</p>
                                 </div>
                             </div>
                             <div class="flex items-center gap-3 text-sm">
-                                <div class="w-10 h-10 rounded-xl bg-[#e8fbf3] flex items-center justify-center text-[#00a877]"><i class="bx bx-tag"></i></div>
+                                <div class="w-10 h-10 rounded-xl bg-[#e8fbf3] flex items-center justify-center text-[#00a877]"><i class="bx bx-timer text-xl"></i></div>
                                 <div>
-                                    <p class="text-neutral-500 text-xs">@lang('messages.packages.type')</p>
+                                    <p class="text-neutral-500 text-xs">@lang('messages.packages.duration')</p>
                                     <p class="font-semibold text-[#053d2c]">{{ $travel_package->type }}</p>
                                 </div>
                             </div>
