@@ -102,7 +102,7 @@
         id="header"
         class="absolute top-0 left-0 w-full z-50 transition-all duration-500"
     >
-        <nav class="container mx-auto px-6 flex items-center justify-between h-16 lg:h-20">
+        <nav class="container mx-auto px-6 xl:px-0 flex items-center justify-between h-16 lg:h-20">
 
             {{-- Logo --}}
             <a
@@ -114,14 +114,14 @@
                     id="logo-white"
                     src="{{ asset('frontend/assets/img/brand-logo-white.png') }}"
                     alt="Desa Wisata Gabugan"
-                    class="h-4 lg:h-12 w-auto block"
+                    class="h-8 lg:h-10 w-auto block"
                 >
                 {{-- Logo gelap untuk scroll --}}
                 <img
                     id="logo-dark"
                     src="{{ asset('frontend/assets/img/brand-logo.png') }}"
                     alt="Desa Wisata Gabugan"
-                    class="w-10 lg:w-20 h-auto hidden"
+                    class="h-8 lg:h-10 w-auto hidden"
                 >
 
                 <div class="hidden sm:block logo-text transition-all duration-300">
@@ -182,6 +182,11 @@
                 <a href="{{ route('travel_package.index') }}"
                 class="nav-link-desktop {{ request()->routeIs('travel_package.*') ? 'active-nav' : '' }}">
                     @lang('messages.nav.packages')
+                </a>
+
+                <a href="{{ route('schedule.index') }}"
+                class="nav-link-desktop {{ request()->routeIs('schedule.*') ? 'active-nav' : '' }}">
+                    @lang('messages.nav.schedules')
                 </a>
 
                 <a href="{{ route('blog.index') }}"
@@ -250,7 +255,7 @@
                     href="https://api.whatsapp.com/send?phone=6281328856252&text={{ urlencode(__('messages.whatsapp.default_message')) }}"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="hidden xl:flex items-center gap-2 bg-[#00a877] hover:bg-[#008c6a] text-white px-4 py-2 rounded-xl text-sm font-medium transition"
+                    class="hidden xl:flex items-center gap-1 bg-[#00a877] hover:bg-[#008c6a] text-white px-3 py-1.5 rounded-xl text-sm font-medium transition"
                 >
                     <i class="bx bxl-whatsapp text-lg"></i>
                     <span>@lang('messages.whatsapp.cta')</span>
@@ -269,10 +274,10 @@
         </nav>
 
         {{-- Mobile Overlay --}}
-        <div
+        {{-- <div
             id="nav-overlay"
-            class="fixed inset-0 bg-black/50 z-[998] hidden lg:hidden"
-        ></div>
+            class="fixed inset-0 bg-black/50 z-[998] is-hidden lg:hidden"
+        ></div> --}}
 
         {{-- Mobile Menu --}}
         <aside
@@ -322,6 +327,14 @@
                         class="mobile-nav-link">
                             <i class="bx bx-book"></i>
                             @lang('messages.nav.blog')
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('schedule.index') }}"
+                        class="mobile-nav-link">
+                            <i class="bx bx-calendar-event"></i>
+                            @lang('messages.nav.schedules')
                         </a>
                     </li>
 
@@ -610,13 +623,13 @@
 
         $('#nav-toggle').on('click', function() {
             $('#nav-menu').removeClass('translate-x-full');
-            $('#nav-overlay').removeClass('hidden');
+            $('#nav-overlay').removeClass('is-hidden');
             $('body').addClass('overflow-hidden');
         });
 
         $('#nav-close, #nav-overlay').on('click', function() {
             $('#nav-menu').addClass('translate-x-full');
-            $('#nav-overlay').addClass('hidden');
+            $('#nav-overlay').addClass('is-hidden');
             $('body').removeClass('overflow-hidden');
         });
 

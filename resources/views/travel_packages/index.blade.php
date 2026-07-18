@@ -14,13 +14,13 @@
     <section class="relative bg-neutral-900 overflow-hidden min-h-[65vh] flex items-center pt-24">
         <div class="absolute inset-0 z-0">
             @if($heroSetting && $heroSetting->slides->count() > 0)
-                <img src="{{ $heroSetting->slides->first()->image_url }}" alt="@lang('messages.nav.packages')" class="w-full h-full object-cover opacity-30">
+                <img src="{{ $heroSetting->slides->first()->image_url }}" alt="@lang('messages.nav.packages')" class="w-full h-full object-cover">
             @elseif($heroSetting && $heroSetting->image_url)
-                <img src="{{ $heroSetting->image_url }}" alt="@lang('messages.nav.packages')" class="w-full h-full object-cover opacity-30">
+                <img src="{{ $heroSetting->image_url }}" alt="@lang('messages.nav.packages')" class="w-full h-full object-cover">
             @else
-                <img src="{{ asset('frontend/assets/img/package-top.jpg') }}" alt="@lang('messages.nav.packages')" class="w-full h-full object-cover opacity-30">
+                <img src="{{ asset('frontend/assets/img/package-top.jpg') }}" alt="@lang('messages.nav.packages')" class="w-full h-full object-cover">
             @endif
-            <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/90 via-emerald-950/60 to-black/60 z-10"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/90 via-emerald-950/60 to-black/70 z-10"></div>
         </div>
         <div class="container mx-auto px-6 relative z-10 text-center text-white">
             <div class="inline-flex items-center gap-2 bg-[#053d2c]/80 border border-[#00a877]/30 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider text-[#00c887] uppercase mb-5 mx-auto">
@@ -70,7 +70,12 @@
                                 <div class="relative h-72 overflow-hidden">
                                     <img src="{{ Storage::url($travel_package->galleries->first()->images ?? '') }}" alt="{{ $travel_package->location }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
                                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                                    <div class="absolute top-5 left-5">
+                                    <div class="absolute top-5 left-5 flex gap-2">
+                                        @if($travel_package->is_signature)
+                                        <span class="inline-flex items-center gap-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                                            <i class="bx bxs-star"></i> Signature
+                                        </span>
+                                        @endif
                                         <span class="bg-[#00a877] text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg">{{ $travel_package->type }}</span>
                                     </div>
                                     <div class="absolute bottom-5 left-5 right-5">

@@ -13,6 +13,7 @@ return [
         'homestay' => 'Homestay',
         'impact' => 'Dampak Sosial',
         'activities' => 'Aktivitas',
+        'schedules' => 'Event',
     ],
 
     // Logo & Branding
@@ -164,11 +165,13 @@ return [
     'booking' => [
         'title' => 'Pesan Sekarang',
         'your_name' => 'Nama Anda',
+        'your_institution' => 'Asal/Instansi',
         'your_email' => 'Email Anda',
         'your_phone' => 'Nomor Telepon',
         'pick_date' => 'Pilih Tanggal',
         'send_booking' => 'Kirim Pesanan',
         'success' => 'Sukses, kami akan memproses pemesanan Anda',
+        'email_notification' => 'Anda akan menerima email konfirmasi setelah mengirim formulir.',
     ],
 
     // Blog
@@ -477,6 +480,8 @@ return [
         'contact_desc' => 'Hubungi Desa Wisata Gabugan untuk informasi paket wisata, reservasi, dan kunjungan.',
         'about_title' => 'Tentang Kami | Desa Wisata Gabugan',
         'about_desc' => 'Pelajari lebih lanjut tentang Desa Wisata Gabugan, desa wisata mandiri di kaki Gunung Merapi.',
+        'schedules_title' => 'Event | Desa Wisata Gabugan',
+        'schedules_desc' => 'Cek event terbaru, open trip, dan jadwal ketersediaan di Desa Wisata Gabugan.',
     ],
 
     // Video Section

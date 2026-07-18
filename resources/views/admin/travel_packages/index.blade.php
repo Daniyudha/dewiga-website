@@ -25,6 +25,7 @@
                         <th>{{ __('Duration') }}</th>
                         <th>{{ __('Title') }}</th>
                         <th>{{ __('Price') }}</th>
+                        <th>{{ __('Signature') }}</th>
                         <th class="!text-center">{{ __('Action') }}</th>
                     </tr>
                 </thead>
@@ -37,6 +38,18 @@
                             </td>
                             <td>{{ $item->location }}</td>
                             <td class="font-medium text-primary-700">{{ formatPrice($item->price) }}</td>
+                            <td>
+                                <form method="POST" action="{{ route('admin.travel_packages.toggle-signature', [$item]) }}" class="inline">
+                                    @csrf
+                                    @method('patch')
+                                    <button type="submit" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold transition {{ $item->is_signature ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300' }}">
+                                        @if($item->is_signature)
+                                            <i class="bx bxs-star"></i>
+                                        @endif
+                                        {{ $item->is_signature ? __('Signature') : __('No') }}
+                                    </button>
+                                </form>
+                            </td>
                             <td>
                                 <div class="flex items-center justify-center gap-4">
                                     <a href="{{ route('admin.travel_packages.edit', [$item]) }}" class="text-blue-600 hover:text-blue-800 transition-colors">
@@ -54,7 +67,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center py-8 text-gray-500">
+                            <td colspan="6" class="text-center py-8 text-gray-500">
                                 <i class="fas fa-inbox text-3xl text-gray-300 block mb-2"></i>
                                 {{ __('No travel packages found.') }}
                                 <a href="{{ route('admin.travel_packages.create') }}" class="text-primary-600 hover:underline block mt-1">

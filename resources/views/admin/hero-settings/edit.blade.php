@@ -318,7 +318,7 @@ document.addEventListener('DOMContentLoaded', function() {
             uploadBtnSingle.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
 
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', '{{ route("admin.hero-settings.slides.upload", [$heroSetting]) }}');
+            xhr.open('POST', window.location.protocol + '//' + window.location.host + '{{ route("admin.hero-settings.slides.upload", [$heroSetting], false) }}');
             xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
             xhr.upload.onprogress = function(e) {
                 if (e.lengthComputable) {
@@ -368,7 +368,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const slides = collectOrderData();
 
-            fetch('{{ route("admin.hero-settings.slides.reorder", [$heroSetting]) }}', {
+            fetch(window.location.protocol + '//' + window.location.host + '{{ route("admin.hero-settings.slides.reorder", [$heroSetting], false) }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -479,7 +479,7 @@ document.addEventListener('DOMContentLoaded', function() {
             uploadBtnHome.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
 
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', '{{ route("admin.hero-settings.slides.upload", [$heroSetting]) }}');
+            xhr.open('POST', window.location.protocol + '//' + window.location.host + '{{ route("admin.hero-settings.slides.upload", [$heroSetting], false) }}');
             xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
             xhr.upload.onprogress = function(e) {
                 if (e.lengthComputable) {

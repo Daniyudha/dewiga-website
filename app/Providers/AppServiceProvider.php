@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\HeroSetting;
+use App\Services\Chat\AIProviderInterface;
+use App\Services\Chat\GroqProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -11,20 +13,17 @@ class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
-        //
+        // Bind AIProviderInterface to GroqProvider (swap provider here)
+        $this->app->bind(AIProviderInterface::class, GroqProvider::class);
     }
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         Paginator::useTailwind();
 
@@ -40,7 +39,6 @@ class AppServiceProvider extends ServiceProvider
             'travel_packages.index',
             'activities.index',
         ], function ($view) {
-            // Determine which page hero to load based on the view name
             $viewName = $view->getName();
             $pageMap = [
                 'homepage' => 'home',

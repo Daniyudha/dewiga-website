@@ -2,84 +2,87 @@
 
 @section('title', 'Add Partner Logo - Admin Dewiga')
 
-@push('styles')
-<style>
-    #dropzone {
-        transition: all 0.2s ease;
-    }
-    #dropzone.drag-over {
-        border-color: #3b82f6;
-        background-color: #eff6ff;
-    }
-</style>
-@endpush
-
 @section('content')
-    {{-- Page Header --}}
     <div class="mb-6">
         <a href="{{ route('admin.partner_logos.index') }}" class="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition">
             <i class="fas fa-arrow-left"></i> Back to Partner Logos
         </a>
     </div>
 
-    {{-- Form Card --}}
-    <div class="max-w-2xl">
-        <div class="admin-card">
-            <div class="admin-card-header">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center text-primary-600">
-                        <i class="fas fa-image"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-heading font-semibold text-gray-800">Partner Logo</h3>
-                        <p class="text-xs text-gray-500">Upload a new client/partner logo. Drag & drop or click to browse.</p>
+    <form method="POST" action="{{ route('admin.partner_logos.store') }}" enctype="multipart/form-data" id="partnerLogoForm">
+        @csrf
+        
+        <div class="max-w-2xl">
+            {{-- Image Upload --}}
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center text-primary-600">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-heading font-semibold text-gray-800">Partner Logo</h3>
+                            <p class="text-xs text-gray-500">Upload a new client/partner logo. Drag & drop or click to browse.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="admin-card-body">
-                <form method="POST" action="{{ route('admin.partner_logos.store') }}" enctype="multipart/form-data">
-                    @csrf
+                <div class="admin-card-body">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Logo Image <span class="text-red-500">*</span>
+                    </label>
 
-                    {{-- Name --}}
+                    {{-- Dropzone --}}
+                    <div id="dropzoneSingle" class="border-2 border-dashed border-gray-300 rounded-xl p-10 text-center hover:border-primary-400 hover:bg-primary-50/30 transition cursor-pointer">
+                        <i class="fas fa-cloud-upload-alt text-4xl text-gray-300 mb-3"></i>
+                        <p class="text-sm text-gray-600 font-medium">Drop image here or click to browse</p>
+                        <p class="text-xs text-gray-400 mt-1">Supported: PNG, SVG. Max 2MB.</p>
+                        <input type="file" id="fileInputSingle" name="image" accept="image/*" class="hidden">
+                    </div>
+
+                    {{-- Preview after selecting file --}}
+                    <div id="previewAreaSingle" class="hidden">
+                        <div class="relative group bg-white rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+                            <div class="aspect-[16/9] overflow-hidden">
+                                <img id="previewImageSingle" src="" alt="Preview" class="w-full h-full object-contain">
+                            </div>
+                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-200 flex items-center justify-center">
+                                <button type="button" id="removeFileSingleBtn" 
+                                        class="w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition shadow-lg opacity-0 group-hover:opacity-100">
+                                    <i class="fas fa-trash text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p id="fileSelectedTextSingle" class="text-sm text-gray-500 mt-2">1 image selected</p>
+                    </div>
+
+                    {{-- Upload Progress --}}
+                    <div id="uploadProgressSingle" class="hidden mt-4">
+                        <div class="flex items-center gap-3">
+                            <div class="flex-1 bg-gray-200 rounded-full h-2">
+                                <div id="progressBarSingle" class="bg-primary-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                            <span id="progressTextSingle" class="text-sm text-gray-600 shrink-0">0%</span>
+                        </div>
+                    </div>
+
+                    @error('image')
+                        <p class="admin-form-error">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            {{-- Name --}}
+            <div class="admin-card mt-6">
+                <div class="admin-card-header">
+                    <h3 class="font-heading font-semibold text-gray-800">Partner Information</h3>
+                </div>
+                <div class="admin-card-body">
                     <div class="admin-form-group mb-5">
                         <label for="name" class="admin-form-label">{{ __('Name') }} <span class="text-red-500">*</span></label>
                         <input type="text" id="name" name="name" value="{{ old('name') }}"
                                class="admin-form-input @error('name') error @enderror"
                                placeholder="e.g. Ministry of Tourism" required>
                         @error('name')
-                            <p class="admin-form-error">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- Image Dropzone --}}
-                    <div class="admin-form-group mb-5">
-                        <label class="admin-form-label">{{ __('Logo Image') }} <span class="text-red-500">*</span></label>
-
-                        {{-- Dropzone --}}
-                        <div id="dropzone" class="border-2 border-dashed border-gray-300 rounded-xl p-10 text-center hover:border-primary-400 hover:bg-primary-50/30 transition cursor-pointer">
-                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-300 mb-3"></i>
-                            <p class="text-sm text-gray-600 font-medium">Drop image here or click to browse</p>
-                            <p class="text-xs text-gray-400 mt-1">Supported: PNG, SVG. Max 2MB.</p>
-                            <input type="file" id="image" name="image" accept="image/*" class="hidden">
-                        </div>
-
-                        {{-- Preview after selecting file --}}
-                        <div id="previewArea" class="hidden mt-4">
-                            <div class="relative group bg-white rounded-xl overflow-hidden border border-gray-200 shadow-sm">
-                                <div class="overflow-hidden flex items-center justify-center">
-                                    <img id="previewImage" src="" alt="Preview" class="w-full h-full object-contain">
-                                </div>
-                                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-200 flex items-center justify-center">
-                                    <button type="button" id="removeFileBtn"
-                                            class="w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition shadow-lg opacity-0 group-hover:opacity-100">
-                                        <i class="fas fa-trash text-sm"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <p id="fileSelectedText" class="text-sm text-gray-500 mt-2">1 image selected</p>
-                        </div>
-
-                        @error('image')
                             <p class="admin-form-error">{{ $message }}</p>
                         @enderror
                     </div>
@@ -119,81 +122,74 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    {{-- Submit --}}
-                    <div class="flex items-center gap-3 pt-4 border-t border-gray-100">
-                        <button type="submit" class="admin-btn-primary">
-                            <i class="fas fa-save"></i>
-                            {{ __('Save Logo') }}
-                        </button>
-                        <a href="{{ route('admin.partner_logos.index') }}" class="admin-btn-secondary">
-                            {{ __('Cancel') }}
-                        </a>
-                    </div>
-                </form>
+            {{-- Submit --}}
+            <div class="flex items-center gap-3 pt-4">
+                <button type="submit" class="admin-btn-primary" id="submitBtn">
+                    <i class="fas fa-save"></i>
+                    {{ __('Save Logo') }}
+                </button>
+                <a href="{{ route('admin.partner_logos.index') }}" class="admin-btn-secondary">
+                    {{ __('Cancel') }}
+                </a>
             </div>
         </div>
-    </div>
+    </form>
 @endsection
 
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const dropzone = document.getElementById('dropzone');
-    const fileInput = document.getElementById('image');
-    const previewArea = document.getElementById('previewArea');
-    const previewImage = document.getElementById('previewImage');
-    const removeFileBtn = document.getElementById('removeFileBtn');
+    const dropzoneSingle = document.getElementById('dropzoneSingle');
+    const fileInputSingle = document.getElementById('fileInputSingle');
+    const previewAreaSingle = document.getElementById('previewAreaSingle');
+    const previewImageSingle = document.getElementById('previewImageSingle');
+    const removeFileSingleBtn = document.getElementById('removeFileSingleBtn');
+    const uploadProgressSingle = document.getElementById('uploadProgressSingle');
+    const progressBarSingle = document.getElementById('progressBarSingle');
+    const progressTextSingle = document.getElementById('progressTextSingle');
+    const fileSelectedTextSingle = document.getElementById('fileSelectedTextSingle');
+    const form = document.getElementById('partnerLogoForm');
 
-    function showPreview(file) {
+    function showPreviewSingle(file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            previewImage.src = e.target.result;
-            dropzone.classList.add('hidden');
-            previewArea.classList.remove('hidden');
+            previewImageSingle.src = e.target.result;
+            dropzoneSingle.classList.add('hidden');
+            previewAreaSingle.classList.remove('hidden');
+            fileSelectedTextSingle.textContent = '1 image selected';
         };
         reader.readAsDataURL(file);
     }
 
-    function resetDropzone() {
-        fileInput.value = '';
-        previewArea.classList.add('hidden');
-        dropzone.classList.remove('hidden');
+    function resetDropzoneSingle() {
+        fileInputSingle.value = '';
+        previewAreaSingle.classList.add('hidden');
+        dropzoneSingle.classList.remove('hidden');
+        uploadProgressSingle.classList.add('hidden');
+        progressBarSingle.style.width = '0%';
+        progressTextSingle.textContent = '0%';
     }
 
-    // Click to browse
-    dropzone.addEventListener('click', () => fileInput.click());
-
-    // Drag over
-    dropzone.addEventListener('dragover', (e) => {
+    dropzoneSingle.addEventListener('click', () => fileInputSingle.click());
+    dropzoneSingle.addEventListener('dragover', (e) => {
         e.preventDefault();
-        dropzone.classList.add('drag-over');
+        dropzoneSingle.classList.add('border-primary-500', 'bg-primary-50/50');
     });
-
-    // Drag leave
-    dropzone.addEventListener('dragleave', () => {
-        dropzone.classList.remove('drag-over');
+    dropzoneSingle.addEventListener('dragleave', () => {
+        dropzoneSingle.classList.remove('border-primary-500', 'bg-primary-50/50');
     });
-
-    // Drop
-    dropzone.addEventListener('drop', (e) => {
+    dropzoneSingle.addEventListener('drop', (e) => {
         e.preventDefault();
-        dropzone.classList.remove('drag-over');
-        if (e.dataTransfer.files.length > 0) {
-            fileInput.files = e.dataTransfer.files;
-            showPreview(e.dataTransfer.files[0]);
-        }
+        dropzoneSingle.classList.remove('border-primary-500', 'bg-primary-50/50');
+        if (e.dataTransfer.files.length > 0) showPreviewSingle(e.dataTransfer.files[0]);
     });
-
-    // File input change
-    fileInput.addEventListener('change', () => {
-        if (fileInput.files.length > 0) {
-            showPreview(fileInput.files[0]);
-        }
+    fileInputSingle.addEventListener('change', () => {
+        if (fileInputSingle.files.length > 0) showPreviewSingle(fileInputSingle.files[0]);
     });
-
-    // Remove file
-    removeFileBtn.addEventListener('click', resetDropzone);
+    removeFileSingleBtn.addEventListener('click', resetDropzoneSingle);
 });
 </script>
 @endpush

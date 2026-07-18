@@ -96,4 +96,19 @@ class TravelPackageController extends Controller
             'alert-type' => 'danger'
         ]);
     }
+
+    /**
+     * Toggle signature status.
+     */
+    public function toggleSignature(TravelPackage $travel_package)
+    {
+        $travel_package->update([
+            'is_signature' => !$travel_package->is_signature
+        ]);
+
+        return redirect()->back()->with([
+            'message' => 'Signature status updated!',
+            'alert-type' => 'success'
+        ]);
+    }
 }

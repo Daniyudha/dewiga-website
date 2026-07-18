@@ -136,6 +136,19 @@
                     </div>
                 </div>
 
+                {{-- Signature Package --}}
+                <div class="border-t border-gray-200 pt-6">
+                    <h3 class="text-lg font-heading font-semibold text-gray-800 mb-4">{{ __('Package Options') }}</h3>
+                    <div class="flex items-center gap-6">
+                        <input type="hidden" name="is_signature" value="0">
+                        <label class="inline-flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" name="is_signature" value="1"
+                                   class="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500">
+                            <span class="text-sm text-gray-700">{{ __('Signature Package') }}</span>
+                        </label>
+                    </div>
+                </div>
+
                 {{-- Submit --}}
                 <div class="flex items-center gap-3 pt-2">
                     <button type="submit" class="admin-btn-success">
@@ -210,7 +223,7 @@ document.getElementById('image').addEventListener('change', function(e) {
                     toolbar: [ 'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight' ]
                 },
                 simpleUpload: {
-                    uploadUrl: '{{ route('admin.upload.image') }}',
+                    uploadUrl: window.location.protocol + '//' + window.location.host + '{{ route('admin.upload.image', [], false) }}',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                         'Accept': 'application/json'

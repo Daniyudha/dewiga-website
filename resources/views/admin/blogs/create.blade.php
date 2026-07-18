@@ -255,7 +255,7 @@ document.getElementById('image').addEventListener('change', function(e) {
                     toolbar: [ 'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight' ]
                 },
                 simpleUpload: {
-                    uploadUrl: '{{ route('admin.upload.image') }}',
+                    uploadUrl: window.location.protocol + '//' + window.location.host + '{{ route('admin.upload.image', [], false) }}',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                         'Accept': 'application/json'

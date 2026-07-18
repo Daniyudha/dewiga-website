@@ -13,6 +13,7 @@ return [
         'homestay' => 'Homestay',
         'impact' => 'Community Impact',
         'activities' => 'Activities',
+        'schedules' => 'Events',
     ],
 
     // Logo & Branding
@@ -164,11 +165,13 @@ return [
     'booking' => [
         'title' => 'Book Now',
         'your_name' => 'Your Name',
+        'your_institution' => 'Institution/Organization',
         'your_email' => 'Your Email',
         'your_phone' => 'Your Phone Number',
         'pick_date' => 'Pick Your Date',
         'send_booking' => 'Send Booking',
         'success' => "Success, we'll process your booking",
+        'email_notification' => 'You will receive a confirmation email after submitting the form.',
     ],
 
     // Blog
@@ -477,6 +480,8 @@ return [
         'contact_desc' => 'Contact Gabugan Tourism Village for tour package information, reservations, and visits.',
         'about_title' => 'About Us | Gabugan Tourism Village',
         'about_desc' => 'Learn more about Gabugan Tourism Village, an independent tourism village at the foot of Mount Merapi.',
+        'schedules_title' => 'Events | Gabugan Tourism Village',
+        'schedules_desc' => 'Check upcoming events, open trips, and schedule availability at Gabugan Tourism Village.',
     ],
 
     // Video Section

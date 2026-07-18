@@ -1,29 +1,35 @@
 @extends('layouts.frontend')
 
-@section('title', $travel_package->title ?? $travel_package->type . ' - ' . __('messages.seo.packages_title'))
+@section('title', $travel_package->title ?? $travel_package->location . ' - ' . __('messages.seo.packages_title'))
 @section('meta_description', strip_tags($travel_package->description))
-@section('og_title', $travel_package->title ?? $travel_package->type)
+@section('og_title', $travel_package->title ?? $travel_package->location)
 @section('og_description', strip_tags($travel_package->description))
-@section('twitter_title', $travel_package->title ?? $travel_package->type)
+@section('twitter_title', $travel_package->title ?? $travel_package->location)
 @section('twitter_description', strip_tags($travel_package->description))
 
 @section('content')
     {{-- HERO --}}
-    <section class="relative bg-neutral-900 overflow-hidden min-h-[60vh] flex items-end pt-24">
+    <section class="relative bg-neutral-900 overflow-hidden min-h-[70vh] flex items-end pt-24">
         <div class="absolute inset-0 z-0">
             @php
                 $heroImg = $travel_package->galleries->count() > 0 && $travel_package->galleries->first()->images
                     ? asset('storage/' . $travel_package->galleries->first()->images)
                     : asset('frontend/assets/img/package-top.jpg');
             @endphp
-            <img src="{{ $heroImg }}" alt="{{ $travel_package->type }}" class="w-full h-full object-cover opacity-30">
-            <div class="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/40 to-black/30 z-10"></div>
+            <img src="{{ $heroImg }}" alt="{{ $travel_package->location }}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/90 via-emerald-950/60 to-black/70 z-10"></div>
         </div>
         <div class="relative z-10 container mx-auto px-6 pb-16">
             <div class="max-w-4xl">
-                <span class="inline-flex items-center gap-2 bg-[#00a877] text-white px-5 py-2 rounded-full text-sm font-semibold mb-6">{{ $travel_package->type }}</span>
+                <div class="flex items-center gap-2 mb-6">
+                    @if($travel_package->is_signature)
+                    <span class="inline-flex items-center gap-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                        <i class="bx bxs-star"></i> Signature
+                    </span>
+                    @endif
+                    <span class="inline-flex items-center gap-2 bg-[#00a877] text-white px-5 py-2 rounded-full text-sm font-semibold">{{ $travel_package->type }}</span>
+                </div>
                 <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-white">{{ $travel_package->title ?? $travel_package->location }}</h1>
-                {{-- <p class="text-neutral-200 text-base md:text-lg font-medium max-w-2xl leading-relaxed font-light">{{ $travel_package->location }}</p> --}}
             </div>
         </div>
         <div class="absolute bottom-0 left-0 right-0 z-10 overflow-hidden">
@@ -116,8 +122,14 @@
                             </div>
                         </div>
 
+                        <a href="{{ route('travel_package.book', $travel_package->slug) }}"
+                           class="w-full inline-flex items-center justify-center gap-2 bg-[#00a877] hover:bg-[#009065] text-white px-8 py-4 rounded-full font-medium transition duration-300 mb-4">
+                            <i class="bx bx-calendar text-xl"></i>
+                            @lang('Book Now')
+                        </a>
+                        
                         <a href="https://api.whatsapp.com/send?phone=6281328856252&text={{ urlencode(__('messages.whatsapp.default_message')) }}" target="_blank"
-                           class="w-full inline-flex items-center justify-center gap-2 bg-[#00a877] hover:bg-[#009065] text-white px-8 py-4 rounded-full font-medium transition duration-300">
+                           class="w-full inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full font-medium transition duration-300">
                             <i class="bx bxl-whatsapp text-xl"></i>
                             @lang('messages.whatsapp.cta')
                         </a>

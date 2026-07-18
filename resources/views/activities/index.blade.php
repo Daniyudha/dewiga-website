@@ -10,15 +10,15 @@
         <div class="absolute inset-0 z-0">
             @if($heroSetting && $heroSetting->slides->count() > 0)
                 <img src="{{ $heroSetting->slides->first()->image_url }}" alt="Aktivitas Desa Wisata Gabugan"
-                     class="w-full h-full object-cover opacity-30">
+                     class="w-full h-full object-cover">
             @elseif($heroSetting && $heroSetting->image_url)
                 <img src="{{ $heroSetting->image_url }}" alt="Aktivitas Desa Wisata Gabugan"
-                     class="w-full h-full object-cover opacity-30">
+                     class="w-full h-full object-cover">
             @else
                 <img src="{{ asset('frontend/assets/img/hero2.jpg') }}" alt="Aktivitas Desa Wisata Gabugan"
-                     class="w-full h-full object-cover opacity-30">
+                     class="w-full h-full object-cover">
             @endif
-            <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/90 via-emerald-950/60 to-black/60 z-10"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/90 via-emerald-950/60 to-black/70 z-10"></div>
         </div>
         <div class="container mx-auto px-6 relative z-10 text-center text-white">
             <div class="inline-flex items-center gap-2 bg-[#00a877]/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider text-white uppercase mb-5 mx-auto">

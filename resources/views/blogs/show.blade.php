@@ -28,10 +28,10 @@
 
 @section('content')
     {{-- HERO --}}
-    <section class="relative bg-neutral-900 overflow-hidden min-h-[55vh] flex items-end pt-24">
+    <section class="relative bg-neutral-900 overflow-hidden min-h-[70vh] flex items-end pt-24">
         <div class="absolute inset-0 z-0">
-            <img src="{{ Storage::url($blog->image) }}" alt="{{ $blog->title }}" class="w-full h-full object-cover opacity-30">
-            <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/90 via-emerald-950/60 to-black/60 z-10"></div>
+            <img src="{{ Storage::url($blog->image) }}" alt="{{ $blog->title }}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/90 via-emerald-950/60 to-black/70 z-10"></div>
         </div>
         <div class="relative z-10 container mx-auto px-6 pb-16">
             <div class="max-w-4xl">

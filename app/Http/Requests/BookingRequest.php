@@ -23,10 +23,19 @@ class BookingRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'email' => 'required',
+            'institution' => 'nullable',
+            'email' => 'required|email',
             'number_phone' => 'required',
-            'date' => ['required', 'date'],
+            'schedule_id' => 'nullable|exists:schedules,id',
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
             'travel_package_id' => 'required',
+            'people_count' => 'nullable|integer|min:1',
+            'description' => 'nullable|string',
+            'participants' => 'nullable|array',
+            'participants.*.name' => 'required|string|max:255',
+            'participants.*.email' => 'nullable|email',
+            'participants.*.phone' => 'nullable|string',
         ];
     }
 }

@@ -317,14 +317,17 @@
     display: inline-flex;
     align-items: center;
 
-    /* padding: .75rem 1rem; */
-    /* border-radius: .75rem; */
-
     color: rgba(255,255,255,.85);
 
     font-weight: 500;
 
     transition: all .3s ease;
+}
+
+@media (max-width: 1280px) {
+    .nav-link-desktop{
+        padding: 0 0.7rem;
+    }
 }
 
 .nav-link-desktop:hover{

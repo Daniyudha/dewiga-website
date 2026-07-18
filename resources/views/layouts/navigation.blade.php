@@ -39,6 +39,14 @@
             <span>{{ __('Users') }}</span>
         </a>
     </div>
+    
+    {{-- Travel Packages --}}
+    <div class="nav-item">
+        <a href="{{ route('admin.travel_packages.index') }}" class="nav-link">
+            <i class="nav-icon fa fa-hotel"></i>
+            <span>{{ __('Travel Package') }}</span>
+        </a>
+    </div>
 
     {{-- Bookings --}}
     <div class="nav-item">
@@ -48,14 +56,22 @@
         </a>
     </div>
 
-    {{-- Travel Packages --}}
+    {{-- Open Trip Registrations --}}
     <div class="nav-item">
-        <a href="{{ route('admin.travel_packages.index') }}" class="nav-link">
-            <i class="nav-icon fa fa-hotel"></i>
-            <span>{{ __('Travel Package') }}</span>
+        <a href="{{ route('admin.open-trip-registrations.index') }}" class="nav-link">
+            <i class="nav-icon fas fa-users"></i>
+            <span>{{ __('Open Trip Registrations') }}</span>
         </a>
     </div>
-
+    
+    {{-- Schedules --}}
+    <div class="nav-item">
+        <a href="{{ route('admin.schedules.index') }}" class="nav-link">
+            <i class="nav-icon fas fa-calendar-alt"></i>
+            <span>{{ __('Schedules') }}</span>
+        </a>
+    </div>
+    
     {{-- Blog (with treeview) --}}
     <div class="nav-item">
         <a href="#" class="nav-link treeview-toggle">

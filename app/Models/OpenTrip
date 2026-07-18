@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class OpenTripRegistration extends Model
+{
+    use HasFactory;
+
+    protected $guarded = ['id'];
+
+    protected $casts = [
+        'date' => 'date:Y-m-d',
+        'start_date' => 'date:Y-m-d',
+        'end_date' => 'date:Y-m-d',
+        'people_count' => 'integer',
+    ];
+
+    /**
+     * Get available statuses with labels.
+     */
+    public static function statuses(): array
+    {
+        return [
+            'pending' => 'Pending',
+            'confirmed' => 'Confirmed',
+            'cancelled' => 'Cancelled',
+        ];
+    }
+
+    /**
+     * Get status label.
+     */
+    public function getStatusLabelAttribute(): string
+    {
+        return self::statuses()[$this->status] ?? $this->status;
+    }
+
+    public function travelPackage()
+    {
+        return $this->belongsTo(TravelPackage::class, 'travel_package_id');
+    }
+
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class);
+    }
+}

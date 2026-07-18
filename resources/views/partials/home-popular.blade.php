@@ -33,6 +33,12 @@
                                 @endif
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                                 <span class="absolute top-4 left-4 bg-[#00a877] text-white text-[10px] font-bold tracking-wider uppercase px-3 py-1.5 rounded-full">{{ $package->type }}</span>
+                                @if($package->is_signature)
+                                <span class="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] font-bold tracking-wider uppercase px-3 py-1.5 rounded-full flex items-center gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                    {{ __('Signature') }}
+                                </span>
+                                @endif
                                 <div class="absolute bottom-4 left-4 right-4">
                                     <div class="bg-white/20 backdrop-blur-sm border border-white/20 rounded-2xl px-4 py-2">
                                         <span class="text-[10px] text-white/70 block">@lang('messages.popular.start_from')</span>

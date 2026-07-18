@@ -20,4 +20,9 @@ class TravelPackageController extends Controller
 
         return view('travel_packages.show', compact('travel_package', 'travel_packages'));
     }
+
+    public function book(TravelPackage $travel_package)
+    {
+        return view('bookings.create', compact('travel_package'));
+    }
 }

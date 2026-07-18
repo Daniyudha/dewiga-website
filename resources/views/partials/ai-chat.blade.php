@@ -7,7 +7,7 @@
 --}}
 
 {{-- Overlay --}}
-<div id="ai-chat-overlay" class="fixed inset-0 bg-black/40 z-[9998] hidden transition-opacity duration-300"></div>
+<div id="ai-chat-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[9998] hidden transition-opacity duration-300"></div>
 
 {{-- Chat Panel (slide from right) --}}
 <div id="ai-chat-panel" class="fixed top-0 right-0 z-[9999] h-screen w-full sm:w-3/4 lg:w-1/2 xl:1/3 bg-white shadow-2xl flex flex-col translate-x-full transition-transform duration-300 ease-out">

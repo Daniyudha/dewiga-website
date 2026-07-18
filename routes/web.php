@@ -11,8 +11,11 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     Route::group(['middleware' => ['is_admin','auth'], 'prefix' => 'admin', 'as' => 'admin.'], function() {
         Route::get('dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
-        Route::resource('bookings', \App\Http\Controllers\Admin\BookingController::class)->only(['index', 'destroy']);
+        Route::resource('bookings', \App\Http\Controllers\Admin\BookingController::class)->except('show');
+        Route::patch('bookings/{booking}/confirm', [\App\Http\Controllers\Admin\BookingController::class, 'confirm'])->name('bookings.confirm');
+        Route::patch('bookings/{booking}/cancel', [\App\Http\Controllers\Admin\BookingController::class, 'cancel'])->name('bookings.cancel');
         Route::resource('travel_packages', \App\Http\Controllers\Admin\TravelPackageController::class)->except('show');
+        Route::patch('travel_packages/{travel_package}/toggle-signature', [\App\Http\Controllers\Admin\TravelPackageController::class, 'toggleSignature'])->name('travel_packages.toggle-signature');
         Route::resource('travel_packages.galleries', \App\Http\Controllers\Admin\GalleryController::class)->except(['create', 'index','show']);
         Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class)->except('show');
         Route::resource('blogs', \App\Http\Controllers\Admin\BlogController::class)->except('show');
@@ -21,6 +24,18 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
         Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
         Route::put('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+
+        // Schedules
+        Route::resource('schedules', \App\Http\Controllers\Admin\ScheduleController::class)->except('show');
+        Route::patch('schedules/{schedule}/toggle-active', [\App\Http\Controllers\Admin\ScheduleController::class, 'toggleActive'])->name('schedules.toggle-active');
+
+        // Open Trip Registrations
+        Route::get('open-trip-registrations/{schedule}/export', [\App\Http\Controllers\Admin\OpenTripRegistrationController::class, 'export'])->name('open-trip-registrations.export');
+        Route::get('open-trip-registrations/{schedule}/schedule', [\App\Http\Controllers\Admin\OpenTripRegistrationController::class, 'showSchedule'])->name('open-trip-registrations.schedule');
+        Route::post('open-trip-registrations/{schedule}/recalculate', [\App\Http\Controllers\Admin\OpenTripRegistrationController::class, 'recalculate'])->name('open-trip-registrations.recalculate');
+        Route::resource('open-trip-registrations', \App\Http\Controllers\Admin\OpenTripRegistrationController::class);
+
+
 
         // Partner Logos
         Route::resource('partner_logos', \App\Http\Controllers\Admin\PartnerLogoController::class)->except('show');
@@ -54,6 +69,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     // travel packages
     Route::get('travel-packages', [\App\Http\Controllers\TravelPackageController::class, 'index'])->name('travel_package.index');
     Route::get('travel-packages/{travel_package:slug}', [\App\Http\Controllers\TravelPackageController::class, 'show'])->name('travel_package.show');
+    Route::get('travel-packages/{travel_package:slug}/book', [\App\Http\Controllers\TravelPackageController::class, 'book'])->name('travel_package.book');
 
     // blogs
     Route::get('blogs', [\App\Http\Controllers\BlogController::class, 'index'])->name('blog.index');
@@ -81,7 +97,14 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     Route::get('testimonials/create', [\App\Http\Controllers\TestimonialController::class, 'create'])->name('testimonials.create');
     Route::post('testimonials', [\App\Http\Controllers\TestimonialController::class, 'store'])->name('testimonials.store');
 
+    // schedules
+    Route::get('schedules', [\App\Http\Controllers\ScheduleController::class, 'index'])->name('schedule.index');
+    
     // sitemap
     Route::get('sitemap.xml', [\App\Http\Controllers\HomeController::class, 'sitemap'])->name('sitemap');
-});
 
+    // AI Chatbot API
+    Route::post('api/chat/send', [\App\Http\Controllers\ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::get('api/chat/welcome', [\App\Http\Controllers\ChatController::class, 'welcome'])->name('chat.welcome');
+    Route::post('api/chat/clear', [\App\Http\Controllers\ChatController::class, 'clearSession'])->name('chat.clear');
+});
