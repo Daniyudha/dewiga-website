@@ -125,13 +125,13 @@
                         <a href="{{ route('travel_package.book', $travel_package->slug) }}"
                            class="w-full inline-flex items-center justify-center gap-2 bg-[#00a877] hover:bg-[#009065] text-white px-8 py-4 rounded-full font-medium transition duration-300 mb-4">
                             <i class="bx bx-calendar text-xl"></i>
-                            @lang('Book Now')
+                            @lang('messages.packages.cta_online')
                         </a>
                         
                         <a href="https://api.whatsapp.com/send?phone=6281328856252&text={{ urlencode(__('messages.whatsapp.default_message')) }}" target="_blank"
                            class="w-full inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-full font-medium transition duration-300">
                             <i class="bx bxl-whatsapp text-xl"></i>
-                            @lang('messages.whatsapp.cta')
+                            @lang('messages.packages.cta_whatsapp')
                         </a>
                     </div>
                 </div>

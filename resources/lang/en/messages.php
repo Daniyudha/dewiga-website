@@ -153,6 +153,8 @@ return [
         'empty' => 'No packages available at the moment.',
         'showing' => 'Showing :count Tour Packages',
         'activities' => 'Activities',
+        'cta_whatsapp' => 'Consult via WhatsApp',
+        'cta_online' => 'Online Reservation',
         'cta_badge' => 'Reserve Now',
         'cta_hero_title' => 'Experience Authentic Village Life with Gabugan Residents',
         'cta_hero_desc' => 'Edu-tourism, Live In, Outbound, Agriculture, and Local Culture in one unforgettable experience.',

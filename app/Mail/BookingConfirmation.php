@@ -31,8 +31,8 @@ class BookingConfirmation extends Mailable
      */
     public function build()
     {
-        return $this->from('edpdewiga@gmail.com', 'Dewiga Travel')
-                    ->subject('Booking Confirmation - Dewiga Travel')
+        return $this->from('edpdewiga@gmail.com', 'Desa Wisata Gabugan')
+                    ->subject('Booking Confirmation - Desa Wisata Gabugan')
                     ->markdown('emails.booking-confirmation');
     }
 }

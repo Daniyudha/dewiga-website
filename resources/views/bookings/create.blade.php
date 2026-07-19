@@ -62,7 +62,7 @@
                 <i class="bx bx-chevron-right"></i>
                 <a href="{{ route('travel_package.show', $travel_package->slug) }}" class="hover:text-[#00a877]">{{ $travel_package->title ?? $travel_package->type }}</a>
                 <i class="bx bx-chevron-right"></i>
-                <span class="text-[#053d2c] font-medium">@lang('messages.nav.booking')</span>
+                <span class="text-[#053d2c] font-medium">@lang('messages.booking.title')</span>
             </div>
         </div>
     </section>
@@ -72,7 +72,7 @@
         <div class="container mx-auto px-6">
             <div class="max-w-2xl mx-auto">
                 <div class="bg-white rounded-[2rem] shadow-xl p-8 md:p-10">
-                    <h2 class="font-serif text-3xl font-bold text-[#053d2c] mb-2">@lang('messages.nav.booking')</h2>
+                    <h2 class="font-serif text-3xl font-bold text-[#053d2c] mb-2">@lang('messages.booking.title')</h2>
                     <p class="text-neutral-500 mb-6">{{ $travel_package->title ?? $travel_package->location }}</p>
 
                     @if(session('message'))

@@ -153,6 +153,8 @@ return [
         'empty' => 'Belum ada paket wisata tersedia saat ini.',
         'showing' => 'Menampilkan :count Paket Wisata',
         'activities' => 'Aktivitas',
+        'cta_whatsapp' => 'Konsultasi via WhatsApp',
+        'cta_online' => 'Reservasi Online',
         'cta_badge' => 'Reservasi Sekarang',
         'cta_hero_title' => 'Rasakan Pengalaman Desa yang Autentik Bersama Warga Gabugan',
         'cta_hero_desc' => 'Eduwisata, Live In, Outbound, Pertanian, dan Budaya Lokal dalam satu pengalaman yang berkesan.',

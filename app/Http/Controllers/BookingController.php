@@ -69,6 +69,9 @@ class BookingController extends Controller
             // Increment booked count on schedule
             $schedule->increment('booked', $data['people_count'] ?? 1);
             
+            // Load travelPackage relation for email
+            $openTripRegistration->load('travelPackage');
+
             // Send email notification
             try {
                 Mail::to($openTripRegistration->email)->cc('edpdewiga@gmail.com')->send(new BookingConfirmation($openTripRegistration));
@@ -115,6 +118,9 @@ class BookingController extends Controller
         if ($schedule && $data['status'] === 'confirmed') {
             $schedule->increment('booked', $data['people_count'] ?? 1);
         }
+
+        // Load travelPackage relation for email
+        $booking->load('travelPackage');
 
         // Send email notification
         try {
