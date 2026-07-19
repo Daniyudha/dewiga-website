@@ -69,8 +69,8 @@ class BookingController extends Controller
             // Increment booked count on schedule
             $schedule->increment('booked', $data['people_count'] ?? 1);
             
-            // Load travelPackage relation for email
-            $openTripRegistration->load('travelPackage');
+            // Load travel_package relation for email
+            $openTripRegistration->load('travel_package');
 
             // Send email notification
             try {
@@ -119,8 +119,8 @@ class BookingController extends Controller
             $schedule->increment('booked', $data['people_count'] ?? 1);
         }
 
-        // Load travelPackage relation for email
-        $booking->load('travelPackage');
+        // Load travel_package relation for email
+        $booking->load('travel_package');
 
         // Send email notification
         try {
