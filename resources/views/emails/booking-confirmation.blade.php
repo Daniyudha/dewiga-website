@@ -144,10 +144,10 @@
             <div class="detail-row">
                 <span class="detail-label">{{ __('Package') }}</span>
                 <span class="detail-value">
-                    @if($booking->travelPackage)
-                        <span class="package-badge">{{ $booking->travelPackage->type }}</span>
-                    @elseif($booking->travel_package)
+                    @if($booking->travel_package)
                         <span class="package-badge">{{ $booking->travel_package->type }}</span>
+                    @elseif($booking->travelPackage)
+                        <span class="package-badge">{{ $booking->travelPackage->type }}</span>
                     @else
                         -
                     @endif
