@@ -9,6 +9,7 @@ use App\Models\TravelPackage;
 use Illuminate\Http\Request;
 use App\Http\Requests\BookingRequest;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use App\Mail\BookingConfirmation;
 
 class BookingController extends Controller
@@ -76,7 +77,7 @@ class BookingController extends Controller
             try {
                 Mail::to($openTripRegistration->email)->cc('edpdewiga@gmail.com')->send(new BookingConfirmation($openTripRegistration));
             } catch (\Exception $e) {
-                // Log error but don't fail the registration
+                Log::error('Failed to send open trip email to '.$openTripRegistration->email.': '.$e->getMessage());
             }
             
             return redirect()->back()->with([
@@ -99,19 +100,31 @@ class BookingController extends Controller
             }
         }
 
-        // Create schedule automatically for non-open_trip bookings
+        // Create schedule automatically for non-open_trip bookings (skip if already exists for this package+date)
         if (!$schedule && isset($data['travel_package_id']) && isset($data['start_date'])) {
-            $schedule = Schedule::create([
-                'travel_package_id' => $data['travel_package_id'],
-                'visitor_name' => $data['name'],
-                'start_date' => $data['start_date'],
-                'end_date' => $data['end_date'] ?? null,
-                'quota' => $data['people_count'] ?? 1,
-                'booked' => $data['status'] === 'confirmed' ? ($data['people_count'] ?? 1) : 0,
-                'type' => $data['status'] === 'confirmed' ? 'confirmed' : 'pending',
-                'is_active' => true,
-            ]);
-            $booking->update(['schedule_id' => $schedule->id]);
+            $existingSchedule = Schedule::where('travel_package_id', $data['travel_package_id'])
+                ->where('start_date', $data['start_date'])
+                ->first();
+            
+            if ($existingSchedule) {
+                $booking->update(['schedule_id' => $existingSchedule->id]);
+            } else {
+                try {
+                    $schedule = Schedule::create([
+                        'travel_package_id' => $data['travel_package_id'],
+                        'visitor_name' => $data['name'],
+                        'start_date' => $data['start_date'],
+                        'end_date' => $data['end_date'] ?? null,
+                        'quota' => $data['people_count'] ?? 1,
+                        'booked' => $data['status'] === 'confirmed' ? ($data['people_count'] ?? 1) : 0,
+                        'type' => $data['status'] === 'confirmed' ? 'confirmed' : 'pending',
+                        'is_active' => true,
+                    ]);
+                    $booking->update(['schedule_id' => $schedule->id]);
+                } catch (\Exception $e) {
+                    Log::warning('Could not auto-create schedule for booking #'.$booking->id.': '.$e->getMessage());
+                }
+            }
         }
 
         // Increment booked count on schedule if schedule_id is set and status is confirmed
@@ -126,7 +139,7 @@ class BookingController extends Controller
         try {
             Mail::to($booking->email)->cc('edpdewiga@gmail.com')->send(new BookingConfirmation($booking));
         } catch (\Exception $e) {
-            // Log error but don't fail the booking
+            Log::error('Failed to send booking confirmation email to '.$booking->email.': '.$e->getMessage());
         }
 
         // Get travel package for redirect

@@ -188,7 +188,7 @@
                 @lang('messages.nav.schedules')
             </h1>
             <p class="text-neutral-200 text-base md:text-lg max-w-2xl mx-auto leading-relaxed font-light">
-                {{ __('Check upcoming events, open trips, and schedule availability') }}
+                {{ __('messages.schedules.hero_desc') }}
             </p>
         </div>
         <div class="absolute bottom-0 left-0 right-0 z-10 overflow-hidden">
@@ -207,16 +207,16 @@
             {{-- Legend --}}
             <div class="flex flex-wrap items-center justify-center gap-4 mt-4 text-sm">
                 <span class="inline-flex items-center gap-1.5">
-                    <span class="w-3 h-3 rounded-full bg-blue-500"></span> Open Trip
+                    <span class="w-3 h-3 rounded-full bg-blue-500"></span> {{ __('messages.schedules.Open_Trip') }}
                 </span>
                 <span class="inline-flex items-center gap-1.5">
-                    <span class="w-3 h-3 rounded-full bg-emerald-600"></span> Confirmed
+                    <span class="w-3 h-3 rounded-full bg-emerald-600"></span> {{ __('messages.schedules.Confirmed') }}
                 </span>
                 <span class="inline-flex items-center gap-1.5">
-                    <span class="w-3 h-3 rounded-full bg-amber-500"></span> Pending
+                    <span class="w-3 h-3 rounded-full bg-amber-500"></span> {{ __('messages.schedules.Pending') }}
                 </span>
                 <span class="inline-flex items-center gap-1.5">
-                    <span class="w-3 h-3 rounded-full bg-red-500"></span> Fully Booked
+                    <span class="w-3 h-3 rounded-full bg-red-500"></span> {{ __('messages.schedules.Fully_Booked') }}
                 </span>
             </div>
         </div>
@@ -226,24 +226,24 @@
     @if($allSchedules->isNotEmpty())
     <section class="py-12 bg-[#f8fdfb]" id="events-section">
         <div class="container mx-auto px-6">
-            <h2 class="text-2xl font-serif font-bold text-[#053d2c] mb-8 text-center">{{ __('Upcoming Events') }}</h2>
+            <h2 class="text-2xl font-serif font-bold text-[#053d2c] mb-8 text-center">{{ __('messages.schedules.Upcoming_Events') }}</h2>
 
             {{-- Type Tabs --}}
             <div class="type-tabs justify-center" id="eventTabs">
                 <button class="type-tab active" data-type="all">
-                    {{ __('All') }}
+                    {{ __('messages.schedules.All') }}
                     <span class="count">{{ $allSchedules->count() }}</span>
                 </button>
                 <button class="type-tab" data-type="open_trip">
-                    <span class="type-badge type-open_trip mr-1">Open Trip</span>
+                    <span class="type-badge type-open_trip mr-1">{{ __('messages.schedules.Open_Trip') }}</span>
                     <span class="count">{{ $openTrips->count() }}</span>
                 </button>
                 <button class="type-tab" data-type="confirmed">
-                    <span class="type-badge type-confirmed mr-1">Confirmed</span>
+                    <span class="type-badge type-confirmed mr-1">{{ __('messages.schedules.Confirmed') }}</span>
                     <span class="count">{{ $confirmed->count() }}</span>
                 </button>
                 <button class="type-tab" data-type="pending">
-                    <span class="type-badge type-pending mr-1">Pending</span>
+                    <span class="type-badge type-pending mr-1">{{ __('messages.schedules.Pending') }}</span>
                     <span class="count">{{ $pending->count() }}</span>
                 </button>
             </div>
@@ -262,11 +262,11 @@
                                 </span>
                                 @if($isPast)
                                     <span class="inline-flex items-center gap-1 text-xs font-medium text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full">
-                                        {{ __('Past Event') }}
+                                        {{ __('messages.schedules.Past_Event') }}
                                     </span>
                                 @elseif(!$schedule->isAvailable())
                                     <span class="inline-flex items-center gap-1 text-xs font-medium text-red-700 bg-red-50 px-2 py-0.5 rounded-full">
-                                        {{ __('Fully Booked') }}
+                                        {{ __('messages.schedules.Fully_Booked') }}
                                     </span>
                                 @endif
                             </div>
@@ -279,13 +279,13 @@
                                 </div>
                                 <div>
                                     <h3 class="font-bold text-base text-[#053d2c]">{{ $schedule->visitor_name }}</h3>
-                                    <p class="text-xs text-neutral-400">{{ __('Visitor') }}</p>
+                                    <p class="text-xs text-neutral-400">{{ __('messages.testimonials.visitor') }}</p>
                                 </div>
                             </div>
                             @endif
 
                             <div class="mt-3 pt-3 border-t border-neutral-100">
-                                <p class="text-xs text-neutral-400 uppercase tracking-wider font-semibold mb-1">{{ __('Package') }}</p>
+                                <p class="text-xs text-neutral-400 uppercase tracking-wider font-semibold mb-1">{{ __('messages.packages.description_title') }}</p>
                                 <p class="font-semibold text-[#053d2c]">{{ $schedule->travelPackage->type }}</p>
                                 <p class="text-sm text-neutral-500">{{ $schedule->travelPackage->location }}</p>
                             </div>
@@ -297,23 +297,28 @@
 
                             @php $pct = $schedule->quota > 0 ? round(($schedule->booked / $schedule->quota) * 100) : 0; @endphp
                             <div class="flex items-center justify-between text-sm mt-3 pt-3 border-t border-neutral-100 mb-2">
-                                <span class="text-neutral-500">{{ __('Quota') }}:</span>
-                                <span class="font-medium">{{ $schedule->booked }}/{{ $schedule->quota }}</span>
+                                <span class="text-neutral-500">{{ $schedule->type === 'open_trip' ? __('messages.booking.quota') : __('messages.schedules.Prospective_Visitors') }}:</span>
+                                <span class="font-medium">{{ $schedule->type === 'open_trip' ? $schedule->booked.'/'.$schedule->quota : $schedule->quota.' '.__('messages.schedules.people') }}</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
                                 <div class="h-2 rounded-full transition-all duration-300 {{ $pct >= 100 ? 'bg-red-500' : ($pct >= 80 ? 'bg-yellow-500' : 'bg-emerald-500') }}" style="width: {{ min($pct, 100) }}%"></div>
                             </div>
 
                             <div class="flex items-center justify-between">
-                                @if($schedule->isAvailable())
+                                @if($schedule->type === 'open_trip' && $schedule->isAvailable())
                                 <span class="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                                    {{ $schedule->remainingQuota() }} {{ __('spots left') }}
+                                    {{ $schedule->remainingQuota() }} {{ __('messages.schedules.spots_left') }}
+                                </span>
+                                @elseif($schedule->type !== 'open_trip' && $schedule->isAvailable())
+                                <span class="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                    {{ $schedule->quota }} {{ __('messages.schedules.people') }}
                                 </span>
                                 @else
                                 <span class="inline-flex items-center gap-1 text-xs font-medium text-red-700 bg-red-50 px-2 py-1 rounded-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                                    {{ __('Fully Booked') }}
+                                    {{ __('messages.schedules.Fully_Booked') }}
                                 </span>
                                 @endif
                             </div>
@@ -328,7 +333,7 @@
                                     data-start-date="{{ $schedule->start_date->format('Y-m-d') }}"
                                     data-end-date="{{ $schedule->end_date?->format('Y-m-d') }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1 -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-                                {{ __('Register Now') }}
+                                {{ __('messages.schedules.Register_Now') }}
                             </button>
                             @endif
                         </div>
@@ -349,11 +354,11 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-[#053d2c] mb-2">{{ __('No Events Yet') }}</h3>
-                <p class="text-neutral-500 mb-6">{{ __('There are no upcoming events at the moment. Please check back later or contact us for more information.') }}</p>
+                <h3 class="text-xl font-bold text-[#053d2c] mb-2">{{ __('messages.schedules.No_Events_Yet') }}</h3>
+                <p class="text-neutral-500 mb-6">{{ __('messages.schedules.empty_message') }}</p>
                 <a href="https://api.whatsapp.com/send?phone=6281328856252&text={{ urlencode(__('messages.whatsapp.default_message')) }}" target="_blank" class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-medium transition-colors">
                     <i class="bx bxl-whatsapp text-lg"></i>
-                    {{ __('Ask Now') }}
+                    {{ __('messages.whatsapp.ask_now') }}
                 </a>
             </div>
         </div>
@@ -370,7 +375,7 @@
                         <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-white font-bold text-xl" id="mAvatar">V</div>
                         <div>
                             <h3 class="text-xl font-bold text-white" id="mVisitor">-</h3>
-                            <p class="text-white/80 text-sm">{{ __('Visitor') }}</p>
+                            <p class="text-white/80 text-sm">{{ __('messages.testimonials.visitor') }}</p>
                         </div>
                     </div>
                 </div>
@@ -378,38 +383,38 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="modal-icon"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></div>
-                    <div class="flex-1"><div class="modal-label">{{ __('Package') }}</div><div class="modal-value" id="mPackage">-</div></div>
+                    <div class="flex-1"><div class="modal-label">{{ __('messages.packages.description_title') }}</div><div class="modal-value" id="mPackage">-</div></div>
                 </div>
                 <div class="row">
                     <div class="modal-icon"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg></div>
-                    <div class="flex-1"><div class="modal-label">{{ __('Location') }}</div><div class="modal-value" id="mLocation">-</div></div>
+                    <div class="flex-1"><div class="modal-label">{{ __('messages.packages.duration') }}</div><div class="modal-value" id="mLocation">-</div></div>
                 </div>
                 <div class="row">
                     <div class="modal-icon"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
-                    <div class="flex-1"><div class="modal-label">{{ __('Date') }}</div><div class="modal-value" id="mDate">-</div></div>
+                    <div class="flex-1"><div class="modal-label">{{ __('messages.packages.form_date') }}</div><div class="modal-value" id="mDate">-</div></div>
                 </div>
                 <div class="row">
                     <div class="modal-icon"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
-                    <div class="flex-1"><div class="modal-label">{{ __('Quota') }}</div><div class="modal-value" id="mQuota">-</div></div>
+                    <div class="flex-1"><div class="modal-label" id="mQuotaLabel">{{ __('messages.booking.quota') }}</div><div class="modal-value" id="mQuota">-</div></div>
                 </div>
                 <div class="row">
                     <div class="modal-icon"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-                    <div class="flex-1"><div class="modal-label">{{ __('Status') }}</div><div class="modal-value" id="mStatus">-</div></div>
+                    <div class="flex-1"><div class="modal-label">{{ __('messages.packages.status') }}</div><div class="modal-value" id="mStatus">-</div></div>
                 </div>
                 <div class="row">
                     <div class="modal-icon"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg></div>
-                    <div class="flex-1"><div class="modal-label">{{ __('Type') }}</div><div class="modal-value" id="mType">-</div></div>
+                    <div class="flex-1"><div class="modal-label">{{ __('messages.packages.package_title') }}</div><div class="modal-value" id="mType">-</div></div>
                 </div>
     <div class="mt-6 pt-4 border-t border-neutral-100">
         <a href="#" id="mCta" class="block w-full text-center bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2 -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-            {{ __('View Package Details') }}
+            {{ __('messages.schedules.View_Package_Details') }}
         </a>
     </div>
     <div id="mRegisterContainer" class="mt-3 is-hidden">
         <button type="button" id="mRegisterBtn" class="w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1 -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-            {{ __('Register for Open Trip') }}
+            {{ __('messages.schedules.Register_for_Open_Trip') }}
         </button>
     </div>
             </div>
@@ -422,7 +427,7 @@
             <div class="modal-header">
                 <button type="button" class="modal-close-btn" id="registerModalCloseBtn">✕</button>
                 <div class="text-white">
-                    <h3 class="text-xl font-bold text-white" id="registerModalTitle">{{ __('Open Trip Registration') }}</h3>
+                    <h3 class="text-xl font-bold text-white" id="registerModalTitle">{{ __('messages.schedules.Open_Trip_Registration') }}</h3>
                     <p class="text-white/80 text-sm" id="registerModalPackage">-</p>
                 </div>
             </div>
@@ -434,64 +439,64 @@
                     <input type="hidden" name="start_date" id="registerStartDate">
                     
                     <div>
-                        <label for="registerName" class="admin-form-label">{{ __('Name') }} <span class="text-red-500">*</span></label>
+                        <label for="registerName" class="admin-form-label">{{ __('messages.booking.your_name') }} <span class="text-red-500">*</span></label>
                         <input type="text" id="registerName" name="name" required
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
-                               placeholder="{{ __('Your full name') }}">
+                               class="w-full px-3 py-2 shadow-md border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                               placeholder="{{ __('messages.schedules.Your_full_name') }}">
                     </div>
                     
                     <div>
-                        <label for="registerPhone" class="admin-form-label">{{ __('Phone Number') }} <span class="text-red-500">*</span></label>
+                        <label for="registerPhone" class="admin-form-label">{{ __('messages.booking.your_phone') }} <span class="text-red-500">*</span></label>
                         <input type="tel" id="registerPhone" name="number_phone" required
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
-                               placeholder="{{ __('081234567890') }}">
+                               class="w-full px-3 py-2 shadow-md border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                               placeholder="{{ __('messages.booking.your_phone') }}">
                     </div>
                     
                     <div>
-                        <label for="registerEmail" class="admin-form-label">{{ __('Email') }} <span class="text-red-500">*</span></label>
+                        <label for="registerEmail" class="admin-form-label">{{ __('messages.booking.your_email') }} <span class="text-red-500">*</span></label>
                         <input type="email" id="registerEmail" name="email" required
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
-                               placeholder="{{ __('your@email.com') }}">
+                               class="w-full px-3 py-2 shadow-md border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                               placeholder="{{ __('messages.schedules.your_email') }}">
                     </div>
                     
                     <div>
-                        <label for="registerPeople" class="admin-form-label">{{ __('Number of People') }} <span class="text-red-500">*</span></label>
+                        <label for="registerPeople" class="admin-form-label">{{ __('messages.schedules.Number_of_People') }} <span class="text-red-500">*</span></label>
                         <input type="number" id="registerPeople" name="people_count" required min="1" value="1"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
-                               onchange="updateParticipantForms()">
+                               class="disabled:bg-gray-200 w-full px-3 py-2 shadow-md border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                               onchange="updateParticipantForms()" disabled>
                     </div>
                     
                     {{-- Dynamic Participants Section --}}
                     <div id="participantsSection">
                         <div class="flex items-center justify-between mb-2">
-                            <label class="admin-form-label">{{ __('Participant Names') }}</label>
-                            <button type="button" onclick="addParticipantForm()" class="text-xs text-emerald-600 hover:text-emerald-700">
-                                <i class="fas fa-plus"></i> {{ __('Add') }}
-                            </button>
+                            <label class="admin-form-label">{{ __('messages.schedules.Participant_Names') }}</label>
                         </div>
-                        <div id="participantsContainer" class="space-y-2 max-h-48 overflow-y-auto">
+                        <div id="participantsContainer" class="space-y-2 shadow-md border-b-2 border-gray-300 overflow-y-auto">
                             {{-- First participant form - shown by default --}}
                             <div class="participant-form flex items-center gap-2">
                                 <input type="text" name="participants[0][name]" 
-                                       class="flex-1 px-2 py-1 text-sm border border-gray-300 rounded" 
-                                       placeholder="{{ __('Participant name') }}" required>
+                                       class="flex-1 px-2 py-2 text-sm border border-gray-300 rounded" 
+                                       placeholder="{{ __('messages.schedules.Participant_name') }}" required>
                             </div>
+                        </div>
+                        <div class="flex justify-end mt-2">
+                        <button type="button" onclick="addParticipantForm()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-1 px-3 rounded-lg transition-colors text-sm flex items-center ">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                                <i class="fas fa-plus"></i> {{ __('messages.schedules.Add') }}
+                            </button>
                         </div>
                     </div>
                     
                     <div>
-                        <label for="registerDescription" class="admin-form-label">{{ __('Description (Optional)') }}</label>
+                        <label for="registerDescription" class="admin-form-label">{{ __('messages.schedules.Description_Optional') }}</label>
                         <textarea id="registerDescription" name="description" rows="3"
-                                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
-                                  placeholder="{{ __('Any special requests or notes...') }}"></textarea>
+                                  class="w-full px-3 py-2 shadow-md border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                                  placeholder="{{ __('messages.schedules.Any_special_requests') }}"></textarea>
                     </div>
                     
                     <div class="flex items-center gap-3 pt-4">
                         <button type="submit" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
-                            {{ __('Submit Registration') }}
-                        </button>
-                        <button type="button" class="modal-close-btn bg-gray-200 text-gray-700 hover:bg-gray-300" id="registerModalCancelBtn">
-                            {{ __('Cancel') }}
+                            {{ __('messages.schedules.Submit_Registration') }}
                         </button>
                     </div>
                 </form>
@@ -530,7 +535,7 @@ function addParticipantForm() {
     div.innerHTML = `
         <input type="text" name="participants[${index}][name]" 
                class="flex-1 px-2 py-1 text-sm border border-gray-300 rounded" 
-               placeholder="{{ __('Participant name') }}" required>
+               placeholder="{{ __('messages.schedules.Participant_name') }}" required>
         <button type="button" onclick="this.parentElement.remove(); updatePeopleCount()" 
                 class="text-red-500 hover:text-red-700 text-xs">
             <i class="fas fa-times"></i>
@@ -558,16 +563,27 @@ function openModal(props) {
         dt += ' → ' + props.end_date;
     }
     document.getElementById('mDate').textContent = dt;
-    document.getElementById('mQuota').textContent = props.booked + '/' + props.quota + ' (' + props.remaining + ' ' + '{{ __("remaining") }}' + ')';
+    // Set quota label based on type
+    var quotaLabel = document.getElementById('mQuotaLabel');
+    if (props.type === 'open_trip') {
+        quotaLabel.textContent = '{{ __("messages.booking.quota") }}';
+    } else {
+        quotaLabel.textContent = '{{ __("messages.schedules.Prospective_Visitors") }}';
+    }
+    if (props.type === 'open_trip') {
+        document.getElementById('mQuota').textContent = props.booked + '/' + props.quota + ' (' + props.remaining + ' ' + '{{ __("messages.schedules.remaining") }}' + ')';
+    } else {
+        document.getElementById('mQuota').textContent = props.quota + ' {{ __("messages.schedules.people") }}';
+    }
     var st = document.getElementById('mStatus');
     // Check if past event
     var isPast = props.start_date && new Date(props.start_date) < new Date();
     if (isPast) {
-        st.innerHTML = '<span class="inline-flex items-center gap-1 text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full text-xs font-medium"><svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3"/></svg> {{ __("Past Event") }}</span>';
+        st.innerHTML = '<span class="inline-flex items-center gap-1 text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full text-xs font-medium"><svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3"/></svg> {{ __("messages.schedules.Past_Event") }}</span>';
     } else if (props.is_available) {
-        st.innerHTML = '<span class="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full text-xs font-medium"><svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> {{ __("Available") }}</span>';
+        st.innerHTML = '<span class="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full text-xs font-medium"><svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> {{ __("messages.schedules.Available") }}</span>';
     } else {
-        st.innerHTML = '<span class="inline-flex items-center gap-1 text-red-700 bg-red-50 px-2 py-0.5 rounded-full text-xs font-medium"><svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg> {{ __("Fully Booked") }}</span>';
+        st.innerHTML = '<span class="inline-flex items-center gap-1 text-red-700 bg-red-50 px-2 py-0.5 rounded-full text-xs font-medium"><svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg> {{ __("messages.schedules.Fully_Booked") }}</span>';
     }
     document.getElementById('mType').textContent = props.type_label || props.type || '-';
     document.getElementById('mCta').href = props.package_url || '#';
@@ -655,10 +671,10 @@ jQuery(document).ready(function($) {
             $('#registerScheduleId').val(schedule.id);
             $('#registerPackageId').val(schedule.travel_package_id);
             $('#registerStartDate').val(schedule.start_date);
-            $('#registerModalTitle').text('{{ __("Open Trip Registration") }}');
+            $('#registerModalTitle').text('{{ __("messages.schedules.Open_Trip_Registration") }}');
             $('#registerModalPackage').text(schedule.package_name + ' - ' + schedule.package_location);
             // Reset participants container to 1 form
-            $('#participantsContainer').html('<div class="participant-form flex items-center gap-2"><input type="text" name="participants[0][name]" class="flex-1 px-2 py-1 text-sm border border-gray-300 rounded" placeholder="{{ __('Participant name') }}" required></div>');
+            $('#participantsContainer').html('<div class="participant-form flex items-center gap-2"><input type="text" name="participants[0][name]" class="flex-1 px-2 py-1 text-sm border border-gray-300 rounded" placeholder="{{ __("messages.schedules.Participant_name") }}" required></div>');
             $('#registerPeople').val(1);
             // Show participants section (remove hidden class if present)
             $('#participantsSection').show();
@@ -676,10 +692,10 @@ jQuery(document).ready(function($) {
             document.getElementById('registerScheduleId').value = schedule.id;
             document.getElementById('registerPackageId').value = schedule.travel_package_id;
             document.getElementById('registerStartDate').value = schedule.start_date;
-            document.getElementById('registerModalTitle').textContent = '{{ __("Open Trip Registration") }}';
+            document.getElementById('registerModalTitle').textContent = '{{ __("messages.schedules.Open_Trip_Registration") }}';
             document.getElementById('registerModalPackage').textContent = schedule.package_name + ' - ' + schedule.package_location;
             // Reset participants container to 1 form
-            document.getElementById('participantsContainer').innerHTML = '<div class="participant-form flex items-center gap-2"><input type="text" name="participants[0][name]" class="flex-1 px-2 py-1 text-sm border border-gray-300 rounded" placeholder="{{ __('Participant name') }}" required></div>';
+            document.getElementById('participantsContainer').innerHTML = '<div class="participant-form flex items-center gap-2"><input type="text" name="participants[0][name]" class="flex-1 px-2 py-1 text-sm border border-gray-300 rounded" placeholder="{{ __("messages.schedules.Participant_name") }}" required></div>';
             document.getElementById('registerPeople').value = 1;
             // Show participants section
             document.getElementById('participantsSection').classList.remove('is-hidden');

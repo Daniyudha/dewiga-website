@@ -35,8 +35,6 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         Route::post('open-trip-registrations/{schedule}/recalculate', [\App\Http\Controllers\Admin\OpenTripRegistrationController::class, 'recalculate'])->name('open-trip-registrations.recalculate');
         Route::resource('open-trip-registrations', \App\Http\Controllers\Admin\OpenTripRegistrationController::class);
 
-
-
         // Partner Logos
         Route::resource('partner_logos', \App\Http\Controllers\Admin\PartnerLogoController::class)->except('show');
         Route::resource('activities', \App\Http\Controllers\Admin\ActivityController::class)->except('show');
@@ -59,7 +57,32 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         Route::delete('hero-settings/{heroSetting}/slides/{heroSlide}', [\App\Http\Controllers\Admin\HeroSettingController::class, 'deleteSlide'])->name('hero-settings.slides.destroy');
         Route::post('hero-settings/{heroSetting}/slides/reorder', [\App\Http\Controllers\Admin\HeroSettingController::class, 'reorderSlides'])->name('hero-settings.slides.reorder');
 
-        // CKEditor image upload
+        // Price Calculator
+        Route::prefix('price-calculator')->name('price-calculator.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'index'])->name('index');
+            Route::get('create', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'create'])->name('create');
+            Route::post('calculate', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'calculate'])->name('calculate');
+            Route::post('store', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'store'])->name('store');
+
+            // Settings (before {priceEstimation})
+            Route::get('settings/index', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'settings'])->name('settings');
+            Route::put('settings/components/{pricingComponent}', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'updateComponentPrice'])->name('update-component-price');
+            Route::put('settings/addons/{pricingAddon}', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'updateAddonPrice'])->name('update-addon-price');
+            Route::put('settings/tiers/{participantPriceTier}', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'updateTier'])->name('update-tier');
+
+            // PDF (before {priceEstimation})
+            Route::get('{priceEstimation}/pdf-view', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'pdfView'])->name('pdf-view');
+            Route::get('{priceEstimation}/pdf-download', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'pdfDownload'])->name('pdf-download');
+
+            // Model-bound routes
+            Route::get('{priceEstimation}', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'show'])->name('show');
+            Route::get('{priceEstimation}/edit', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'edit'])->name('edit');
+            Route::put('{priceEstimation}', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'update'])->name('update');
+            Route::get('{priceEstimation}/duplicate', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'duplicate'])->name('duplicate');
+            Route::delete('{priceEstimation}', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'destroy'])->name('destroy');
+            Route::post('{priceEstimation}/recalculate', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'recalculate'])->name('recalculate');
+        });
+
         Route::post('upload-image', [\App\Http\Controllers\Admin\UploadController::class, 'image'])->name('upload.image');
     });
 

@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminSeeder::class,
             HeroSettingSeeder::class,
+            PriceCalculatorSeeder::class,
         ]);
     }
 }

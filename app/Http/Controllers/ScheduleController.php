@@ -47,6 +47,7 @@ class ScheduleController extends Controller
                 'borderColor' => $color,
                 'textColor' => '#ffffff',
                     'extendedProps' => [
+                        'id' => $s->id,
                         'package_name' => $s->travelPackage->type,
                         'package_location' => $s->travelPackage->location,
                         'package_slug' => $s->travelPackage->slug,

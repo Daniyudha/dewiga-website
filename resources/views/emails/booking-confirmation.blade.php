@@ -46,10 +46,12 @@
             margin-bottom: 24px;
         }
         .detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 12px;
+            padding: 12px;
             border-bottom: 1px solid #e2e8f0;
+            align-items: center;
         }
         .detail-row:last-child {
             border-bottom: none;
@@ -61,7 +63,6 @@
         .detail-value {
             font-weight: 600;
             color: #1e293b;
-            text-align: right;
         }
         .package-badge {
             display: inline-block;
@@ -93,10 +94,9 @@
 </head>
 <body>
     <div class="email-container">
-        <!-- Header with Logo -->
+        <!-- Header -->
         <div class="email-header">
-            <img src="{{ asset('frontend/assets/img/brand-logo-outline.png') }}" alt="Desa Wisata Gabugan" class="email-logo">
-            <h1>{{ __('Booking Confirmation') }}</h1>
+            <h1 style="margin-top:8px;">{{ __('Booking Confirmation') }}</h1>
         </div>
 
         <!-- Content -->
@@ -110,39 +110,39 @@
             <h2>{{ __('Booking Details') }}</h2>
 
             <div class="detail-row">
-                <span class="detail-label">{{ __('Name') }}</span>
+                <span class="detail-label">{{ __('Name') }}:</span>
                 <span class="detail-value">{{ $booking->name }}</span>
             </div>
 
             <div class="detail-row">
-                <span class="detail-label">{{ __('Institution') }}</span>
+                <span class="detail-label">{{ __('Institution') }}:</span>
                 <span class="detail-value">{{ $booking->institution ?? '-' }}</span>
             </div>
 
             <div class="detail-row">
-                <span class="detail-label">{{ __('Email') }}</span>
+                <span class="detail-label">{{ __('Email') }}:</span>
                 <span class="detail-value">{{ $booking->email }}</span>
             </div>
 
             <div class="detail-row">
-                <span class="detail-label">{{ __('Phone') }}</span>
+                <span class="detail-label">{{ __('Phone') }}:</span>
                 <span class="detail-value">{{ $booking->number_phone }}</span>
             </div>
 
             <div class="detail-row">
-                <span class="detail-label">{{ __('Visit Date') }}</span>
+                <span class="detail-label">{{ __('Visit Date') }}:</span>
                 <span class="detail-value">
                     {{ $booking->date->format('d M Y') }}@if($booking->end_date) - {{ $booking->end_date->format('d M Y') }}@endif
                 </span>
             </div>
 
             <div class="detail-row">
-                <span class="detail-label">{{ __('Number of People') }}</span>
+                <span class="detail-label">{{ __('Number of People') }}:</span>
                 <span class="detail-value">{{ $booking->people_count ?? 1 }}</span>
             </div>
 
             <div class="detail-row">
-                <span class="detail-label">{{ __('Package') }}</span>
+                <span class="detail-label">{{ __('Package') }}:</span>
                 <span class="detail-value">
                     @if($booking->travel_package)
                         <span class="package-badge">{{ $booking->travel_package->type }}</span>
@@ -156,7 +156,7 @@
 
             @if($booking->amount)
             <div class="detail-row">
-                <span class="detail-label">{{ __('Total Amount') }}</span>
+                <span class="detail-label">{{ __('Total Amount') }}:</span>
                 <span class="detail-value">Rp {{ number_format($booking->amount, 0, ',', '.') }}</span>
             </div>
             @endif

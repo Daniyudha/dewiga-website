@@ -101,6 +101,14 @@
         </a>
     </div>
 
+    {{-- Price Calculator --}}
+    <div class="nav-item">
+        <a href="{{ route('admin.price-calculator.index') }}" class="nav-link">
+            <i class="nav-icon fas fa-calculator"></i>
+            <span>Kalkulator Harga</span>
+        </a>
+    </div>
+
     {{-- Activities --}}
     <div class="nav-item">
         <a href="{{ route('admin.activities.index') }}" class="nav-link">
