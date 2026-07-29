@@ -23,12 +23,15 @@
             </div>
         </div>
 
-        <div id="dropzone" class="border-2 border-dashed border-gray-300 rounded-xl p-10 text-center hover:border-primary-400 hover:bg-primary-50/30 transition cursor-pointer">
-            <i class="fas fa-images text-4xl text-gray-300 mb-3"></i>
-            <p class="text-sm text-gray-600 font-medium">Drop images here or click to browse</p>
-            <p class="text-xs text-gray-400 mt-1">Supported: JPG, PNG, WebP</p>
-            <input type="file" id="fileInput" name="images[]" multiple accept="image/*" class="hidden">
-        </div>
+        <form method="POST" action="{{ route('admin.site-galleries.upload') }}" enctype="multipart/form-data">
+            @csrf
+            <div id="dropzone" class="border-2 border-dashed border-gray-300 rounded-xl p-10 text-center hover:border-primary-400 hover:bg-primary-50/30 transition cursor-pointer">
+                <i class="fas fa-images text-4xl text-gray-300 mb-3"></i>
+                <p class="text-sm text-gray-600 font-medium">Drop images here or click to browse</p>
+                <p class="text-xs text-gray-400 mt-1">Supported: JPG, PNG, WebP</p>
+                <input type="file" id="fileInput" name="images[]" multiple accept="image/*" class="hidden" onchange="this.form.submit()">
+            </div>
+        </form>
 
         {{-- Upload Progress --}}
         <div id="uploadProgress" class="hidden mt-4">
@@ -58,9 +61,13 @@
                     <img src="{{ asset('storage/' . $gallery->image) }}" alt="{{ $gallery->title ?? 'Gallery' }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     {{-- Dark overlay only on image --}}
                     <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <button type="button" onclick="showDeleteModal('{{ route('admin.site-galleries.destroy', [$gallery]) }}')" class="w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition shadow-lg transform hover:scale-110">
-                            <i class="fas fa-trash text-lg"></i>
-                        </button>
+                        <form method="POST" action="{{ route('admin.site-galleries.destroy', [$gallery]) }}" class="inline"
+                              onsubmit="return confirm('Hapus gambar ini?')">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition shadow-lg transform hover:scale-110">
+                                <i class="fas fa-trash text-lg"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
 
@@ -96,9 +103,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const dropzone = document.getElementById('dropzone');
     const fileInput = document.getElementById('fileInput');
-    const uploadProgress = document.getElementById('uploadProgress');
-    const progressBar = document.getElementById('progressBar');
-    const progressText = document.getElementById('progressText');
 
     // Dropzone click
     dropzone.addEventListener('click', () => fileInput.click());
@@ -116,57 +120,9 @@ document.addEventListener('DOMContentLoaded', function() {
         dropzone.classList.remove('border-primary-500', 'bg-primary-50/50');
         if (e.dataTransfer.files.length > 0) {
             fileInput.files = e.dataTransfer.files;
-            uploadFiles();
+            fileInput.form.submit();
         }
     });
-
-    // File select
-    fileInput.addEventListener('change', () => {
-        if (fileInput.files.length > 0) uploadFiles();
-    });
-
-    function uploadFiles() {
-        const files = fileInput.files;
-        if (files.length === 0) return;
-
-        const formData = new FormData();
-        for (let i = 0; i < files.length; i++) {
-            formData.append('images[]', files[i]);
-        }
-
-        uploadProgress.classList.remove('hidden');
-        progressBar.style.width = '0%';
-        progressText.textContent = '0%';
-
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', './upload');
-        xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
-
-        xhr.upload.onprogress = function(e) {
-            if (e.lengthComputable) {
-                const pct = Math.round((e.loaded / e.total) * 100);
-                progressBar.style.width = pct + '%';
-                progressText.textContent = pct + '%';
-            }
-        };
-
-        xhr.onload = function() {
-            setTimeout(() => {
-                uploadProgress.classList.add('hidden');
-                progressBar.style.width = '0%';
-                progressText.textContent = '0%';
-                fileInput.value = '';
-                location.reload();
-            }, 500);
-        };
-
-        xhr.onerror = function() {
-            uploadProgress.classList.add('hidden');
-            alert('Upload failed. Please try again.');
-        };
-
-        xhr.send(formData);
-    }
 
     // ---- Title Save ----
     document.querySelectorAll('.gallery-title-input').forEach(input => {
@@ -194,7 +150,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 if (data.success) {
                     saveBtn.classList.add('hidden');
-                    // Brief success feedback
                     input.style.borderColor = '#00a877';
                     setTimeout(() => { input.style.borderColor = ''; }, 1000);
                 }
@@ -202,7 +157,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(err => console.error('Error saving title:', err));
         });
 
-        // Save on Enter key
         input.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -213,4 +167,3 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endpush
-</write_to_file>
