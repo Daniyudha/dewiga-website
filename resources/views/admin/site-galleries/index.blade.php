@@ -133,7 +133,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         saveBtn.addEventListener('click', function() {
             const id = input.dataset.id;
-            const url = input.dataset.url;
+            const url = (window.location.protocol === 'https:' && input.dataset.url.startsWith('http://')) 
+                ? 'https://' + input.dataset.url.substring(7) 
+                : input.dataset.url;
             const title = input.value;
 
             fetch(url, {
