@@ -20,7 +20,7 @@
     <div class="admin-card-body">
         <form method="GET" action="{{ route('admin.rundown-templates.index') }}">
             <div class="flex gap-3">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari template..." class="form-input flex-1">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari template..." class="form-input py-1 px-2 rounded-md shadow-md border border-gray-500 flex-1">
                 <button type="submit" class="admin-btn-sm admin-btn-primary"><i class="fas fa-search mr-1"></i> Cari</button>
                 @if(request('search'))
                     <a href="{{ route('admin.rundown-templates.index') }}" class="admin-btn-sm admin-btn-secondary">Reset</a>

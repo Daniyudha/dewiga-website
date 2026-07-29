@@ -61,13 +61,9 @@
                     <img src="{{ asset('storage/' . $gallery->image) }}" alt="{{ $gallery->title ?? 'Gallery' }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     {{-- Dark overlay only on image --}}
                     <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <form method="POST" action="{{ route('admin.site-galleries.destroy', [$gallery]) }}" class="inline"
-                              onsubmit="return confirm('Hapus gambar ini?')">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition shadow-lg transform hover:scale-110">
-                                <i class="fas fa-trash text-lg"></i>
-                            </button>
-                        </form>
+                        <button type="button" onclick="showDeleteModal('{{ route('admin.site-galleries.destroy', [$gallery]) }}')" class="w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition shadow-lg transform hover:scale-110">
+                            <i class="fas fa-trash text-lg"></i>
+                        </button>
                     </div>
                 </div>
 

@@ -33,11 +33,8 @@ class SiteGalleryController extends Controller
             $uploaded[] = $gallery;
         }
 
-        return response()->json([
-            'success' => true,
-            'message' => count($uploaded) . ' gambar berhasil diupload',
-            'data' => $uploaded,
-        ]);
+        return redirect()->route('admin.site-galleries.index')
+            ->with('success', count($uploaded) . ' gambar berhasil diupload');
     }
 
     public function updateTitle(Request $request, SiteGallery $siteGallery)
@@ -51,10 +48,7 @@ class SiteGalleryController extends Controller
     {
         Storage::disk('public')->delete($siteGallery->image);
         $siteGallery->delete();
-        return redirect()->back()->with([
-            'message' => 'Gambar berhasil dihapus!',
-            'alert-type' => 'danger'
-        ]);
+        return redirect()->back()->with('success', 'Gambar berhasil dihapus!');
     }
 
     public function reorder(Request $request)
