@@ -126,7 +126,7 @@
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <form method="POST" action="{{ route('admin.transactions.destroy', $transaction) }}"
-                                          onsubmit="return confirm('Hapus transaksi ini?')" class="inline">
+                                          onclick="showDeleteModal(this.closest('form'))" class="inline">
                                         @csrf @method('DELETE')
                                         <button type="submit" class="text-red-600 hover:text-red-800 text-sm" title="Hapus">
                                             <i class="fas fa-trash"></i>

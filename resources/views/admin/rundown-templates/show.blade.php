@@ -146,7 +146,7 @@
         @endif
 
         <form method="POST" action="{{ route('admin.rundown-templates.destroy', $rundownTemplate) }}" 
-              onsubmit="return confirm('Hapus template ini? Tindakan ini tidak dapat dibatalkan.')">
+              onclick="showDeleteModal(this.closest('form'))">
             @csrf @method('DELETE')
             <button type="submit" class="w-full admin-btn-sm admin-btn-danger">
                 <i class="fas fa-trash mr-1"></i> Hapus Template

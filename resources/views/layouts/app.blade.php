@@ -257,9 +257,27 @@
         let deleteFormToSubmit = null;
 
         function showDeleteModal(form) {
-            deleteFormToSubmit = form;
+            if (typeof form === 'string') {
+                // URL was passed instead of form - create temp form
+                const tempForm = document.createElement('form');
+                tempForm.method = 'POST';
+                tempForm.action = form;
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = '_token';
+                csrfInput.value = document.querySelector('meta[name="csrf-token"]').content;
+                tempForm.appendChild(csrfInput);
+                const methodInput = document.createElement('input');
+                methodInput.type = 'hidden';
+                methodInput.name = '_method';
+                methodInput.value = 'DELETE';
+                tempForm.appendChild(methodInput);
+                document.body.appendChild(tempForm);
+                deleteFormToSubmit = tempForm;
+            } else {
+                deleteFormToSubmit = form;
+            }
             document.getElementById('deleteModal').classList.add('open');
-            // Prevent body scrolling while modal is open
             document.body.style.overflow = 'hidden';
         }
 

@@ -85,7 +85,7 @@
                                     <a href="#" onclick="showEditItemModal({{ $item->id }})" class="text-amber-600 hover:underline text-xs mr-2">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form method="POST" action="{{ route('admin.schedules.rundown.delete-item', [$schedule, $rundown, $item]) }}" class="inline" onsubmit="return confirm('Hapus item ini?')">
+                                    <form method="POST" action="{{ route('admin.schedules.rundown.delete-item', [$schedule, $rundown, $item]) }}" class="inline" onclick="showDeleteModal(this.closest('form'))">
                                         @csrf @method('DELETE')
                                         <button type="submit" class="text-red-600 hover:underline text-xs"><i class="fas fa-trash"></i></button>
                                     </form>
@@ -171,7 +171,7 @@
             </div>
             <div class="admin-card-body space-y-2">
                 <form method="POST" action="{{ route('admin.schedules.rundown.destroy', [$schedule, $rundown]) }}"
-                      onsubmit="return confirm('Hapus rundown ini beserta semua itemnya? Tindakan ini tidak dapat dibatalkan.')">
+                      onclick="showDeleteModal(this.closest('form'))">
                     @csrf @method('DELETE')
                     <button type="submit" class="w-full text-center admin-btn-sm admin-btn-danger">
                         <i class="fas fa-trash mr-1"></i> Hapus Rundown

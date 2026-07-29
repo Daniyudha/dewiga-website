@@ -24,7 +24,7 @@
                     <i class="fas fa-edit mr-1"></i> Edit
                 </a>
                 <form method="POST" action="{{ route('admin.schedules.rundown.destroy', [$schedule, $rundown]) }}" 
-                      onsubmit="return confirm('Hapus rundown ini?')" class="inline">
+                      onclick="showDeleteModal(this.closest('form'))" class="inline">
                     @csrf @method('DELETE')
                     <button type="submit" class="admin-btn-xs admin-btn-danger">
                         <i class="fas fa-trash mr-1"></i> Hapus

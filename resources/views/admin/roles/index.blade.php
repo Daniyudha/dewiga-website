@@ -50,7 +50,7 @@
                 </a>
                 @if(!$role->is_default && $role->slug !== 'super_admin')
                 <form method="POST" action="{{ route('admin.roles.destroy', $role) }}" 
-                      onsubmit="return confirm('Hapus role ini?')" class="inline">
+                      onclick="showDeleteModal(this.closest('form'))" class="inline">
                     @csrf @method('DELETE')
                     <button type="submit" class="text-sm text-red-600 hover:text-red-800 ml-3">
                         <i class="fas fa-trash"></i> Hapus

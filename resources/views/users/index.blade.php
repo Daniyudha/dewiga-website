@@ -66,7 +66,7 @@
                                     </a>
                                     @if($user->id !== Auth::id())
                                     <form method="POST" action="{{ route('admin.users.destroy', $user) }}"
-                                          onsubmit="return confirm('Hapus user ini?')" class="inline">
+                                          onclick="showDeleteModal(this.closest('form'))" class="inline">
                                         @csrf @method('DELETE')
                                         <button type="submit" class="text-red-600 hover:text-red-800 text-sm" title="Hapus">
                                             <i class="fas fa-trash"></i>

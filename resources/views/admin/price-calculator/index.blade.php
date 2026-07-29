@@ -97,7 +97,7 @@
                                     <a href="{{ route('admin.price-calculator.pdf-download', $est) }}" class="admin-btn-sm admin-btn-warning" title="Download PDF" target="_blank">
                                         <i class="fas fa-download"></i>
                                     </a>
-                                    <form action="{{ route('admin.price-calculator.destroy', $est) }}" method="POST" class="inline" onsubmit="return confirm('Hapus estimasi ini?')">
+                                    <form action="{{ route('admin.price-calculator.destroy', $est) }}" method="POST" class="inline" onclick="showDeleteModal(this.closest('form'))">
                                         @csrf @method('DELETE')
                                         <button type="submit" class="admin-btn-sm admin-btn-danger" title="Hapus">
                                             <i class="fas fa-trash"></i>
