@@ -40,22 +40,24 @@
     {{-- SITE GALLERY FROM ADMIN (MASONRY) --}}
     @php $siteGalleries = \App\Models\SiteGallery::orderBy('order')->get(); @endphp
     @if($siteGalleries && $siteGalleries->count() > 0)
-    <section class="pb-24 bg-white">
-        <div class="container mx-auto px-6 py-12">
-            <div class="tz-gallery masonry-grid">
-                @foreach($siteGalleries as $item)
-                <div class="masonry-item break-inside-avoid mb-4">
-                    <a href="{{ asset('storage/' . $item->image) }}" data-fancybox="site-gallery" data-caption="{{ $item->title ?? '' }}" class="group block rounded-xl overflow-hidden relative">
-                        <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->title ?? 'Gallery' }}" class="w-full h-auto object-cover group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
-                        @if($item->title)
-                        <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <p class="text-white text-sm font-medium">{{ $item->title }}</p>
-                        </div>
-                        @endif
-                    </a>
+    <section class="pb-24">
+        <div class="bg-white">
+            <div class="container mx-auto px-6 py-12">
+                <div class="tz-gallery masonry-grid">
+                    @foreach($siteGalleries as $item)
+                    <div class="masonry-item break-inside-avoid mb-4">
+                        <a href="{{ asset('storage/' . $item->image) }}" data-fancybox="site-gallery" data-caption="{{ $item->title ?? '' }}" class="group block rounded-xl overflow-hidden relative">
+                            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->title ?? 'Gallery' }}" class="w-full h-auto object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
+                            @if($item->title)
+                            <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <p class="text-white text-sm font-medium">{{ $item->title }}</p>
+                            </div>
+                            @endif
+                        </a>
+                    </div>
+                    @endforeach
                 </div>
-                @endforeach
             </div>
         </div>
     </section>

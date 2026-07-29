@@ -258,6 +258,10 @@
 
         function showDeleteModal(form) {
             if (typeof form === 'string') {
+                // Fix protocol mismatch (APP_URL http vs page https)
+                if (window.location.protocol === 'https:' && form.startsWith('http://')) {
+                    form = 'https://' + form.substring(7);
+                }
                 // URL was passed instead of form - create temp form
                 const tempForm = document.createElement('form');
                 tempForm.method = 'POST';
@@ -275,6 +279,10 @@
                 document.body.appendChild(tempForm);
                 deleteFormToSubmit = tempForm;
             } else {
+                // Fix form action protocol if mismatch
+                if (window.location.protocol === 'https:' && form.action && form.action.startsWith('http://')) {
+                    form.action = 'https://' + form.action.substring(7);
+                }
                 deleteFormToSubmit = form;
             }
             document.getElementById('deleteModal').classList.add('open');
