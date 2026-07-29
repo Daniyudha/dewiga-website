@@ -87,20 +87,20 @@
                         <input type="hidden" name="travel_package_id" value="{{ $travel_package->id }}">
 
                         <div class="total-display">
-                            <p class="text-sm opacity-80 mb-1">@lang('Total Price')</p>
+                            <p class="text-sm opacity-80 mb-1">@lang('messages.booking.total')</p>
                             <p class="total-amount" id="totalAmount">{{ formatPrice($travel_package->price) }}</p>
-                            <p class="text-xs opacity-70" id="totalPeople">1 @lang('person')</p>
+                            <p class="text-xs opacity-70" id="totalPeople">1 @lang('messages.booking.person')</p>
                         </div>
 
                         <div>
-                            <label class="block text-xs text-neutral-500 mb-1 font-medium">@lang('Your Name') <span class="text-red-500">*</span></label>
-                            <input type="text" name="name" placeholder="{{ __('John Doe') }}" required
+                            <label class="block text-xs text-neutral-500 mb-1 font-medium">@lang('messages.booking.your_name') <span class="text-red-500">*</span></label>
+                            <input type="text" name="name" placeholder="{{ __('messages.booking.placeholder_name') }}" required
                                 class="w-full px-4 py-3 shadow-md rounded-xl border border-neutral-200 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition">
                         </div>
 
                         <div>
-                            <label class="block text-xs text-neutral-500 mb-1 font-medium">@lang('Institution/Organization')</label>
-                            <input type="text" name="institution" placeholder="{{ __('Company/Organization Name') }}"
+                            <label class="block text-xs text-neutral-500 mb-1 font-medium">@lang('messages.booking.your_institution')</label>
+                            <input type="text" name="institution" placeholder="{{ __('messages.booking.placeholder_institution') }}"
                                 class="w-full px-4 py-3 shadow-md rounded-xl border border-neutral-200 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition">
                         </div>
 
@@ -112,7 +112,7 @@
 
                         <div>
                             <label class="block text-xs text-neutral-500 mb-1 font-medium">@lang('Your Phone Number') <span class="text-red-500">*</span></label>
-                            <input type="tel" name="number_phone" placeholder="{{ __('081234567890') }}" required
+                            <input type="tel" name="number_phone" placeholder="{{ __('08123xxxxx') }}" required
                                 class="w-full px-4 py-3 shadow-md rounded-xl border border-neutral-200 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition">
                         </div>
 
@@ -136,8 +136,8 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs text-neutral-500 mb-1 font-medium">@lang('Description/Notes')</label>
-                            <textarea name="description" rows="3" placeholder="{{ __('Any special requests or notes...') }}"
+                            <label class="block text-xs text-neutral-500 mb-1 font-medium">@lang('messages.booking.description')</label>
+                            <textarea name="description" rows="3" placeholder="{{ __('messages.booking.placeholder_description') }}"
                                 class="w-full px-4 py-3 shadow-md rounded-xl border border-neutral-200 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"></textarea>
                         </div>
 

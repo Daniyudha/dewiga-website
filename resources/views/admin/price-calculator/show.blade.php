@@ -13,7 +13,22 @@
         if (substr($waNum, 0, 1) === '0') $waNum = '62' . substr($waNum, 1);
         $waText = rawurlencode("Halo Bapak/Ibu,\n\nBerikut estimasi kunjungan ke Desa Wisata Gabugan.\n\nNomor Estimasi: {$estimation->estimation_number}\nInstansi: {$estimation->institution_name}\nPeserta: {$estimation->service_participant_count} orang\nEstimasi: " . formatPrice($estimation->rounded_price_per_person) . "/orang\nTotal: " . formatPrice($estimation->quotation_total) . "\n\nSalam,\nDesa Wisata Gabugan");
     @endphp
+    @php
+        $isConverted = $estimation->isConvertedToSchedule();
+        $convertedSchedule = $isConverted ? $estimation->getConvertedSchedule() : null;
+    @endphp
     <div class="flex gap-2 flex-wrap">
+        @if($isConverted && $convertedSchedule)
+            <a href="{{ route('admin.schedules.index') }}?search={{ $convertedSchedule->id }}" class="admin-btn-sm admin-btn-success">
+                <i class="fas fa-calendar-check mr-1"></i>
+                Lihat Schedule
+            </a>
+        @else
+            <button type="button" onclick="showConvertModal()" class="admin-btn-sm admin-btn-primary">
+                <i class="fas fa-calendar-plus mr-1"></i>
+                Jadikan Schedule
+            </button>
+        @endif
         <a href="{{ route('admin.price-calculator.pdf-view', $estimation) }}" class="admin-btn-sm admin-btn-info" target="_blank">
             <i class="fas fa-file-pdf mr-1"></i>
             View PDF
@@ -210,4 +225,132 @@
         </div>
     </div>
 </div>
+
+{{-- Conversion Status Card --}}
+@if($isConverted && $convertedSchedule)
+<div class="admin-card shadow-md border-l-4 border-green-500 mt-6">
+    <div class="admin-card-body">
+        <div class="flex items-center justify-between">
+            <div>
+                <h4 class="font-heading font-semibold text-green-800">
+                    <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                    Status Konversi
+                </h4>
+                <p class="text-sm text-gray-600 mt-1">
+                    Estimasi ini sudah dikonversi menjadi jadwal.
+                </p>
+                <p class="text-sm font-medium text-gray-800 mt-1">
+                    <i class="fas fa-calendar-alt mr-1"></i>
+                    {{ $convertedSchedule->visitor_name ?? 'Jadwal #' . $convertedSchedule->id }}
+                </p>
+            </div>
+            <a href="{{ route('admin.schedules.index') }}?search={{ $convertedSchedule->id }}" class="admin-btn-sm admin-btn-success">
+                <i class="fas fa-eye mr-1"></i>
+                Lihat Schedule
+            </a>
+        </div>
+    </div>
+</div>
+@endif
+
+{{-- Convert Modal --}}
+<div id="convertModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onclick="hideConvertModal()"></div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form id="convertForm" method="POST" action="{{ route('admin.price-calculator.convert-to-schedule', $estimation) }}" class="p-6">
+                @csrf
+                <div class="mb-4">
+                    <h3 class="text-lg font-heading font-semibold text-gray-900" id="modal-title">
+                        <i class="fas fa-calendar-plus text-primary-600 mr-2"></i>
+                        Konversi ke Jadwal
+                    </h3>
+                    <p class="text-sm text-gray-500 mt-1">
+                        Estimasi {{ $estimation->estimation_number }} - {{ $estimation->institution_name }}
+                    </p>
+                </div>
+
+                <div class="space-y-4">
+                    {{-- Nama Jadwal --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Jadwal</label>
+                        <input type="text" name="visitor_name" value="{{ $estimation->institution_name }} - {{ $estimation->contact_person }}"
+                               class="w-full rounded-lg border-gray-300 focus:border-primary-500 focus:ring-primary-500 text-sm">
+                    </div>
+
+                    {{-- Tanggal --}}
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
+                            <input type="date" name="start_date" value="{{ $estimation->arrival_date->format('Y-m-d') }}"
+                                   class="w-full rounded-lg border-gray-300 focus:border-primary-500 focus:ring-primary-500 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
+                            <input type="date" name="end_date" value="{{ $estimation->departure_date->format('Y-m-d') }}"
+                                   class="w-full rounded-lg border-gray-300 focus:border-primary-500 focus:ring-primary-500 text-sm">
+                        </div>
+                    </div>
+
+                    {{-- Status Awal --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Status Awal</label>
+                        <select name="status" class="w-full rounded-lg border-gray-300 focus:border-primary-500 focus:ring-primary-500 text-sm">
+                            <option value="pending">Pending (Menunggu Konfirmasi)</option>
+                            <option value="confirmed">Confirmed (Terkonfirmasi)</option>
+                        </select>
+                    </div>
+
+                    {{-- Catatan --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Catatan</label>
+                        <textarea name="notes" rows="2" class="w-full rounded-lg border-gray-300 focus:border-primary-500 focus:ring-primary-500 text-sm">{{ $estimation->notes }}</textarea>
+                    </div>
+                </div>
+
+                {{-- Info Ringkasan --}}
+                <div class="bg-gray-50 rounded-lg p-4 mt-4 text-sm space-y-1">
+                    <p class="text-gray-600">
+                        <span class="font-medium">Peserta:</span>
+                        {{ $estimation->student_count }} siswa + {{ $estimation->companion_count }} pendamping
+                    </p>
+                    <p class="text-gray-600">
+                        <span class="font-medium">Total Quotation:</span>
+                        {{ formatPrice($estimation->quotation_total) }}
+                    </p>
+                    <p class="text-gray-600">
+                        <span class="font-medium">Harga/Orang:</span>
+                        {{ formatPrice($estimation->rounded_price_per_person) }}
+                    </p>
+                </div>
+
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" onclick="hideConvertModal()" class="admin-btn-sm admin-btn-secondary">
+                        Batal
+                    </button>
+                    <button type="submit" class="admin-btn-sm admin-btn-primary">
+                        <i class="fas fa-calendar-plus mr-1"></i>
+                        Konversi ke Jadwal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+function showConvertModal() {
+    document.getElementById('convertModal').classList.remove('hidden');
+}
+function hideConvertModal() {
+    document.getElementById('convertModal').classList.add('hidden');
+}
+document.getElementById('convertForm')?.addEventListener('submit', function(e) {
+    document.querySelector('#convertForm button[type="submit"]').disabled = true;
+    document.querySelector('#convertForm button[type="submit"]').innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Mengkonversi...';
+});
+</script>
+@endpush

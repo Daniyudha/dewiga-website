@@ -58,6 +58,19 @@
                         @enderror
                     </div>
 
+                    {{-- Guest Type --}}
+                    <div class="admin-form-group">
+                        <label for="guest_type" class="admin-form-label">{{ __('Tipe Tamu') }}</label>
+                        <select id="guest_type" name="guest_type"
+                                class="admin-form-input @error('guest_type') error @enderror">
+                            <option value="lokal" {{ old('guest_type') == 'lokal' ? 'selected' : '' }}>Lokal</option>
+                            <option value="asing" {{ old('guest_type') == 'asing' ? 'selected' : '' }}>Asing</option>
+                        </select>
+                        @error('guest_type')
+                            <p class="admin-form-error">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     {{-- Phone --}}
                     <div class="admin-form-group">
                         <label for="number_phone" class="admin-form-label">{{ __('Phone Number') }} <span class="text-red-500">*</span></label>

@@ -6,16 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StorePriceEstimationRequest;
 use App\Models\PriceEstimation;
 use App\Services\PriceCalculatorService;
+use App\Services\PriceEstimationConversionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PriceCalculatorController extends Controller
 {
     protected PriceCalculatorService $calculatorService;
+    protected PriceEstimationConversionService $conversionService;
 
-    public function __construct(PriceCalculatorService $calculatorService)
-    {
+    public function __construct(
+        PriceCalculatorService $calculatorService,
+        PriceEstimationConversionService $conversionService
+    ) {
         $this->calculatorService = $calculatorService;
+        $this->conversionService = $conversionService;
     }
 
     /**
@@ -208,6 +213,24 @@ class PriceCalculatorController extends Controller
             return redirect()
                 ->back()
                 ->with('error', 'Gagal menghitung ulang estimasi: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Convert a Price Estimation to a Schedule.
+     */
+    public function convertToSchedule(Request $request, PriceEstimation $priceEstimation)
+    {
+        try {
+            $schedule = $this->conversionService->convert($priceEstimation, $request->all());
+
+            return redirect()
+                ->route('admin.schedules.index', $schedule)
+                ->with('success', 'Estimasi ' . $priceEstimation->estimation_number . ' berhasil dikonversi menjadi jadwal!');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Gagal mengkonversi estimasi: ' . $e->getMessage());
         }
     }
 

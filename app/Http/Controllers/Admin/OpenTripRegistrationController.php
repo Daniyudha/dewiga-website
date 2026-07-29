@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\OpenTripRegistration;
 use App\Models\Schedule;
 use App\Models\TravelPackage;
+use App\Services\GuestSyncService;
+use App\Services\TransactionSyncService;
 use Illuminate\Http\Request;
 
 class OpenTripRegistrationController extends Controller
@@ -72,8 +74,12 @@ class OpenTripRegistrationController extends Controller
 
         $openTripRegistration = OpenTripRegistration::create($validated);
 
+        // Auto-sync to guests table
+        app(GuestSyncService::class)->syncFromOpenTrip($openTripRegistration);
+
         if ($openTripRegistration->status === 'confirmed') {
             $schedule->increment('booked', $openTripRegistration->people_count);
+            app(TransactionSyncService::class)->syncFromOpenTrip($openTripRegistration);
         }
 
         return redirect()->route('admin.open-trip-registrations.schedule', $schedule)

@@ -38,32 +38,45 @@
         </div>
     @endif
 
-    {{-- Filter by Type --}}
+    {{-- Filter & Search --}}
     <div class="admin-card mb-6">
         <div class="admin-card-body">
             <form method="GET" action="{{ route('admin.schedules.index') }}" class="flex flex-wrap items-center gap-3">
-                <label class="text-sm font-medium text-gray-700">{{ __('Filter by Type') }}:</label>
-                <select name="type" class="admin-input w-auto min-w-[180px]" onchange="this.form.submit()">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari kode, nama, paket..."
+                       class="admin-input flex-1 min-w-[200px] py-2 px-3 rounded-lg shadow-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <label class="text-sm font-medium text-gray-700">{{ __('Type') }}:</label>
+                <select name="type" class="admin-input w-auto min-w-[150px] py-2 px-2 rounded-lg shadow-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     <option value="">{{ __('All Types') }}</option>
                     @foreach(\App\Models\Schedule::types() as $val => $label)
                         <option value="{{ $val }}" {{ request('type') == $val ? 'selected' : '' }}>{{ $label }}</option>
                     @endforeach
                 </select>
-                @if(request('type'))
+                <button type="submit" class="admin-btn-primary"><i class="fas fa-search mr-1"></i> Cari</button>
+                @if(request('search') || request('type'))
                     <a href="{{ route('admin.schedules.index') }}" class="text-sm text-red-600 hover:underline">
-                        <i class="fas fa-times"></i> {{ __('Clear Filter') }}
+                        <i class="fas fa-times"></i> Reset
                     </a>
                 @endif
             </form>
         </div>
     </div>
 
-    {{-- Calendar Card --}}
+    {{-- Calendar Card (Collapsible) --}}
     <div class="admin-card mb-6">
-        <div class="admin-card-header">
-            <h2 class="font-heading font-semibold text-gray-800">{{ __('Schedule Calendar') }}</h2>
+        <div class="admin-card-header cursor-pointer select-none" onclick="toggleCalendar()">
+            <div class="w-full flex items-center justify-between">
+                <h2 class="font-heading font-semibold text-gray-800">
+                    <i class="fas fa-calendar-alt text-primary-600 mr-2"></i>
+                    {{ __('Schedule Calendar') }}
+                </h2>
+                <div class="flex items-center gap-2">
+                    <span id="calendarToggleIcon" class="text-gray-400 text-sm">
+                        <i class="fas fa-chevron-up"></i>
+                    </span>
+                </div>
+            </div>
         </div>
-        <div class="admin-card-body">
+        <div id="calendarBody" class="admin-card-body">
             <div id="calendar"></div>
         </div>
     </div>
@@ -78,7 +91,7 @@
                 <table class="admin-table w-full">
                     <thead>
                         <tr>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Package') }}</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Type') }}</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Visitor') }}</th>
@@ -94,7 +107,9 @@
                     <tbody class="divide-y divide-gray-100">
                         @forelse($schedules as $schedule)
                             <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-4 py-3 text-sm text-gray-500">{{ $schedule->id }}</td>
+                                <td class="px-4 py-3 font-mono text-xs font-semibold text-gray-900 whitespace-nowrap">
+                                    {{ $schedule->schedule_code ?? 'SCH' . str_pad($schedule->id, 6, '0', STR_PAD_LEFT) }}
+                                </td>
                                 <td class="px-4 py-3">
                                     <div class="text-sm font-medium text-gray-900">
                                         {{ $schedule->travelPackage->type ?? 'N/A' }}
@@ -148,15 +163,19 @@
                                 </td>
                                 <td class="px-4 py-3 text-right">
                                     <div class="flex items-center justify-end gap-2">
+                                        <a href="{{ route('admin.schedules.show', $schedule) }}"
+                                            class="text-green-600 hover:text-green-800 text-sm font-medium transition-colors" title="Lihat Detail">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
                                         <a href="{{ route('admin.schedules.edit', $schedule) }}"
-                                            class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors">
+                                            class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <form method="POST" action="{{ route('admin.schedules.destroy', $schedule) }}"
                                             onsubmit="return confirm('{{ __('Are you sure?') }}')" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-800 text-sm font-medium transition-colors">
+                                            <button type="submit" class="text-red-600 hover:text-red-800 text-sm font-medium transition-colors" title="Hapus">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
@@ -185,37 +204,52 @@
     </div>
 @endsection
 
-@push('script-alt')
+@push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const calendarEl = document.getElementById('calendar');
-    const events = @json($calendarEvents);
-
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,listWeek'
-        },
-        events: events,
-        eventClick: function(info) {
-            // Navigate to edit page
-            window.location.href = '/admin/schedules/' + info.event.id + '/edit';
-        },
-        eventDidMount: function(info) {
-            // Add tooltip
-            const props = info.event.extendedProps;
-            let tooltip = '<b>' + props.package_name + '</b>';
-            if (props.visitor_name) tooltip += '<br>Visitor: ' + props.visitor_name;
-            tooltip += '<br>Quota: ' + props.quota + ' | Booked: ' + props.booked + ' | Remaining: ' + props.remaining;
-            if (props.end_date) tooltip += '<br>' + props.start_date + ' → ' + props.end_date;
-            info.el.setAttribute('title', tooltip.replace(/<[^>]*>/g, ''));
-        }
-    });
-
-    calendar.render();
+    document.getElementById('calendarBody').style.display = 'none';
 });
+
+var calendarInitialized = false;
+var calendarInstance = null;
+
+function toggleCalendar() {
+    const body = document.getElementById('calendarBody');
+    const icon = document.getElementById('calendarToggleIcon');
+    if (body.style.display === 'none') {
+        body.style.display = 'block';
+        icon.innerHTML = '<i class="fas fa-chevron-up"></i>';
+        if (!calendarInitialized) {
+            calendarInitialized = true;
+            const calendarEl = document.getElementById('calendar');
+            const events = @json($calendarEvents);
+            calendarInstance = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,listWeek'
+                },
+                events: events,
+                eventClick: function(info) {
+                    window.location.href = '/admin/schedules/' + info.event.id + '/edit';
+                },
+                eventDidMount: function(info) {
+                    const props = info.event.extendedProps;
+                    let tooltip = '<b>' + props.package_name + '</b>';
+                    if (props.visitor_name) tooltip += '<br>Visitor: ' + props.visitor_name;
+                    tooltip += '<br>Quota: ' + props.quota + ' | Booked: ' + props.booked + ' | Remaining: ' + props.remaining;
+                    if (props.end_date) tooltip += '<br>' + props.start_date + ' → ' + props.end_date;
+                    info.el.setAttribute('title', tooltip.replace(/<[^>]*>/g, ''));
+                }
+            });
+            calendarInstance.render();
+        }
+    } else {
+        body.style.display = 'none';
+        icon.innerHTML = '<i class="fas fa-chevron-down"></i>';
+    }
+}
 </script>
 @endpush

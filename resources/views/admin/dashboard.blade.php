@@ -129,8 +129,196 @@
             </div>
         </div>
     </div>
+
+
+{{-- Operational Dashboard Section --}}
+@if(isset($operationalStats))
+<div class="mt-8 pt-8 border-t border-gray-200">
+    <h2 class="text-xl font-heading font-bold text-gray-900 mb-4">Reservasi & Operasional</h2>
+
+    {{-- Operational Stats Cards --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 max-w-full">
+        <div class="admin-card">
+            <div class="admin-card-body">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-yellow-50 flex items-center justify-center text-yellow-600 flex-shrink-0">
+                        <i class="fas fa-clock text-sm"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs text-gray-500 truncate">Reservasi Pending</p>
+                        <h3 class="text-xl font-bold text-gray-900">{{ $operationalStats['pending_reservations'] }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="admin-card">
+            <div class="admin-card-body">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center text-green-600 flex-shrink-0">
+                        <i class="fas fa-check-circle text-sm"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs text-gray-500 truncate">Reservasi Confirmed</p>
+                        <h3 class="text-xl font-bold text-gray-900">{{ $operationalStats['confirmed_reservations'] }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="admin-card">
+            <div class="admin-card-body">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 flex-shrink-0">
+                        <i class="fas fa-users text-sm"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs text-gray-500 truncate">Kunjungan Bulan Ini</p>
+                        <h3 class="text-xl font-bold text-gray-900">{{ $operationalStats['visits_this_month'] }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="admin-card">
+            <div class="admin-card-body">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center text-primary-600 flex-shrink-0">
+                        <i class="fas fa-file-invoice-dollar text-sm"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs text-gray-500 truncate">Nilai Quotation</p>
+                        <h3 class="text-xl font-bold text-gray-900">{{ formatPrice($operationalStats['quotation_value']) }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="admin-card">
+            <div class="admin-card-body">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 flex-shrink-0">
+                        <i class="fas fa-credit-card text-sm"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs text-gray-500 truncate">Pembayaran Diterima</p>
+                        <h3 class="text-xl font-bold text-gray-900">{{ formatPrice($operationalStats['payments_received']) }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="admin-card">
+            <div class="admin-card-body">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600 flex-shrink-0">
+                        <i class="fas fa-globe text-sm"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs text-gray-500 truncate">Open Trip Aktif</p>
+                        <h3 class="text-xl font-bold text-gray-900">{{ $operationalStats['active_open_trips'] }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="admin-card">
+            <div class="admin-card-body">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600 flex-shrink-0">
+                        <i class="fas fa-calculator text-sm"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs text-gray-500 truncate">Estimasi Tindak Lanjut</p>
+                        <h3 class="text-xl font-bold text-gray-900">{{ $operationalStats['unconverted_quotations'] }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="admin-card">
+            <div class="admin-card-body">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center text-red-600 flex-shrink-0">
+                        <i class="fas fa-exclamation-triangle text-sm"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs text-gray-500 truncate">Sisa Tagihan</p>
+                        <h3 class="text-xl font-bold text-gray-900">{{ formatPrice($operationalStats['sisa_tagihan']) }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    {{-- Upcoming Reservations --}}
+    <div class="admin-card mb-6">
+        <div class="admin-card-header">
+            <h3 class="font-heading font-semibold text-gray-800">Reservasi Terdekat</h3>
+        </div>
+        <div class="admin-card-body p-0">
+            <div class="overflow-x-auto">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Rombongan</th>
+                            <th>Peserta</th>
+                            <th>Status</th>
+                            <th>Pembayaran</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($upcomingReservations ?? [] as $res)
+                            <tr>
+                                <td class="whitespace-nowrap">{{ $res['start_date']->format('d/m/Y') }}</td>
+                                <td class="font-medium">{{ $res['visitor_name'] ?? '-' }}</td>
+                                <td>{{ $res['participants'] }}</td>
+                                <td><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium {{ $res['status_badge'] }}">{{ $res['status_label'] }}</span></td>
+                                <td><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium {{\App\Enums\PaymentStatus::badgeClass($res['payment_status'])}}">{{ $res['payment_status_label'] }}</span></td>
+                                <td><a href="{{ route('admin.schedules.show', $res['id']) }}" class="text-primary-600 hover:underline text-sm">Detail</a></td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="6" class="text-center py-4 text-gray-500">Belum ada reservasi</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {{-- Quotations Need Follow Up --}}
+    <div class="admin-card mb-6">
+        <div class="admin-card-header">
+            <h3 class="font-heading font-semibold text-gray-800">Quotation Perlu Tindak Lanjut</h3>
+        </div>
+        <div class="admin-card-body p-0">
+            <div class="overflow-x-auto">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>No. Estimasi</th>
+                            <th>Instansi</th>
+                            <th>Total</th>
+                            <th>Tanggal</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($quotationsNeedFollowUp ?? [] as $q)
+                            <tr>
+                                <td class="font-mono text-sm">{{ $q->estimation_number }}</td>
+                                <td>{{ $q->institution_name }}</td>
+                                <td class="font-mono">{{ formatPrice($q->quotation_total) }}</td>
+                                <td>{{ $q->created_at->format('d/m/Y') }}</td>
+                                <td><a href="{{ route('admin.price-calculator.show', $q) }}" class="text-primary-600 hover:underline text-sm">Lihat</a></td>
+                            </tr>
+                        @empty
+                            <tr><td colspan="5" class="text-center py-4 text-gray-500">Semua estimasi sudah ditindaklanjuti</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 @endsection
+</div>{{-- .container end --}}
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

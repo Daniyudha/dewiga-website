@@ -1,0 +1,138 @@
+<?php
+
+namespace App\Services;
+
+use App\Enums\PaymentStatus;
+use App\Enums\ScheduleStatus;
+use App\Models\PriceEstimation;
+use App\Models\Schedule;
+use App\Models\SchedulePayment;
+use App\Models\OpenTripRegistration;
+use Illuminate\Support\Facades\DB;
+
+class DashboardStatisticService
+{
+    /**
+     * Get operational statistics for the dashboard.
+     */
+    public function getOperationalStats(): array
+    {
+        $now = now();
+        $monthStart = $now->copy()->startOfMonth();
+        $monthEnd = $now->copy()->endOfMonth();
+
+        // Reservasi pending
+        $pendingReservations = Schedule::where('status', ScheduleStatus::PENDING)->count();
+
+        // Reservasi confirmed
+        $confirmedReservations = Schedule::where('status', ScheduleStatus::CONFIRMED)->count();
+
+        // Kunjungan bulan ini
+        $visitsThisMonth = Schedule::whereBetween('start_date', [$monthStart, $monthEnd])
+            ->whereIn('status', [ScheduleStatus::CONFIRMED, ScheduleStatus::IN_PROGRESS, ScheduleStatus::COMPLETED])
+            ->count();
+
+        // Total peserta bulan ini (dari quotation estimation)
+        $participantsThisMonth = PriceEstimation::whereBetween('arrival_date', [$monthStart, $monthEnd])
+            ->sum('service_participant_count');
+
+        // Nilai quotation bulan ini
+        $quotationValue = PriceEstimation::whereBetween('created_at', [$monthStart, $monthEnd])
+            ->sum('quotation_total');
+
+        // Pembayaran diterima bulan ini
+        $paymentsReceived = SchedulePayment::where('status', 'paid')
+            ->whereBetween('payment_date', [$monthStart, $monthEnd])
+            ->sum('amount');
+
+        // Sisa tagihan (total quotation - total paid)
+        $sisaTagihan = 0;
+        $totalQuotation = PriceEstimation::sum('quotation_total');
+        $totalPaid = SchedulePayment::where('status', 'paid')->sum('amount');
+        $sisaTagihan = max(0, $totalQuotation - $totalPaid);
+
+        // Open trip aktif
+        $activeOpenTrips = Schedule::where('type', 'open_trip')
+            ->whereIn('status', [ScheduleStatus::PENDING, ScheduleStatus::CONFIRMED])
+            ->where('is_active', true)
+            ->count();
+
+        // Total pendaftar open trip
+        $totalOpenTripRegistrations = OpenTripRegistration::count();
+
+        // Quotation belum dikonversi
+        $unconvertedQuotations = PriceEstimation::whereDoesntHave('schedule')->count();
+
+        return [
+            'pending_reservations' => $pendingReservations,
+            'confirmed_reservations' => $confirmedReservations,
+            'visits_this_month' => $visitsThisMonth,
+            'participants_this_month' => $participantsThisMonth,
+            'quotation_value' => $quotationValue,
+            'payments_received' => $paymentsReceived,
+            'sisa_tagihan' => $sisaTagihan,
+            'active_open_trips' => $activeOpenTrips,
+            'total_open_trip_registrations' => $totalOpenTripRegistrations,
+            'unconverted_quotations' => $unconvertedQuotations,
+            'total_quotation' => $totalQuotation,
+            'total_paid' => $totalPaid,
+        ];
+    }
+
+    /**
+     * Get upcoming reservations list.
+     */
+    public function getUpcomingReservations(int $limit = 10)
+    {
+        return Schedule::with('travelPackage', 'priceEstimation')
+            ->whereIn('status', [ScheduleStatus::PENDING, ScheduleStatus::CONFIRMED, ScheduleStatus::IN_PROGRESS])
+            ->where('start_date', '>=', now()->subDay())
+            ->orderBy('start_date')
+            ->limit($limit)
+            ->get()
+            ->map(function ($s) {
+                $paymentSummary = app(SchedulePaymentService::class)->getPaymentSummary($s);
+                return [
+                    'id' => $s->id,
+                    'visitor_name' => $s->visitor_name,
+                    'start_date' => $s->start_date,
+                    'end_date' => $s->end_date,
+                    'participants' => $s->priceEstimation?->service_participant_count ?? $s->booked,
+                    'status' => $s->status,
+                    'status_label' => $s->status_label,
+                    'status_badge' => $s->status_badge,
+                    'payment_status' => $paymentSummary['payment_status'],
+                    'payment_status_label' => $paymentSummary['payment_status_label'],
+                    'package' => $s->travelPackage?->type ?? '-',
+                ];
+            });
+    }
+
+    /**
+     * Get quotations needing follow-up (draft/sent, >3 days old, not converted).
+     */
+    public function getQuotationsNeedFollowUp(int $limit = 10)
+    {
+        return PriceEstimation::with('createdBy')
+            ->whereDoesntHave('schedule')
+            ->where('created_at', '<', now()->subDays(3))
+            ->orderBy('created_at')
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Get open trips almost full (>=80% quota).
+     */
+    public function getOpenTripsNearlyFull(int $limit = 10)
+    {
+        return Schedule::with('travelPackage')
+            ->where('type', 'open_trip')
+            ->where('is_active', true)
+            ->whereColumn('booked', '>=', DB::raw('quota * 0.8'))
+            ->whereColumn('booked', '<', 'quota')
+            ->orderByDesc(DB::raw('booked / quota'))
+            ->limit($limit)
+            ->get();
+    }
+}

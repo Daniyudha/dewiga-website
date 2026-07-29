@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\ScheduleStatus;
 use App\Models\Schedule;
 use App\Models\TravelPackage;
+use App\Models\RundownTemplate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ScheduleRequest;
+use App\Services\ScheduleStatusService;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -19,6 +22,19 @@ class ScheduleController extends Controller
 
         $query = Schedule::with('travelPackage')
             ->whereHas('travelPackage');
+
+        // Filter by search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('visitor_name', 'like', "%{$search}%")
+                  ->orWhere('schedule_code', 'like', "%{$search}%")
+                  ->orWhereHas('travelPackage', function ($pq) use ($search) {
+                      $pq->where('type', 'like', "%{$search}%")
+                         ->orWhere('location', 'like', "%{$search}%");
+                  });
+            });
+        }
 
         // Filter by type
         if ($request->filled('type')) {
@@ -65,6 +81,28 @@ class ScheduleController extends Controller
             });
 
         return view('admin.schedules.index', compact('schedules', 'travel_packages', 'calendarEvents'));
+    }
+
+    /**
+     * Display the specified schedule with tabs.
+     */
+    public function show(Schedule $schedule)
+    {
+        $schedule->load([
+            'travelPackage',
+            'priceEstimation.items',
+            'bookings.participants',
+            'openTripRegistrations.participants',
+            'payments',
+            'statusHistories.changedBy',
+        ]);
+
+        $paymentService = app(\App\Services\SchedulePaymentService::class);
+        $paymentSummary = $paymentService->getPaymentSummary($schedule);
+
+        $templates = RundownTemplate::where('is_active', true)->orderBy('name')->get();
+
+        return view('admin.schedules.show', compact('schedule', 'paymentSummary', 'templates'));
     }
 
     /**
@@ -127,6 +165,31 @@ class ScheduleController extends Controller
             'message' => 'Jadwal berhasil dihapus!',
             'alert-type' => 'success',
         ]);
+    }
+
+    /**
+     * Update schedule status with validation and history.
+     */
+    public function updateStatus(Request $request, Schedule $schedule, ScheduleStatusService $statusService)
+    {
+        $validated = $request->validate([
+            'status' => 'required|string|in:' . implode(',', ScheduleStatus::all()),
+            'notes' => 'nullable|string|max:500',
+        ]);
+
+        try {
+            $statusService->updateStatus($schedule, $validated['status'], $validated['notes'] ?? null);
+
+            return redirect()->back()->with([
+                'message' => 'Status jadwal berhasil diperbarui menjadi ' . ScheduleStatus::label($validated['status']) . '!',
+                'alert-type' => 'success',
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'message' => 'Gagal memperbarui status: ' . $e->getMessage(),
+                'alert-type' => 'error',
+            ]);
+        }
     }
 
     /**

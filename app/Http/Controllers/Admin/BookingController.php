@@ -8,6 +8,8 @@ use App\Models\Schedule;
 use App\Models\TravelPackage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\GuestSyncService;
+use App\Services\TransactionSyncService;
 
 class BookingController extends Controller
 {
@@ -62,6 +64,7 @@ class BookingController extends Controller
             'email' => 'required|email|max:255',
             'number_phone' => 'required|string|max:20',
             'institution' => 'nullable|string|max:255',
+            'guest_type' => 'nullable|in:lokal,asing',
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'date' => 'nullable|date',
@@ -101,6 +104,9 @@ class BookingController extends Controller
 
         $booking = Booking::create($validated);
 
+        // Auto-sync to guests table
+        app(GuestSyncService::class)->syncFromBooking($booking);
+
         // Create schedule automatically for non-open_trip bookings
         // Use start_date if available, otherwise use date
         $startDate = $validated['start_date'] ?? $validated['date'];
@@ -118,9 +124,10 @@ class BookingController extends Controller
             $booking->update(['schedule_id' => $schedule->id]);
         }
 
-        // If confirmed, increment schedule booked count
+        // If confirmed, increment schedule booked count and sync transaction
         if ($booking->status === 'confirmed' && $schedule) {
             $schedule->increment('booked');
+            app(TransactionSyncService::class)->syncFromBooking($booking);
         }
 
         return redirect()->route('admin.bookings.index')->with([
@@ -148,6 +155,9 @@ class BookingController extends Controller
                 $schedule->increment('booked');
             }
         }
+
+        // Sync transaction
+        app(TransactionSyncService::class)->syncFromBooking($booking);
 
         return redirect()->back()->with([
             'message' => 'Booking berhasil dikonfirmasi!',
@@ -201,6 +211,7 @@ class BookingController extends Controller
             'email' => 'required|email|max:255',
             'number_phone' => 'required|string|max:20',
             'institution' => 'nullable|string|max:255',
+            'guest_type' => 'nullable|in:lokal,asing',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'date' => 'nullable|date',

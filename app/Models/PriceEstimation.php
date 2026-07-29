@@ -46,6 +46,30 @@ class PriceEstimation extends Model
     }
 
     /**
+     * Get the schedule that was created from this estimation.
+     */
+    public function schedule()
+    {
+        return $this->hasOne(Schedule::class, 'price_estimation_id');
+    }
+
+    /**
+     * Check if this estimation has been converted to a schedule.
+     */
+    public function isConvertedToSchedule(): bool
+    {
+        return $this->schedule()->exists();
+    }
+
+    /**
+     * Get the converted schedule, if any.
+     */
+    public function getConvertedSchedule()
+    {
+        return $this->schedule()->first();
+    }
+
+    /**
      * Generate a unique estimation number.
      */
     public static function generateEstimationNumber(): string

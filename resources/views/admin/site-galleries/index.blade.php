@@ -53,19 +53,19 @@
         <div id="galleryGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             @foreach($galleries as $gallery)
             <div class="gallery-item group relative bg-white rounded-xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition" data-id="{{ $gallery->id }}">
-                {{-- Image --}}
-                <div class="aspect-[4/3] overflow-hidden">
+                {{-- Image with overlay --}}
+                <div class="aspect-[4/3] overflow-hidden relative">
                     <img src="{{ asset('storage/' . $gallery->image) }}" alt="{{ $gallery->title ?? 'Gallery' }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                </div>
-
-                {{-- Overlay Actions --}}
-                <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <form method="POST" action="{{ route('admin.site-galleries.destroy', [$gallery]) }}" class="inline">
-                        @csrf @method('delete')
-                        <button type="button" onclick="showDeleteModal(this.closest('form'))" class="w-8 h-8 bg-red-500 text-white rounded-lg flex items-center justify-center hover:bg-red-600 transition shadow">
-                            <i class="fas fa-trash text-xs"></i>
-                        </button>
-                    </form>
+                    {{-- Dark overlay only on image --}}
+                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <form method="POST" action="{{ route('admin.site-galleries.destroy', [$gallery]) }}" class="inline"
+                              onsubmit="return confirm('Hapus gambar ini?')">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition shadow-lg transform hover:scale-110">
+                                <i class="fas fa-trash text-lg"></i>
+                            </button>
+                        </form>
+                    </div>
                 </div>
 
                 {{-- Title Input --}}

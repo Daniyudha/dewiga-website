@@ -99,7 +99,7 @@
             <table class="admin-table">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th>Kode Booking</th>
                         <th>{{ __('Name') }}</th>
                         <th>{{ __('Institution') }}</th>
                         <th>{{ __('Contact') }}</th>
@@ -117,7 +117,9 @@
                 <tbody>
                     @forelse($bookings as $booking)
                         <tr>
-                            <td class="font-medium text-gray-900">{{ $loop->iteration }}</td>
+                            <td class="font-mono text-xs font-semibold text-gray-900 whitespace-nowrap">
+                                {{ $booking->booking_code }}
+                            </td>
                             <td class="font-medium">{{ $booking->name }}</td>
                             <td>
                                 <span class="text-xs text-gray-600">{{ $booking->institution ?? '-' }}</span>

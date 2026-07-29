@@ -3,19 +3,16 @@
 @section('title', 'Edit Booking - Admin Dewiga')
 
 @section('content')
-    {{-- Page Header --}}
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
             <h1 class="text-2xl font-heading font-bold text-gray-900">{{ __('Edit Booking') }}</h1>
-            <p class="text-sm text-gray-500 mt-1">Update booking information</p>
+            <p class="text-sm text-gray-500 mt-1">Edit booking #{{ $booking->id }}</p>
         </div>
         <a href="{{ route('admin.bookings.index') }}" class="admin-btn-secondary">
-            <i class="fas fa-arrow-left"></i>
-            {{ __('Back') }}
+            <i class="fas fa-arrow-left"></i> {{ __('Back') }}
         </a>
     </div>
 
-    {{-- Form Card --}}
     <div class="admin-card">
         <div class="admin-card-header">
             <h2 class="font-heading font-semibold text-gray-800">{{ __('Booking Information') }}</h2>
@@ -26,90 +23,78 @@
                 @method('PUT')
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {{-- Name --}}
+                    @if($booking->booking_code)
+                    <div class="admin-form-group md:col-span-2">
+                        <div class="px-3 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-mono">
+                            <strong>Kode Booking:</strong> {{ $booking->booking_code }}
+                        </div>
+                    </div>
+                    @endif
                     <div class="admin-form-group">
                         <label for="name" class="admin-form-label">{{ __('Name') }} <span class="text-red-500">*</span></label>
                         <input type="text" id="name" name="name" value="{{ old('name', $booking->name) }}"
                                class="admin-form-input @error('name') error @enderror" required>
-                        @error('name')
-                            <p class="admin-form-error">{{ $message }}</p>
-                        @enderror
+                        @error('name')<p class="admin-form-error">{{ $message }}</p>@enderror
                     </div>
 
-                    {{-- Institution --}}
                     <div class="admin-form-group">
                         <label for="institution" class="admin-form-label">{{ __('Institution/Organization') }}</label>
                         <input type="text" id="institution" name="institution" value="{{ old('institution', $booking->institution) }}"
-                               class="admin-form-input @error('institution') error @enderror"
-                               placeholder="School/Company/Organization name">
-                        @error('institution')
-                            <p class="admin-form-error">{{ $message }}</p>
-                        @enderror
+                               class="admin-form-input @error('institution') error @enderror">
+                        @error('institution')<p class="admin-form-error">{{ $message }}</p>@enderror
                     </div>
 
-                    {{-- Email --}}
                     <div class="admin-form-group">
                         <label for="email" class="admin-form-label">{{ __('Email') }} <span class="text-red-500">*</span></label>
                         <input type="email" id="email" name="email" value="{{ old('email', $booking->email) }}"
                                class="admin-form-input @error('email') error @enderror" required>
-                        @error('email')
-                            <p class="admin-form-error">{{ $message }}</p>
-                        @enderror
+                        @error('email')<p class="admin-form-error">{{ $message }}</p>@enderror
                     </div>
 
-                    {{-- Phone --}}
+                    <div class="admin-form-group">
+                        <label for="guest_type" class="admin-form-label">{{ __('Tipe Tamu') }}</label>
+                        <select id="guest_type" name="guest_type" class="admin-form-input @error('guest_type') error @enderror">
+                            <option value="lokal" {{ old('guest_type', $booking->guest_type ?? 'lokal') == 'lokal' ? 'selected' : '' }}>Lokal</option>
+                            <option value="asing" {{ old('guest_type', $booking->guest_type ?? 'lokal') == 'asing' ? 'selected' : '' }}>Asing</option>
+                        </select>
+                        @error('guest_type')<p class="admin-form-error">{{ $message }}</p>@enderror
+                    </div>
+
                     <div class="admin-form-group">
                         <label for="number_phone" class="admin-form-label">{{ __('Phone Number') }} <span class="text-red-500">*</span></label>
                         <input type="text" id="number_phone" name="number_phone" value="{{ old('number_phone', $booking->number_phone) }}"
                                class="admin-form-input @error('number_phone') error @enderror" required>
-                        @error('number_phone')
-                            <p class="admin-form-error">{{ $message }}</p>
-                        @enderror
+                        @error('number_phone')<p class="admin-form-error">{{ $message }}</p>@enderror
                     </div>
 
-                    {{-- Start Date --}}
                     <div class="admin-form-group">
                         <label for="start_date" class="admin-form-label">{{ __('Start Date') }} <span class="text-red-500">*</span></label>
-                        <input type="date" id="start_date" name="start_date" value="{{ old('start_date', $booking->date->format('Y-m-d')) }}"
+                        <input type="date" id="start_date" name="start_date" value="{{ old('start_date', optional($booking->start_date)->format('Y-m-d')) }}"
                                class="admin-form-input @error('start_date') error @enderror" required>
-                        @error('start_date')
-                            <p class="admin-form-error">{{ $message }}</p>
-                        @enderror
+                        @error('start_date')<p class="admin-form-error">{{ $message }}</p>@enderror
                     </div>
 
-                    {{-- End Date --}}
                     <div class="admin-form-group">
                         <label for="end_date" class="admin-form-label">{{ __('End Date') }}</label>
-                        <input type="date" id="end_date" name="end_date" value="{{ old('end_date', $booking->end_date?->format('Y-m-d')) }}"
+                        <input type="date" id="end_date" name="end_date" value="{{ old('end_date', optional($booking->end_date)->format('Y-m-d')) }}"
                                class="admin-form-input @error('end_date') error @enderror">
-                        @error('end_date')
-                            <p class="admin-form-error">{{ $message }}</p>
-                        @enderror
+                        @error('end_date')<p class="admin-form-error">{{ $message }}</p>@enderror
                     </div>
 
-                    {{-- Amount --}}
                     <div class="admin-form-group">
                         <label for="amount" class="admin-form-label">{{ __('Amount (Rp)') }}</label>
                         <input type="number" id="amount" name="amount" value="{{ old('amount', $booking->amount) }}"
-                               class="admin-form-input @error('amount') error @enderror"
-                               placeholder="0" min="0" step="1000">
-                        @error('amount')
-                            <p class="admin-form-error">{{ $message }}</p>
-                        @enderror
+                               class="admin-form-input @error('amount') error @enderror" min="0" step="1000">
+                        @error('amount')<p class="admin-form-error">{{ $message }}</p>@enderror
                     </div>
 
-                    {{-- People Count --}}
                     <div class="admin-form-group">
                         <label for="people_count" class="admin-form-label">{{ __('Number of People') }}</label>
-                        <input type="number" id="people_count" name="people_count" value="{{ old('people_count', $booking->people_count) }}"
-                               class="admin-form-input @error('people_count') error @enderror"
-                               placeholder="1" min="1">
-                        @error('people_count')
-                            <p class="admin-form-error">{{ $message }}</p>
-                        @enderror
+                        <input type="number" id="people_count" name="people_count" value="{{ old('people_count', $booking->people_count ?? 1) }}"
+                               class="admin-form-input @error('people_count') error @enderror" min="1">
+                        @error('people_count')<p class="admin-form-error">{{ $message }}</p>@enderror
                     </div>
 
-                    {{-- Travel Package --}}
                     <div class="admin-form-group">
                         <label for="travel_package_id" class="admin-form-label">{{ __('Travel Package') }} <span class="text-red-500">*</span></label>
                         <select id="travel_package_id" name="travel_package_id" class="admin-form-input @error('travel_package_id') error @enderror" required>
@@ -120,30 +105,22 @@
                                 </option>
                             @endforeach
                         </select>
-                        @error('travel_package_id')
-                            <p class="admin-form-error">{{ $message }}</p>
-                        @enderror
+                        @error('travel_package_id')<p class="admin-form-error">{{ $message }}</p>@enderror
                     </div>
 
-                    {{-- Schedule --}}
                     <div class="admin-form-group">
-                        <label for="schedule_id" class="admin-form-label">{{ __('Schedule (Optional)') }}</label>
+                        <label for="schedule_id" class="admin-form-label">{{ __('Schedule') }}</label>
                         <select id="schedule_id" name="schedule_id" class="admin-form-input @error('schedule_id') error @enderror">
                             <option value="">{{ __('No Schedule') }}</option>
                             @foreach($schedules as $schedule)
                                 <option value="{{ $schedule->id }}" {{ old('schedule_id', $booking->schedule_id) == $schedule->id ? 'selected' : '' }}>
                                     {{ $schedule->start_date->format('d M Y') }} - {{ $schedule->travelPackage->type }}
-                                    @if($schedule->visitor_name) ({{ $schedule->visitor_name }}) @endif
-                                    [{{ $schedule->remainingQuota() }} spots]
                                 </option>
                             @endforeach
                         </select>
-                        @error('schedule_id')
-                            <p class="admin-form-error">{{ $message }}</p>
-                        @enderror
+                        @error('schedule_id')<p class="admin-form-error">{{ $message }}</p>@enderror
                     </div>
 
-                    {{-- Status --}}
                     <div class="admin-form-group">
                         <label for="status" class="admin-form-label">{{ __('Status') }} <span class="text-red-500">*</span></label>
                         <select id="status" name="status" class="admin-form-input @error('status') error @enderror" required>
@@ -151,39 +128,27 @@
                                 <option value="{{ $val }}" {{ old('status', $booking->status) == $val ? 'selected' : '' }}>{{ $label }}</option>
                             @endforeach
                         </select>
-                        @error('status')
-                            <p class="admin-form-error">{{ $message }}</p>
-                        @enderror
+                        @error('status')<p class="admin-form-error">{{ $message }}</p>@enderror
                     </div>
 
-                    {{-- Notes --}}
                     <div class="admin-form-group md:col-span-2">
                         <label for="notes" class="admin-form-label">{{ __('Notes') }}</label>
                         <textarea id="notes" name="notes" rows="3" class="admin-form-input @error('notes') error @enderror">{{ old('notes', $booking->notes) }}</textarea>
-                        @error('notes')
-                            <p class="admin-form-error">{{ $message }}</p>
-                        @enderror
+                        @error('notes')<p class="admin-form-error">{{ $message }}</p>@enderror
                     </div>
 
-                    {{-- Description --}}
                     <div class="admin-form-group md:col-span-2">
                         <label for="description" class="admin-form-label">{{ __('Description') }}</label>
-                        <textarea id="description" name="description" rows="3" class="admin-form-input @error('description') error @enderror"
-                                  placeholder="Additional description...">{{ old('description', $booking->description) }}</textarea>
-                        @error('description')
-                            <p class="admin-form-error">{{ $message }}</p>
-                        @enderror
+                        <textarea id="description" name="description" rows="3" class="admin-form-input @error('description') error @enderror">{{ old('description', $booking->description) }}</textarea>
+                        @error('description')<p class="admin-form-error">{{ $message }}</p>@enderror
                     </div>
                 </div>
 
                 <div class="flex items-center gap-3 pt-4 border-t border-gray-100">
                     <button type="submit" class="admin-btn-success">
-                        <i class="fas fa-save"></i>
-                        {{ __('Update Booking') }}
+                        <i class="fas fa-save"></i> {{ __('Update Booking') }}
                     </button>
-                    <a href="{{ route('admin.bookings.index') }}" class="admin-btn-secondary">
-                        {{ __('Cancel') }}
-                    </a>
+                    <a href="{{ route('admin.bookings.index') }}" class="admin-btn-secondary">{{ __('Cancel') }}</a>
                 </div>
             </form>
         </div>

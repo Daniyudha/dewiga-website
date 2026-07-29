@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Booking extends Model
 {
@@ -17,7 +18,35 @@ class Booking extends Model
         'end_date' => 'date:Y-m-d',
         'status' => 'string',
         'people_count' => 'integer',
+        'guest_type' => 'string',
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($booking) {
+            if (empty($booking->booking_code)) {
+                $booking->booking_code = static::generateBookingCode();
+            }
+        });
+    }
+
+    public static function generateBookingCode(): string
+    {
+        $prefix = 'BO';
+        $date = now();
+        $year = $date->format('y');
+        $month = $date->format('m');
+
+        $lastBooking = static::orderBy('id', 'desc')->lockForUpdate()->first();
+
+        $seq = 1;
+        if ($lastBooking && $lastBooking->booking_code) {
+            $lastSeq = (int) substr($lastBooking->booking_code, -3);
+            $seq = $lastSeq + 1;
+        }
+
+        return $prefix . $year . $month . str_pad($seq, 3, '0', STR_PAD_LEFT);
+    }
 
     /**
      * Get available statuses with labels.

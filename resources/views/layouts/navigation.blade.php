@@ -23,123 +23,225 @@
 </div>
 
 {{-- Sidebar Menu --}}
-<nav class="flex-1 overflow-y-auto px-3 py-4 space-y-1 nav-sidebar">
-    {{-- Dashboard --}}
-    <div class="nav-item">
-        <a href="{{ route('admin.dashboard') }}" class="nav-link">
-            <i class="nav-icon fas fa-th"></i>
-            <span>{{ __('Dashboard') }}</span>
-        </a>
-    </div>
+<nav class="flex-1 overflow-y-auto px-3 py-4 nav-sidebar">
+    @php $user = Auth::user(); @endphp
 
-    {{-- Users --}}
-    <div class="nav-item">
-        <a href="{{ route('admin.users.index') }}" class="nav-link">
-            <i class="nav-icon fas fa-users"></i>
-            <span>{{ __('Users') }}</span>
-        </a>
+    {{-- DASHBOARD --}}
+    @if($user->hasPermission('dashboard.view'))
+    <div class="nav-section mb-6">
+        <div class="nav-section-title px-3 py-2 text-xs font-semibold text-white/40 uppercase tracking-wider">
+            Dashboard
+        </div>
+        <div class="nav-item">
+            <a href="{{ route('admin.dashboard') }}" class="nav-link">
+                <i class="nav-icon fas fa-th"></i>
+                <span>{{ __('Dashboard') }}</span>
+            </a>
+        </div>
     </div>
-    
-    {{-- Travel Packages --}}
-    <div class="nav-item">
-        <a href="{{ route('admin.travel_packages.index') }}" class="nav-link">
-            <i class="nav-icon fa fa-hotel"></i>
-            <span>{{ __('Travel Package') }}</span>
-        </a>
-    </div>
+    @endif
 
-    {{-- Bookings --}}
-    <div class="nav-item">
-        <a href="{{ route('admin.bookings.index') }}" class="nav-link">
-            <i class="nav-icon fas fa-book"></i>
-            <span>{{ __('Booking') }}</span>
-        </a>
+    {{-- RESERVASI & OPERASIONAL --}}
+    @if($user->hasAnyPermission(['schedules.view', 'schedules.create', 'schedules.edit', 'proposals.view', 'bookings.view', 'open_trips.view']))
+    <div class="nav-section mb-6">
+        <div class="nav-section-title px-3 py-2 text-xs font-semibold text-white/40 uppercase tracking-wider">
+            Reservasi & Operasional
+        </div>
+        @if($user->hasAnyPermission(['schedules.view', 'schedules.create', 'schedules.edit']))
+        <div class="nav-item">
+            <a href="{{ route('admin.schedules.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-calendar-alt"></i>
+                <span>{{ __('Schedules') }}</span>
+            </a>
+        </div>
+        @endif
+        @if($user->hasPermission('schedules.view'))
+        <div class="nav-item">
+            <a href="{{ route('admin.rundown-templates.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-clipboard-list"></i>
+                <span>Template Rundown</span>
+            </a>
+        </div>
+        @endif
+        @if($user->hasAnyPermission(['proposals.view', 'proposals.create', 'proposals.edit']))
+        <div class="nav-item">
+            <a href="{{ route('admin.proposals.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-file-invoice"></i>
+                <span>Proposal Program</span>
+            </a>
+        </div>
+        @endif
+        @if($user->hasPermission('schedules.view'))
+        <div class="nav-item">
+            <a href="{{ route('admin.price-calculator.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-calculator"></i>
+                <span>Kalkulator Harga</span>
+            </a>
+        </div>
+        @endif
+        @if($user->hasAnyPermission(['bookings.view', 'bookings.create', 'bookings.edit']))
+        <div class="nav-item">
+            <a href="{{ route('admin.bookings.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-book"></i>
+                <span>{{ __('Booking') }}</span>
+            </a>
+        </div>
+        @endif
+        @if($user->hasAnyPermission(['open_trips.view', 'open_trips.create', 'open_trips.edit']))
+        <div class="nav-item">
+            <a href="{{ route('admin.open-trip-registrations.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-users"></i>
+                <span>{{ __('Open Trip Registrations') }}</span>
+            </a>
+        </div>
+        @endif
     </div>
+    @endif
 
-    {{-- Open Trip Registrations --}}
-    <div class="nav-item">
-        <a href="{{ route('admin.open-trip-registrations.index') }}" class="nav-link">
-            <i class="nav-icon fas fa-users"></i>
-            <span>{{ __('Open Trip Registrations') }}</span>
-        </a>
+    {{-- Data Base --}}
+    @if($user->hasAnyPermission(['guests.view', 'transactions.view']))
+    <div class="nav-section mb-6">
+        <div class="nav-section-title px-3 py-2 text-xs font-semibold text-white/40 uppercase tracking-wider">
+            Data Base
+        </div>
+        @if($user->hasAnyPermission(['guests.view', 'guests.create', 'guests.edit']))
+        <div class="nav-item">
+            <a href="{{ route('admin.guests.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-address-book"></i>
+                <span>Database Tamu</span>
+            </a>
+        </div>
+        @endif
+        @if($user->hasPermission('guests.view'))
+        <div class="nav-item">
+            <a href="{{ route('admin.visit-reports.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-chart-bar"></i>
+                <span>Data Kunjungan</span>
+            </a>
+        </div>
+        @endif
+        @if($user->hasAnyPermission(['transactions.view', 'transactions.create', 'transactions.edit']))
+        <div class="nav-item">
+            <a href="{{ route('admin.transactions.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-coins"></i>
+                <span>Data Keuangan</span>
+            </a>
+        </div>
+        @endif
     </div>
-    
-    {{-- Schedules --}}
-    <div class="nav-item">
-        <a href="{{ route('admin.schedules.index') }}" class="nav-link">
-            <i class="nav-icon fas fa-calendar-alt"></i>
-            <span>{{ __('Schedules') }}</span>
-        </a>
-    </div>
-    
-    {{-- Blog (with treeview) --}}
-    <div class="nav-item">
-        <a href="#" class="nav-link treeview-toggle">
-            <i class="nav-icon fas fa-circle"></i>
-            <span class="flex-1">{{ __('Blog') }}</span>
-            <i class="fas fa-angle-left treeview-icon transition-transform duration-200 text-xs"></i>
-        </a>
-        <ul class="nav-treeview">
-            <li class="nav-item">
-                <a href="{{ route('admin.categories.index') }}" class="nav-link">
-                    <span>{{ __('Category') }}</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('admin.blogs.index') }}" class="nav-link">
-                    <span>{{ __('Add Blog') }}</span>
-                </a>
-            </li>
-        </ul>
-    </div>
+    @endif
 
-    {{-- Testimonials --}}
-    <div class="nav-item">
-        <a href="{{ route('admin.testimonials.index') }}" class="nav-link">
-            <i class="nav-icon fas fa-star"></i>
-            <span>{{ __('Testimonials') }}</span>
-        </a>
+    {{-- MASTER DATA --}}
+    @if($user->hasAnyPermission(['packages.view', 'packages.create', 'packages.edit']))
+    <div class="nav-section mb-6">
+        <div class="nav-section-title px-3 py-2 text-xs font-semibold text-white/40 uppercase tracking-wider">
+            Master Data
+        </div>
+        @if($user->hasAnyPermission(['packages.view', 'packages.create', 'packages.edit']))
+        <div class="nav-item">
+            <a href="{{ route('admin.travel_packages.index') }}" class="nav-link">
+                <i class="nav-icon fa fa-hotel"></i>
+                <span>{{ __('Travel Package') }}</span>
+            </a>
+        </div>
+        @endif
+        <div class="nav-item">
+            <a href="{{ route('admin.activities.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-running"></i>
+                <span>{{ __('Activities') }}</span>
+            </a>
+        </div>
     </div>
+    @endif
 
-    {{-- Price Calculator --}}
-    <div class="nav-item">
-        <a href="{{ route('admin.price-calculator.index') }}" class="nav-link">
-            <i class="nav-icon fas fa-calculator"></i>
-            <span>Kalkulator Harga</span>
-        </a>
+    {{-- BLOG --}}
+    @if($user->hasPermission('blogs.manage'))
+    <div class="nav-section mb-6">
+        <div class="nav-section-title px-3 py-2 text-xs font-semibold text-white/40 uppercase tracking-wider">
+            Blog
+        </div>
+        <div class="nav-item">
+            <a href="{{ route('admin.blogs.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-blog"></i>
+                <span>{{ __('Blog') }}</span>
+            </a>
+        </div>
+        @if($user->hasPermission('categories.manage'))
+        <div class="nav-item">
+            <a href="{{ route('admin.categories.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-folder"></i>
+                <span>{{ __('Category') }}</span>
+            </a>
+        </div>
+        @endif
     </div>
+    @endif
 
-    {{-- Activities --}}
-    <div class="nav-item">
-        <a href="{{ route('admin.activities.index') }}" class="nav-link">
-            <i class="nav-icon fas fa-running"></i>
-            <span>{{ __('Activities') }}</span>
-        </a>
+    {{-- CONTENT --}}
+    @if($user->hasAnyPermission(['testimonials.manage', 'galleries.manage', 'hero.manage', 'partners.manage']))
+    <div class="nav-section mb-6">
+        <div class="nav-section-title px-3 py-2 text-xs font-semibold text-white/40 uppercase tracking-wider">
+            Content
+        </div>
+        @if($user->hasPermission('testimonials.manage'))
+        <div class="nav-item">
+            <a href="{{ route('admin.testimonials.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-star"></i>
+                <span>{{ __('Testimonials') }}</span>
+            </a>
+        </div>
+        @endif
+        @if($user->hasPermission('galleries.manage'))
+        <div class="nav-item">
+            <a href="{{ route('admin.site-galleries.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-camera"></i>
+                <span>{{ __('Site Gallery') }}</span>
+            </a>
+        </div>
+        @endif
+        @if($user->hasPermission('partners.manage'))
+        <div class="nav-item">
+            <a href="{{ route('admin.partner_logos.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-images"></i>
+                <span>{{ __('Partner Logos') }}</span>
+            </a>
+        </div>
+        @endif
+        @if($user->hasPermission('hero.manage'))
+        <div class="nav-item">
+            <a href="{{ route('admin.hero-settings.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-sliders-h"></i>
+                <span>{{ __('Hero Settings') }}</span>
+            </a>
+        </div>
+        @endif
     </div>
+    @endif
 
-    {{-- Site Gallery --}}
-    <div class="nav-item">
-        <a href="{{ route('admin.site-galleries.index') }}" class="nav-link">
-            <i class="nav-icon fas fa-camera"></i>
-            <span>{{ __('Site Gallery') }}</span>
-        </a>
+    {{-- SETTINGS --}}
+    @if($user->hasAnyPermission(['users.view', 'roles.manage']))
+    <div class="nav-section mb-6">
+        <div class="nav-section-title px-3 py-2 text-xs font-semibold text-white/40 uppercase tracking-wider">
+            Settings
+        </div>
+        @if($user->hasPermission('users.view'))
+        <div class="nav-item">
+            <a href="{{ route('admin.users.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-users-cog"></i>
+                <span>{{ __('Users') }}</span>
+            </a>
+        </div>
+        @endif
+        @if($user->hasPermission('roles.manage'))
+        <div class="nav-item">
+            <a href="{{ route('admin.roles.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-shield-alt"></i>
+                <span>{{ __('Role & Permission') }}</span>
+            </a>
+        </div>
+        @endif
     </div>
-
-    {{-- Partner Logos --}}
-    <div class="nav-item">
-        <a href="{{ route('admin.partner_logos.index') }}" class="nav-link">
-            <i class="nav-icon fas fa-images"></i>
-            <span>{{ __('Partner Logos') }}</span>
-        </a>
-    </div>
-
-    {{-- Hero Settings --}}
-    <div class="nav-item">
-        <a href="{{ route('admin.hero-settings.index') }}" class="nav-link">
-            <i class="nav-icon fas fa-sliders-h"></i>
-            <span>{{ __('Hero Settings') }}</span>
-        </a>
-    </div>
+    @endif
 </nav>
 
 {{-- Footer credit --}}

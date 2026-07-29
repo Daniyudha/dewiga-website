@@ -16,24 +16,31 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         Route::patch('bookings/{booking}/cancel', [\App\Http\Controllers\Admin\BookingController::class, 'cancel'])->name('bookings.cancel');
         Route::resource('travel_packages', \App\Http\Controllers\Admin\TravelPackageController::class)->except('show');
         Route::patch('travel_packages/{travel_package}/toggle-signature', [\App\Http\Controllers\Admin\TravelPackageController::class, 'toggleSignature'])->name('travel_packages.toggle-signature');
+        Route::resource('roles', \App\Http\Controllers\Admin\RolePermissionController::class);
         Route::resource('travel_packages.galleries', \App\Http\Controllers\Admin\GalleryController::class)->except(['create', 'index','show']);
         Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class)->except('show');
         Route::resource('blogs', \App\Http\Controllers\Admin\BlogController::class)->except('show');
         Route::resource('testimonials', \App\Http\Controllers\Admin\TestimonialController::class)->only(['index', 'destroy']);
         Route::patch('testimonials/{testimonial}/toggle', [\App\Http\Controllers\Admin\TestimonialController::class, 'toggle'])->name('testimonials.toggle');
-        Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+        Route::resource('users', \App\Http\Controllers\UserController::class)->except('show');
         Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
         Route::put('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
         // Schedules
         Route::resource('schedules', \App\Http\Controllers\Admin\ScheduleController::class)->except('show');
+        Route::get('schedules/{schedule}/show', [\App\Http\Controllers\Admin\ScheduleController::class, 'show'])->name('schedules.show');
         Route::patch('schedules/{schedule}/toggle-active', [\App\Http\Controllers\Admin\ScheduleController::class, 'toggleActive'])->name('schedules.toggle-active');
+        Route::patch('schedules/{schedule}/update-status', [\App\Http\Controllers\Admin\ScheduleController::class, 'updateStatus'])->name('schedules.update-status');
 
         // Open Trip Registrations
         Route::get('open-trip-registrations/{schedule}/export', [\App\Http\Controllers\Admin\OpenTripRegistrationController::class, 'export'])->name('open-trip-registrations.export');
         Route::get('open-trip-registrations/{schedule}/schedule', [\App\Http\Controllers\Admin\OpenTripRegistrationController::class, 'showSchedule'])->name('open-trip-registrations.schedule');
         Route::post('open-trip-registrations/{schedule}/recalculate', [\App\Http\Controllers\Admin\OpenTripRegistrationController::class, 'recalculate'])->name('open-trip-registrations.recalculate');
         Route::resource('open-trip-registrations', \App\Http\Controllers\Admin\OpenTripRegistrationController::class);
+        Route::resource('guests', \App\Http\Controllers\Admin\GuestController::class)->except('show');
+        Route::get('visit-reports', [\App\Http\Controllers\Admin\VisitReportController::class, 'index'])->name('visit-reports.index');
+        Route::get('visit-reports/export', [\App\Http\Controllers\Admin\VisitReportController::class, 'export'])->name('visit-reports.export');
+        Route::resource('transactions', \App\Http\Controllers\Admin\TransactionController::class)->except('show');
 
         // Partner Logos
         Route::resource('partner_logos', \App\Http\Controllers\Admin\PartnerLogoController::class)->except('show');
@@ -81,6 +88,49 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
             Route::get('{priceEstimation}/duplicate', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'duplicate'])->name('duplicate');
             Route::delete('{priceEstimation}', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'destroy'])->name('destroy');
             Route::post('{priceEstimation}/recalculate', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'recalculate'])->name('recalculate');
+            Route::post('{priceEstimation}/convert-to-schedule', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'convertToSchedule'])->name('convert-to-schedule');
+        });
+
+        // Proposal Program (extends price-calculator)
+        Route::resource('proposals', \App\Http\Controllers\Admin\ProposalController::class)->parameters(['proposals' => 'priceEstimation']);
+        Route::post('proposals/{priceEstimation}/calculate', [\App\Http\Controllers\Admin\ProposalController::class, 'calculate'])->name('proposals.calculate');
+        Route::post('proposals/{priceEstimation}/recalculate', [\App\Http\Controllers\Admin\ProposalController::class, 'recalculate'])->name('proposals.recalculate');
+        Route::get('proposals/{priceEstimation}/duplicate', [\App\Http\Controllers\Admin\ProposalController::class, 'duplicate'])->name('proposals.duplicate');
+        Route::post('proposals/{priceEstimation}/update-program', [\App\Http\Controllers\Admin\ProposalController::class, 'updateProgram'])->name('proposals.update-program');
+        Route::post('proposals/{priceEstimation}/update-facilities', [\App\Http\Controllers\Admin\ProposalController::class, 'updateFacilities'])->name('proposals.update-facilities');
+        Route::patch('proposals/{priceEstimation}/update-status', [\App\Http\Controllers\Admin\ProposalController::class, 'updateStatus'])->name('proposals.update-status');
+        Route::post('proposals/{priceEstimation}/convert-to-schedule', [\App\Http\Controllers\Admin\ProposalController::class, 'convertToSchedule'])->name('proposals.convert-to-schedule');
+        Route::get('proposals/{priceEstimation}/pdf-view', [\App\Http\Controllers\Admin\ProposalController::class, 'pdfView'])->name('proposals.pdf-view');
+        Route::get('proposals/{priceEstimation}/pdf-download', [\App\Http\Controllers\Admin\ProposalController::class, 'pdfDownload'])->name('proposals.pdf-download');
+        Route::get('proposals/convert-estimation/{priceEstimation}', [\App\Http\Controllers\Admin\ProposalController::class, 'convertEstimationToProposal'])->name('proposals.convert-estimation');
+        Route::get('proposals/{priceEstimation}/send-whatsapp', [\App\Http\Controllers\Admin\ProposalController::class, 'sendWhatsApp'])->name('proposals.send-whatsapp');
+        Route::get('proposals/settings/index', [\App\Http\Controllers\Admin\ProposalController::class, 'settings'])->name('proposals.settings');
+        // Proposal Settings
+        Route::get('proposal-settings', [\App\Http\Controllers\Admin\ProposalSettingController::class, 'index'])->name('proposal-settings.index');
+        Route::put('proposal-settings', [\App\Http\Controllers\Admin\ProposalSettingController::class, 'update'])->name('proposal-settings.update');
+
+        // Template Rundown
+        Route::resource('rundown-templates', \App\Http\Controllers\Admin\RundownTemplateController::class);
+        Route::patch('rundown-templates/{rundownTemplate}/toggle-active', [\App\Http\Controllers\Admin\RundownTemplateController::class, 'toggleActive'])->name('rundown-templates.toggle-active');
+        Route::post('rundown-templates/{rundownTemplate}/duplicate', [\App\Http\Controllers\Admin\RundownTemplateController::class, 'duplicate'])->name('rundown-templates.duplicate');
+        Route::post('rundown-templates/{rundownTemplate}/reorder-items', [\App\Http\Controllers\Admin\RundownTemplateController::class, 'reorderItems'])->name('rundown-templates.reorder-items');
+
+        // Schedule Rundown
+        Route::prefix('schedules/{schedule}/rundown')->name('schedules.rundown.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Admin\ScheduleRundownController::class, 'show'])->name('show');
+            Route::post('create-from-template', [\App\Http\Controllers\Admin\ScheduleRundownController::class, 'createFromTemplate'])->name('create-from-template');
+            Route::post('create-empty', [\App\Http\Controllers\Admin\ScheduleRundownController::class, 'createEmpty'])->name('create-empty');
+            Route::get('{rundown}/edit', [\App\Http\Controllers\Admin\ScheduleRundownController::class, 'edit'])->name('edit');
+            Route::put('{rundown}', [\App\Http\Controllers\Admin\ScheduleRundownController::class, 'update'])->name('update');
+            Route::delete('{rundown}', [\App\Http\Controllers\Admin\ScheduleRundownController::class, 'destroy'])->name('destroy');
+            Route::post('{rundown}/reset-from-template', [\App\Http\Controllers\Admin\ScheduleRundownController::class, 'resetFromTemplate'])->name('reset-from-template');
+            Route::post('{rundown}/add-item', [\App\Http\Controllers\Admin\ScheduleRundownController::class, 'addItem'])->name('add-item');
+            Route::put('{rundown}/items/{item}', [\App\Http\Controllers\Admin\ScheduleRundownController::class, 'updateItem'])->name('update-item');
+            Route::delete('{rundown}/items/{item}', [\App\Http\Controllers\Admin\ScheduleRundownController::class, 'deleteItem'])->name('delete-item');
+            Route::post('{rundown}/items/{item}/duplicate', [\App\Http\Controllers\Admin\ScheduleRundownController::class, 'duplicateItem'])->name('duplicate-item');
+            Route::post('{rundown}/reorder-items', [\App\Http\Controllers\Admin\ScheduleRundownController::class, 'reorderItems'])->name('reorder-items');
+            Route::get('{rundown}/pdf-view', [\App\Http\Controllers\Admin\ScheduleRundownController::class, 'pdfView'])->name('pdf-view');
+            Route::get('{rundown}/pdf-download', [\App\Http\Controllers\Admin\ScheduleRundownController::class, 'pdfDownload'])->name('pdf-download');
         });
 
         Route::post('upload-image', [\App\Http\Controllers\Admin\UploadController::class, 'image'])->name('upload.image');

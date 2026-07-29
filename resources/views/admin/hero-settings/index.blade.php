@@ -6,31 +6,42 @@
 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
     <div>
         <h1 class="text-2xl font-heading font-bold text-gray-900">{{ __('Hero Settings') }}</h1>
-        <p class="text-sm text-gray-500 mt-1">Manage hero banners for each page</p>
+        <p class="text-sm text-gray-500 mt-1">Kelola banner hero untuk setiap halaman</p>
     </div>
 </div>
+
+@if(session('success'))
+    <div class="mb-4 px-4 py-3 rounded-lg text-sm font-medium bg-green-100 text-green-800 border border-green-200">
+        {{ session('success') }}
+    </div>
+@endif
+@if(session('error'))
+    <div class="mb-4 px-4 py-3 rounded-lg text-sm font-medium bg-red-100 text-red-800 border border-red-200">
+        {{ session('error') }}
+    </div>
+@endif
 
 {{-- Hero List --}}
 <div class="admin-card">
     <div class="admin-card-header">
-        <h3 class="font-heading font-semibold text-gray-800">All Page Heroes</h3>
-        <span class="text-xs text-gray-500">{{ $heroes->count() }} pages</span>
+        <h3 class="font-heading font-semibold text-gray-800">Semua Halaman Hero</h3>
+        <span class="text-xs text-gray-500">{{ $heroes->count() }} halaman</span>
     </div>
     <div class="admin-card-body p-0">
         <div class="overflow-x-auto">
             <table class="admin-table w-full">
                 <thead>
-                    <tr class="bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                        <th class="px-6 py-3">Page</th>
-                        <th class="px-6 py-3">Images</th>
-                        <th class="px-6 py-3">Last Updated</th>
-                        <th class="px-6 py-3 !text-center">Actions</th>
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Halaman</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Gambar</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Terakhir Update</th>
+                        <th class="px-4 py-3 !text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     @foreach($heroes as $hero)
-                    <tr class="hover:bg-gray-50/50 transition">
-                        <td class="px-6 py-4">
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-4 py-3">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 rounded-xl bg-primary-50 flex items-center justify-center text-primary-600 shrink-0">
                                     @switch($hero->page)
@@ -47,17 +58,17 @@
                                     @endswitch
                                 </div>
                                 <div>
-                                    <span class="font-medium text-gray-900 capitalize">{{ $hero->page }}</span>
+                                    <span class="text-sm font-medium text-gray-900 capitalize">{{ $hero->page }}</span>
                                     @if($hero->page === 'home')
                                         <span class="ml-2 px-2 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-semibold rounded-full">Multi-slide</span>
                                     @endif
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-2">
-                                <span class="text-sm font-medium text-gray-700">{{ $hero->slides->count() }}</span>
-                                <span class="text-xs text-gray-400">images</span>
+                        <td class="px-4 py-3">
+                            <div class="flex items-center gap-2 text-sm">
+                                <span class="font-medium text-gray-700">{{ $hero->slides->count() }}</span>
+                                <span class="text-xs text-gray-400">gambar</span>
                                 @if($hero->page === 'home')
                                     <span class="text-xs text-gray-400">/ 5 max</span>
                                 @else
@@ -65,11 +76,9 @@
                                 @endif
                             </div>
                         </td>
-                        <td class="px-6 py-4">
-                            <span class="text-sm text-gray-500">{{ $hero->updated_at->diffForHumans() }}</span>
-                        </td>
-                        <td class="px-6 py-4 text-center">
-                            <a href="{{ route('admin.hero-settings.edit', [$hero]) }}" class="inline-flex items-center text-blue-600 font-medium rounded-lg hover:text-blue-800 transition">
+                        <td class="px-4 py-3 text-sm text-gray-500">{{ $hero->updated_at->diffForHumans() }}</td>
+                        <td class="px-4 py-3 text-center">
+                            <a href="{{ route('admin.hero-settings.edit', [$hero]) }}" class="text-blue-600 hover:text-blue-800 text-sm" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
                         </td>
