@@ -40,9 +40,7 @@
                 @endif
                 <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-white">{{ $blog->title }}</h1>
                 <div class="flex flex-wrap items-center gap-6 text-neutral-200">
-                    @if ($blog->user)
-                        <span class="flex items-center gap-2"><i class="bx bx-user"></i> {{ $blog->user->name }}</span>
-                    @endif
+                    <span class="flex items-center gap-2"><i class="bx bx-user"></i> {{ $blog->user->name ?? 'Admin Dewiga' }}</span>
                     <span class="flex items-center gap-2"><i class="bx bx-calendar"></i> {{ date('d F Y', strtotime($blog->created_at)) }}</span>
                     <span class="flex items-center gap-2"><i class="bx bx-show"></i> {{ number_format($blog->reads) }} @lang('messages.blog.reads')</span>
                 </div>
@@ -184,9 +182,7 @@
                             <a href="{{ route('blog.show', $relatedBlog->slug) }}"><h2 class="font-serif text-lg font-bold text-[#053d2c] mb-2 line-clamp-2 hover:text-[#00a877] transition-colors">{{ $relatedBlog->title }}</h2></a>
                             <p class="text-sm text-neutral-600 leading-relaxed mb-4 line-clamp-3">{{ $relatedBlog->excerpt }}</p>
                             <div class="flex items-center gap-4 pt-4 border-t border-neutral-100">
-                                @if ($relatedBlog->user)
-                                    <span class="flex items-center gap-1.5 text-xs text-neutral-500"><i class="bx bx-user"></i> {{ $relatedBlog->user->name }}</span>
-                                @endif
+                                <span class="flex items-center gap-1.5 text-xs text-neutral-500"><i class="bx bx-user"></i> {{ $relatedBlog->user->name ?? 'Admin Dewiga' }}</span>
                                 <span class="flex items-center gap-1.5 text-xs text-neutral-500"><i class="bx bx-calendar"></i> {{ date('d M Y', strtotime($relatedBlog->created_at)) }}</span>
                                 <span class="flex items-center gap-1.5 text-xs text-neutral-500"><i class="bx bx-show"></i> {{ $relatedBlog->reads }}</span>
                             </div>
