@@ -25,25 +25,25 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
     <div class="admin-card">
         <div class="admin-card-body text-center">
-            <div class="text-3xl font-bold text-green-600">Rp {{ number_format($totalDebit, 0, ',', '.') }}</div>
+            <div class="text-2xl font-bold text-green-600">Rp {{ number_format($totalDebit, 0, ',', '.') }}</div>
             <div class="text-xs text-gray-500 mt-1">Total Pemasukan (Debit)</div>
         </div>
     </div>
     <div class="admin-card">
         <div class="admin-card-body text-center">
-            <div class="text-3xl font-bold text-red-600">Rp {{ number_format($totalCredit, 0, ',', '.') }}</div>
+            <div class="text-2xl font-bold text-red-600">Rp {{ number_format($totalCredit, 0, ',', '.') }}</div>
             <div class="text-xs text-gray-500 mt-1">Total Pengeluaran (Kredit)</div>
         </div>
     </div>
     <div class="admin-card">
         <div class="admin-card-body text-center">
-            <div class="text-3xl font-bold text-blue-600">Rp {{ number_format($saldoAkhir, 0, ',', '.') }}</div>
+            <div class="text-2xl font-bold text-blue-600">Rp {{ number_format($saldoAkhir, 0, ',', '.') }}</div>
             <div class="text-xs text-gray-500 mt-1">Saldo Filter</div>
         </div>
     </div>
     <div class="admin-card">
         <div class="admin-card-body text-center">
-            <div class="text-3xl font-bold text-indigo-600">Rp {{ number_format($saldoBerjalan, 0, ',', '.') }}</div>
+            <div class="text-2xl font-bold text-indigo-600">Rp {{ number_format($saldoBerjalan, 0, ',', '.') }}</div>
             <div class="text-xs text-gray-500 mt-1">Saldo Keseluruhan</div>
         </div>
     </div>
@@ -53,24 +53,24 @@
 <div class="admin-card mb-6">
     <div class="admin-card-body">
         <form method="GET" action="{{ route('admin.transactions.index') }}" class="flex gap-3 items-center">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari transaksi..." class="form-input flex-1">
-            <select name="source" class="form-input w-48">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari transaksi..." class="form-input flex-1 py-2 px-3 rounded-md shadow-md border border-gray-300">
+            <select name="source" class="form-input w-56 py-2 px-3 rounded-md shadow-md border border-gray-300 cursor-pointer">
                 <option value="">Semua Sumber Dana</option>
                 @foreach(\App\Models\Transaction::sources() as $val => $label)
                     <option value="{{ $val }}" {{ request('source') == $val ? 'selected' : '' }}>{{ $label }}</option>
                 @endforeach
             </select>
-            <select name="category" class="form-input w-40">
+            <select name="category" class="form-input w-42 py-2 px-3 rounded-md shadow-md border border-gray-300 cursor-pointer">
                 <option value="">Semua Kategori</option>
                 @foreach(\App\Models\Transaction::categories() as $val => $label)
                     <option value="{{ $val }}" {{ request('category') == $val ? 'selected' : '' }}>{{ $label }}</option>
                 @endforeach
             </select>
-            <input type="date" name="date_from" value="{{ request('date_from') }}" class="form-input w-36" placeholder="Dari">
-            <input type="date" name="date_to" value="{{ request('date_to') }}" class="form-input w-36" placeholder="Sampai">
-            <button type="submit" class="admin-btn-sm admin-btn-primary"><i class="fas fa-search mr-1"></i> Filter</button>
+            <input type="date" name="date_from" value="{{ request('date_from') }}" class="form-input w-38 py-2 px-3 rounded-md shadow-md border border-gray-300" placeholder="Dari">
+            <input type="date" name="date_to" value="{{ request('date_to') }}" class="form-input w-38 py-2 px-3 rounded-md shadow-md border border-gray-300" placeholder="Sampai">
+            <button type="submit" class="admin-btn-md admin-btn-primary"><i class="fas fa-search mr-1"></i> Filter</button>
             @if(request('search') || request('source') || request('category') || request('date_from') || request('date_to'))
-                <a href="{{ route('admin.transactions.index') }}" class="admin-btn-sm admin-btn-secondary">Reset</a>
+                <a href="{{ route('admin.transactions.index') }}" class="admin-btn-md admin-btn-secondary">Reset</a>
             @endif
         </form>
     </div>

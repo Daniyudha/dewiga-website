@@ -29,7 +29,7 @@
         <div class="admin-card-body">
             <form method="GET" action="{{ route('admin.bookings.index') }}" class="flex flex-wrap items-center gap-3">
                 <label class="text-sm font-medium text-gray-700">{{ __('Status') }}:</label>
-                <select name="status" class="admin-input w-auto min-w-[150px] py-2 px-2 rounded-lg shadow-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" onchange="this.form.submit()">
+                <select name="status" class="admin-input w-auto min-w-[150px]" onchange="this.form.submit()">
                     <option value="">{{ __('All Status') }}</option>
                     @foreach(\App\Models\Booking::statuses() as $val => $label)
                         <option value="{{ $val }}" {{ request('status') == $val ? 'selected' : '' }}>{{ $label }}</option>
@@ -37,13 +37,13 @@
                 </select>
 
                 <label class="text-sm font-medium text-gray-700 ml-2">{{ __('Date From') }}:</label>
-                <input type="date" name="date_from" class="admin-input w-auto py-2 px-2 rounded-lg shadow-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="{{ request('date_from') }}" onchange="this.form.submit()">
+                <input type="date" name="date_from" class="admin-input w-auto" value="{{ request('date_from') }}" onchange="this.form.submit()">
 
                 <label class="text-sm font-medium text-gray-700 ml-2">{{ __('Date To') }}:</label>
-                <input type="date" name="date_to" class="admin-input w-auto py-2 px-2 rounded-lg shadow-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="{{ request('date_to') }}" onchange="this.form.submit()">
+                <input type="date" name="date_to" class="admin-input w-auto" value="{{ request('date_to') }}" onchange="this.form.submit()">
 
                 @if(request('status') || request('date_from') || request('date_to'))
-                    <a href="{{ route('admin.bookings.index') }}" class="text-sm text-red-600 hover:underline">
+                    <a href="{{ route('admin.bookings.index') }}" class="admin-btn-sm admin-btn-secondary text-red-600">
                         <i class="fas fa-times"></i> {{ __('Clear Filter') }}
                     </a>
                 @endif

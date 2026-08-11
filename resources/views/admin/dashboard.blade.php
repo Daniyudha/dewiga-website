@@ -13,6 +13,44 @@
             <h1 class="text-2xl font-heading font-bold text-gray-900">{{ __('Dashboard') }}</h1>
             <p class="text-sm text-gray-500 mt-1">{{ __('Welcome back, :name!', ['name' => Auth::user()->name]) }}</p>
         </div>
+        <button type="button" id="toggleFilterBtn" class="admin-btn-sm admin-btn-primary">
+            <i class="fas fa-filter mr-2"></i> <span id="filterBtnText">Filter</span>
+            @if(request()->has('start_date') || request()->has('end_date'))
+                <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-white text-primary-700">
+                    <i class="fas fa-check-circle mr-1"></i> Aktif
+                </span>
+            @endif
+        </button>
+    </div>
+
+    {{-- Period Filter (hidden by default, toggled by button) --}}
+    <div id="periodFilterCard" class="admin-card mb-6 hidden">
+        <div class="admin-card-body">
+            <form method="GET" action="{{ route('admin.dashboard') }}" class="flex flex-col sm:flex-row items-end gap-4">
+                <div class="flex-1">
+                    <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">Dari Tanggal</label>
+                    <input type="date" name="start_date" id="start_date" value="{{ $startDate->format('Y-m-d') ?? now()->subMonths(3)->format('Y-m-d') }}"
+                        class="admin-input w-full">
+                </div>
+                <div class="flex-1">
+                    <label for="end_date" class="block text-sm font-medium text-gray-700 mb-1">Sampai Tanggal</label>
+                    <input type="date" name="end_date" id="end_date" value="{{ $endDate->format('Y-m-d') ?? now()->format('Y-m-d') }}"
+                        class="admin-input w-full">
+                </div>
+                <div class="flex gap-2">
+                    <button type="submit" class="admin-btn-sm admin-btn-primary">
+                        <i class="fas fa-check mr-2"></i> Terapkan
+                    </button>
+                    <a href="{{ route('admin.dashboard') }}" class="admin-btn-sm admin-btn-secondary">
+                        <i class="fas fa-undo mr-2"></i> Reset
+                    </a>
+                </div>
+            </form>
+            <p class="text-xs text-gray-500 mt-3">
+                <i class="fas fa-info-circle mr-1"></i>
+                Menampilkan data dari <strong>{{ $startDate->format('d M Y') ?? now()->subMonths(3)->format('d M Y') }}</strong> sampai <strong>{{ $endDate->format('d M Y') ?? now()->format('d M Y') }}</strong>
+            </p>
+        </div>
     </div>
 
     {{-- Stats Cards --}}
@@ -79,7 +117,7 @@
         {{-- Daily Visits Chart --}}
         <div class="admin-card">
             <div class="admin-card-header">
-                <h3 class="font-heading font-semibold text-gray-800">{{ __('Daily Visits (Last 30 Days)') }}</h3>
+                <h3 class="font-heading font-semibold text-gray-800">{{ __('Daily Visits (Periode)') }}</h3>
             </div>
             <div class="admin-card-body">
                 <canvas id="dailyVisitsChart" height="200"></canvas>
@@ -171,7 +209,7 @@
                         <i class="fas fa-users text-sm"></i>
                     </div>
                     <div class="min-w-0">
-                        <p class="text-xs text-gray-500 truncate">Kunjungan Bulan Ini</p>
+                        <p class="text-xs text-gray-500 truncate">Kunjungan Periode</p>
                         <h3 class="text-xl font-bold text-gray-900">{{ $operationalStats['visits_this_month'] }}</h3>
                     </div>
                 </div>
@@ -324,6 +362,22 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Toggle Period Filter
+    const toggleFilterBtn = document.getElementById('toggleFilterBtn');
+    const periodFilterCard = document.getElementById('periodFilterCard');
+    const filterBtnText = document.getElementById('filterBtnText');
+
+    if (toggleFilterBtn && periodFilterCard) {
+        toggleFilterBtn.addEventListener('click', function() {
+            periodFilterCard.classList.toggle('hidden');
+            if (periodFilterCard.classList.contains('hidden')) {
+                filterBtnText.textContent = 'Filter';
+            } else {
+                filterBtnText.textContent = 'Tutup';
+            }
+        });
+    }
+
     // Daily Visits Chart
     const dailyVisitsCtx = document.getElementById('dailyVisitsChart');
     if (dailyVisitsCtx) {

@@ -223,3 +223,51 @@ document.addEventListener('DOMContentLoaded', () => {
     initLazyLoad();
 });
 
+/*=============== SHARE BUTTON ===============*/
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.share-button').forEach(button => {
+        button.addEventListener('click', async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const title = this.dataset.title || document.title;
+            const url = this.dataset.route || window.location.href;
+
+            // Use Web Share API if available (mobile)
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: title,
+                        url: url
+                    });
+                    return;
+                } catch (err) {
+                    // User cancelled - do nothing
+                    return;
+                }
+            }
+
+            // Fallback: copy URL to clipboard
+            try {
+                await navigator.clipboard.writeText(url);
+                // Show feedback
+                const originalHtml = this.innerHTML;
+                this.innerHTML = '<i class="bx bx-check"></i>';
+                this.classList.add('bg-[#00a877]', 'text-white');
+                setTimeout(() => {
+                    this.innerHTML = originalHtml;
+                    this.classList.remove('bg-[#00a877]', 'text-white');
+                }, 2000);
+            } catch (err) {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = url;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            }
+        });
+    });
+});
+

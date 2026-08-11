@@ -209,6 +209,7 @@ return [
         'read_article' => 'Read Article',
         'empty_title' => 'No Articles Yet',
         'empty_desc' => 'The latest articles and information about Gabugan Tourism Village will be coming soon.',
+        'author' => 'Author',
         'publish_date' => 'Publication Date',
         'read_count' => 'Read Count',
         'times' => 'times',

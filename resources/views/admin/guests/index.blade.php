@@ -30,24 +30,24 @@
             <form method="GET" action="{{ route('admin.guests.index') }}" class="flex flex-wrap items-center gap-3">
                 <div class="flex-1 min-w-[200px]">
                     <input type="text" name="search" placeholder="Cari nama, instansi, kontak..."
-                           class="admin-input w-full py-2 px-3 rounded-lg shadow-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                           class="admin-input w-full"
                            value="{{ request('search') }}">
                 </div>
 
                 <label class="text-sm font-medium text-gray-700">Sumber:</label>
-                <select name="source" class="admin-input w-auto min-w-[150px] py-2 px-2 rounded-lg shadow-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" onchange="this.form.submit()">
+                <select name="source" class="admin-input w-auto min-w-[150px]" onchange="this.form.submit()">
                     <option value="">Semua Sumber</option>
                     <option value="manual" {{ request('source') == 'manual' ? 'selected' : '' }}>Manual</option>
                     <option value="booking" {{ request('source') == 'booking' ? 'selected' : '' }}>Booking</option>
                     <option value="open_trip" {{ request('source') == 'open_trip' ? 'selected' : '' }}>Open Trip</option>
                 </select>
 
-                <button type="submit" class="admin-btn-primary">
+                <button type="submit" class="admin-btn-sm admin-btn-primary">
                     <i class="fas fa-search"></i> Cari
                 </button>
 
                 @if(request('search') || request('source'))
-                    <a href="{{ route('admin.guests.index') }}" class="text-sm text-red-600 hover:underline">
+                    <a href="{{ route('admin.guests.index') }}" class="admin-btn-sm admin-btn-secondary text-red-600">
                         <i class="fas fa-times"></i> Hapus Filter
                     </a>
                 @endif

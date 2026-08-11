@@ -43,7 +43,11 @@ class BlogController extends Controller
             );
             $slug = Str::slug($request->title_en ?? $request->title, '-');
 
-            Blog::create($request->except('image') + ['slug' => $slug, 'image' => $image]);
+            Blog::create($request->except('image') + [
+                'slug' => $slug,
+                'image' => $image,
+                'user_id' => auth()->id(),
+            ]);
         }
 
         return redirect()->route('admin.blogs.index')->with([

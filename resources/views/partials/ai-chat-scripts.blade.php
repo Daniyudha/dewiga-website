@@ -374,12 +374,19 @@ document.addEventListener('DOMContentLoaded', function() {
         chatToggle.classList.add('hidden');
         document.body.classList.add('overflow-hidden');
         scrollToBottom();
+        // Give focus to input after panel opens
+        setTimeout(function() { if (chatInput) chatInput.focus(); }, 350);
     }
     function closeChat() {
         chatPanel.classList.add('translate-x-full');
         overlay.classList.add('hidden');
         chatToggle.classList.remove('hidden');
         document.body.classList.remove('overflow-hidden');
+        // Reset panel height when closing
+        if (window.visualViewport) {
+            chatPanel.style.height = '100dvh';
+            chatPanel.style.top = '0';
+        }
     }
 
     chatToggle.addEventListener('click', function() {
@@ -392,5 +399,69 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     chatClose.addEventListener('click', closeChat);
     overlay.addEventListener('click', closeChat);
+
+    // ========================
+    // MOBILE KEYBOARD HANDLING (VisualViewport)
+    // ========================
+    // This ensures the chat input stays visible above the mobile keyboard
+    const panel = chatPanel;
+    const quickRepliesArea = document.querySelector('#ai-chat-panel .px-6.py-3.border-t');
+    let isKeyboardOpen = false;
+
+    function handleViewportResize() {
+        if (!window.visualViewport || !panel) return;
+        const vv = window.visualViewport;
+        const panelOpen = !panel.classList.contains('translate-x-full');
+
+        if (!panelOpen) return;
+
+        const windowHeight = window.innerHeight;
+        const vvHeight = vv.height;
+
+        // If visual viewport height is significantly smaller, keyboard is open
+        if (vvHeight < windowHeight - 100) {
+            isKeyboardOpen = true;
+            // Set panel height to visual viewport height and position at top
+            panel.style.height = vvHeight + 'px';
+            panel.style.top = '0px';
+            // Hide quick replies to give more space for messages
+            if (quickRepliesArea) quickRepliesArea.style.display = 'none';
+            // Scroll to bottom to keep latest message visible
+            setTimeout(scrollToBottom, 100);
+        } else {
+            isKeyboardOpen = false;
+            panel.style.height = '100dvh';
+            panel.style.top = '0px';
+            if (quickRepliesArea) quickRepliesArea.style.display = '';
+        }
+    }
+
+    // Listen to visualViewport resize/scroll events
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', handleViewportResize);
+        window.visualViewport.addEventListener('scroll', handleViewportResize);
+        // Also listen to window resize as fallback
+        window.addEventListener('resize', handleViewportResize);
+    }
+
+    // Handle focus/blur of the chat input for older mobile browsers
+    if (chatInput) {
+        chatInput.addEventListener('focus', function() {
+            // Small delay to allow keyboard to open
+            setTimeout(handleViewportResize, 300);
+        });
+        chatInput.addEventListener('blur', function() {
+            setTimeout(handleViewportResize, 300);
+        });
+    }
+
+    // Reset height when chat closes
+    chatClose.addEventListener('click', function() {
+        if (window.visualViewport) {
+            panel.style.height = '100dvh';
+            panel.style.top = '0px';
+        }
+        if (quickRepliesArea) quickRepliesArea.style.display = '';
+    });
 });
 </script>

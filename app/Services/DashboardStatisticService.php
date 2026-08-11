@@ -14,54 +14,66 @@ class DashboardStatisticService
 {
     /**
      * Get operational statistics for the dashboard.
+     *
+     * @param \Carbon\Carbon|null $startDate Start date for filtering (default: 3 months ago)
+     * @param \Carbon\Carbon|null $endDate End date for filtering (default: now)
      */
-    public function getOperationalStats(): array
+    public function getOperationalStats($startDate = null, $endDate = null): array
     {
         $now = now();
-        $monthStart = $now->copy()->startOfMonth();
-        $monthEnd = $now->copy()->endOfMonth();
+        $startDate = $startDate ?? $now->copy()->subMonths(3)->startOfDay();
+        $endDate = $endDate ?? $now->copy()->endOfDay();
 
-        // Reservasi pending
-        $pendingReservations = Schedule::where('status', ScheduleStatus::PENDING)->count();
+        // Reservasi pending dalam periode
+        $pendingReservations = Schedule::where('status', ScheduleStatus::PENDING)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->count();
 
-        // Reservasi confirmed
-        $confirmedReservations = Schedule::where('status', ScheduleStatus::CONFIRMED)->count();
+        // Reservasi confirmed dalam periode
+        $confirmedReservations = Schedule::where('status', ScheduleStatus::CONFIRMED)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->count();
 
-        // Kunjungan bulan ini
-        $visitsThisMonth = Schedule::whereBetween('start_date', [$monthStart, $monthEnd])
+        // Kunjungan dalam periode
+        $visitsThisMonth = Schedule::whereBetween('start_date', [$startDate, $endDate])
             ->whereIn('status', [ScheduleStatus::CONFIRMED, ScheduleStatus::IN_PROGRESS, ScheduleStatus::COMPLETED])
             ->count();
 
-        // Total peserta bulan ini (dari quotation estimation)
-        $participantsThisMonth = PriceEstimation::whereBetween('arrival_date', [$monthStart, $monthEnd])
+        // Total peserta dalam periode (dari quotation estimation)
+        $participantsThisMonth = PriceEstimation::whereBetween('arrival_date', [$startDate, $endDate])
             ->sum('service_participant_count');
 
-        // Nilai quotation bulan ini
-        $quotationValue = PriceEstimation::whereBetween('created_at', [$monthStart, $monthEnd])
+        // Nilai quotation dalam periode
+        $quotationValue = PriceEstimation::whereBetween('created_at', [$startDate, $endDate])
             ->sum('quotation_total');
 
-        // Pembayaran diterima bulan ini
+        // Pembayaran diterima dalam periode
         $paymentsReceived = SchedulePayment::where('status', 'paid')
-            ->whereBetween('payment_date', [$monthStart, $monthEnd])
+            ->whereBetween('payment_date', [$startDate, $endDate])
             ->sum('amount');
 
-        // Sisa tagihan (total quotation - total paid)
+        // Sisa tagihan (total quotation - total paid) dalam periode
         $sisaTagihan = 0;
-        $totalQuotation = PriceEstimation::sum('quotation_total');
-        $totalPaid = SchedulePayment::where('status', 'paid')->sum('amount');
+        $totalQuotation = PriceEstimation::whereBetween('created_at', [$startDate, $endDate])->sum('quotation_total');
+        $totalPaid = SchedulePayment::where('status', 'paid')
+            ->whereBetween('payment_date', [$startDate, $endDate])
+            ->sum('amount');
         $sisaTagihan = max(0, $totalQuotation - $totalPaid);
 
-        // Open trip aktif
+        // Open trip aktif dalam periode
         $activeOpenTrips = Schedule::where('type', 'open_trip')
             ->whereIn('status', [ScheduleStatus::PENDING, ScheduleStatus::CONFIRMED])
             ->where('is_active', true)
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->count();
 
-        // Total pendaftar open trip
-        $totalOpenTripRegistrations = OpenTripRegistration::count();
+        // Total pendaftar open trip dalam periode
+        $totalOpenTripRegistrations = OpenTripRegistration::whereBetween('created_at', [$startDate, $endDate])->count();
 
-        // Quotation belum dikonversi
-        $unconvertedQuotations = PriceEstimation::whereDoesntHave('schedule')->count();
+        // Quotation belum dikonversi dalam periode
+        $unconvertedQuotations = PriceEstimation::whereDoesntHave('schedule')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->count();
 
         return [
             'pending_reservations' => $pendingReservations,

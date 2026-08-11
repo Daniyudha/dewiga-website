@@ -209,6 +209,7 @@ return [
         'read_article' => 'Baca Artikel',
         'empty_title' => 'Belum Ada Artikel',
         'empty_desc' => 'Artikel dan informasi terbaru Desa Wisata Gabugan akan segera hadir.',
+        'author' => 'Penulis',
         'publish_date' => 'Tanggal Publikasi',
         'read_count' => 'Dibaca',
         'times' => 'kali',

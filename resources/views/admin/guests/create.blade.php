@@ -30,7 +30,7 @@
                 <div class="mb-4">
                     <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama PIC <span class="text-red-500">*</span></label>
                     <input type="text" id="name" name="name"
-                           class="admin-input w-full rounded-lg shadow-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('name') border-red-500 @enderror"
+                           class="admin-input w-full @error('name') border-red-500 @enderror"
                            value="{{ old('name') }}" required>
                     @error('name')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -41,7 +41,7 @@
                 <div class="mb-4">
                     <label for="institution" class="block text-sm font-medium text-gray-700 mb-1">Asal / Instansi</label>
                     <input type="text" id="institution" name="institution"
-                           class="admin-input w-full rounded-lg shadow-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('institution') border-red-500 @enderror"
+                           class="admin-input w-full @error('institution') border-red-500 @enderror"
                            value="{{ old('institution') }}">
                     @error('institution')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -52,7 +52,7 @@
                 <div class="mb-4">
                     <label for="number_phone" class="block text-sm font-medium text-gray-700 mb-1">No. Telepon</label>
                     <input type="text" id="number_phone" name="number_phone"
-                           class="admin-input w-full rounded-lg shadow-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('number_phone') border-red-500 @enderror"
+                           class="admin-input w-full @error('number_phone') border-red-500 @enderror"
                            value="{{ old('number_phone') }}" placeholder="08xxxxxxxxxx">
                     @error('number_phone')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -63,7 +63,7 @@
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                     <input type="email" id="email" name="email"
-                           class="admin-input w-full rounded-lg shadow-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('email') border-red-500 @enderror"
+                           class="admin-input w-full @error('email') border-red-500 @enderror"
                            value="{{ old('email') }}">
                     @error('email')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
@@ -74,7 +74,7 @@
                 <div class="mb-4">
                     <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Catatan</label>
                     <textarea id="notes" name="notes" rows="3"
-                              class="admin-input w-full rounded-lg shadow-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('notes') border-red-500 @enderror">{{ old('notes') }}</textarea>
+                              class="admin-input w-full @error('notes') border-red-500 @enderror">{{ old('notes') }}</textarea>
                     @error('notes')
                         <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
                     @enderror
@@ -84,7 +84,7 @@
                     <button type="submit" class="admin-btn-primary">
                         <i class="fas fa-save"></i> Simpan
                     </button>
-                    <a href="{{ route('admin.guests.index') }}" class="text-sm text-gray-600 hover:text-gray-800">
+                    <a href="{{ route('admin.guests.index') }}" class="admin-btn-sm admin-btn-secondary">
                         Batal
                     </a>
                 </div>

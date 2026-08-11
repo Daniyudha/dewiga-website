@@ -25,7 +25,7 @@
     <div class="admin-card-body">
         <form method="GET" action="{{ route('admin.price-calculator.index') }}" class="flex flex-col sm:flex-row gap-3">
             <div class="flex-1">
-                <input type="text" name="search" class="admin-input" placeholder="Cari nomor estimasi, sekolah, atau PIC..." value="{{ request('search') }}">
+                <input type="text" name="search" class="admin-input shadow-md" placeholder="Cari nomor estimasi, sekolah, atau PIC..." value="{{ request('search') }}">
             </div>
             <div class="flex gap-2">
                 <button type="submit" class="admin-btn-primary">

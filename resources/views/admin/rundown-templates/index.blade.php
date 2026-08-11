@@ -9,7 +9,7 @@
         <p class="text-sm text-gray-500 mt-1">Kelola template kegiatan berdasarkan durasi paket</p>
     </div>
     <div class="flex gap-2">
-        <a href="{{ route('admin.rundown-templates.create') }}" class="admin-btn-sm admin-btn-primary">
+        <a href="{{ route('admin.rundown-templates.create') }}" class="admin-btn-md admin-btn-primary">
             <i class="fas fa-plus mr-1"></i> Tambah Template
         </a>
     </div>
@@ -20,8 +20,8 @@
     <div class="admin-card-body">
         <form method="GET" action="{{ route('admin.rundown-templates.index') }}">
             <div class="flex gap-3">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari template..." class="form-input py-1 px-2 rounded-md shadow-md border border-gray-500 flex-1">
-                <button type="submit" class="admin-btn-sm admin-btn-primary"><i class="fas fa-search mr-1"></i> Cari</button>
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari template..." class="form-input py-2 px-3 rounded-md shadow-md border border-gray-300 flex-1">
+                <button type="submit" class="admin-btn-md admin-btn-primary"><i class="fas fa-search mr-1"></i> Cari</button>
                 @if(request('search'))
                     <a href="{{ route('admin.rundown-templates.index') }}" class="admin-btn-sm admin-btn-secondary">Reset</a>
                 @endif

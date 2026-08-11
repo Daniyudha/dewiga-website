@@ -43,17 +43,17 @@
         <div class="admin-card-body">
             <form method="GET" action="{{ route('admin.schedules.index') }}" class="flex flex-wrap items-center gap-3">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari kode, nama, paket..."
-                       class="admin-input flex-1 min-w-[200px] py-2 px-3 rounded-lg shadow-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                       class="admin-input flex-1 min-w-[200px]">
                 <label class="text-sm font-medium text-gray-700">{{ __('Type') }}:</label>
-                <select name="type" class="admin-input w-auto min-w-[150px] py-2 px-2 rounded-lg shadow-md border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <select name="type" class="admin-input w-auto min-w-[150px]">
                     <option value="">{{ __('All Types') }}</option>
                     @foreach(\App\Models\Schedule::types() as $val => $label)
                         <option value="{{ $val }}" {{ request('type') == $val ? 'selected' : '' }}>{{ $label }}</option>
                     @endforeach
                 </select>
-                <button type="submit" class="admin-btn-primary"><i class="fas fa-search mr-1"></i> Cari</button>
+                <button type="submit" class="admin-btn-sm admin-btn-primary"><i class="fas fa-search mr-1"></i> Cari</button>
                 @if(request('search') || request('type'))
-                    <a href="{{ route('admin.schedules.index') }}" class="text-sm text-red-600 hover:underline">
+                    <a href="{{ route('admin.schedules.index') }}" class="admin-btn-sm admin-btn-secondary text-red-600">
                         <i class="fas fa-times"></i> Reset
                     </a>
                 @endif

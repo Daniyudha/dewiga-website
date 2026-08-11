@@ -30,6 +30,12 @@
                     </a>
                     <div class="p-6 flex flex-col flex-1">
                         <div class="flex items-center gap-4 text-xs text-neutral-500 mb-3">
+                            @if ($blog->user)
+                                <span class="flex items-center gap-1">
+                                    <i class="bx bx-user"></i>
+                                    {{ $blog->user->name }}
+                                </span>
+                            @endif
                             <span class="flex items-center gap-1">
                                 <i class="bx bx-calendar"></i>
                                 {{ date('d M Y', strtotime($blog->created_at)) }}

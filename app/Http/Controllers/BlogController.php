@@ -11,7 +11,7 @@ class BlogController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Blog::latest();
+        $query = Blog::with('user')->latest();
 
         if ($request->category) {
             $query->whereHas('category', function ($q) use ($request) {
@@ -27,7 +27,7 @@ class BlogController extends Controller
 
     public function show(Blog $blog)
     {
-        $relatedBlogs = Blog::where('id','!=',$blog->id)
+        $relatedBlogs = Blog::with('user')->where('id','!=',$blog->id)
                 ->where('category_id', $blog->category_id)
                 ->get();
         $categories = Category::get();

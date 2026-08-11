@@ -21,7 +21,7 @@
     "image": "{{ Storage::url($blog->image) }}",
     "datePublished": "{{ $blog->created_at->toIso8601String() }}",
     "dateModified": "{{ $blog->updated_at->toIso8601String() }}",
-    "author": { "@type": "Organization", "name": "Desa Wisata Gabugan" }
+    "author": { "@type": "Person", "name": "{{ $blog->user->name ?? 'Desa Wisata Gabugan' }}" }
 }
 </script>
 @endsection
@@ -40,6 +40,9 @@
                 @endif
                 <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-white">{{ $blog->title }}</h1>
                 <div class="flex flex-wrap items-center gap-6 text-neutral-200">
+                    @if ($blog->user)
+                        <span class="flex items-center gap-2"><i class="bx bx-user"></i> {{ $blog->user->name }}</span>
+                    @endif
                     <span class="flex items-center gap-2"><i class="bx bx-calendar"></i> {{ date('d F Y', strtotime($blog->created_at)) }}</span>
                     <span class="flex items-center gap-2"><i class="bx bx-show"></i> {{ number_format($blog->reads) }} @lang('messages.blog.reads')</span>
                 </div>
@@ -75,17 +78,19 @@
             <div class="grid lg:grid-cols-[1fr_340px] gap-8 lg:gap-12">
                 <div class="blog__detail min-w-0">
                     <div class="bg-white rounded-[2rem] shadow-lg p-6 mb-8">
-                        <div class="grid sm:grid-cols-3 gap-6">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                            <div>
+                                <span class="text-xs text-neutral-400 uppercase">@lang('messages.blog.author')</span>
+                                <p class="font-semibold text-[#053d2c] mt-1">{{ $blog->user->name ?? 'Desa Wisata Gabugan' }}</p>
+                            </div>
                             <div>
                                 <span class="text-xs text-neutral-400 uppercase">@lang('messages.blog.publish_date')</span>
                                 <p class="font-semibold text-[#053d2c] mt-1">{{ date('d F Y', strtotime($blog->created_at)) }}</p>
                             </div>
-                            @if ($blog->category)
                             <div>
                                 <span class="text-xs text-neutral-400 uppercase">@lang('messages.blog.categories')</span>
-                                <p class="font-semibold text-[#053d2c] mt-1">{{ $blog->category->name }}</p>
+                                <p class="font-semibold text-[#053d2c] mt-1">{{ $blog->category->name ?? '-' }}</p>
                             </div>
-                            @endif
                             <div>
                                 <span class="text-xs text-neutral-400 uppercase">@lang('messages.blog.read_count')</span>
                                 <p class="font-semibold text-[#053d2c] mt-1">{{ number_format($blog->reads) }} @lang('messages.blog.times')</p>
@@ -146,7 +151,7 @@
                     @endif
 
                     <div class="bg-gradient-to-br from-[#053d2c] to-[#043424] text-white p-6 rounded-[2rem]">
-                        <h3 class="font-serif font-semibold text-lg mb-2">@lang('messages.blog.ask_question')</h3>
+                        <h3 class="text-white font-serif font-semibold text-lg mb-2">@lang('messages.blog.ask_question')</h3>
                         <p class="text-neutral-300 text-sm mb-4">@lang('messages.blog.ask_desc')</p>
                         <a href="https://api.whatsapp.com/send?phone=6281328856252&text={{ urlencode(__('messages.whatsapp.default_message')) }}" target="_blank" class="inline-flex items-center justify-center gap-2 w-full bg-[#00a877] hover:bg-[#009065] text-white px-6 py-3 rounded-full font-medium transition text-sm"><i class="bx bxl-whatsapp"></i> @lang('messages.whatsapp.cta')</a>
                     </div>
@@ -179,6 +184,9 @@
                             <a href="{{ route('blog.show', $relatedBlog->slug) }}"><h2 class="font-serif text-lg font-bold text-[#053d2c] mb-2 line-clamp-2 hover:text-[#00a877] transition-colors">{{ $relatedBlog->title }}</h2></a>
                             <p class="text-sm text-neutral-600 leading-relaxed mb-4 line-clamp-3">{{ $relatedBlog->excerpt }}</p>
                             <div class="flex items-center gap-4 pt-4 border-t border-neutral-100">
+                                @if ($relatedBlog->user)
+                                    <span class="flex items-center gap-1.5 text-xs text-neutral-500"><i class="bx bx-user"></i> {{ $relatedBlog->user->name }}</span>
+                                @endif
                                 <span class="flex items-center gap-1.5 text-xs text-neutral-500"><i class="bx bx-calendar"></i> {{ date('d M Y', strtotime($relatedBlog->created_at)) }}</span>
                                 <span class="flex items-center gap-1.5 text-xs text-neutral-500"><i class="bx bx-show"></i> {{ $relatedBlog->reads }}</span>
                             </div>

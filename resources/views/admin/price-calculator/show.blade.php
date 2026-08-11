@@ -276,7 +276,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Nama Jadwal</label>
                         <input type="text" name="visitor_name" value="{{ $estimation->institution_name }} - {{ $estimation->contact_person }}"
-                               class="w-full rounded-lg border-gray-300 focus:border-primary-500 focus:ring-primary-500 text-sm">
+                               class="admin-input w-full">
                     </div>
 
                     {{-- Tanggal --}}
@@ -284,19 +284,19 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
                             <input type="date" name="start_date" value="{{ $estimation->arrival_date->format('Y-m-d') }}"
-                                   class="w-full rounded-lg border-gray-300 focus:border-primary-500 focus:ring-primary-500 text-sm">
+                                   class="admin-input w-full">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
                             <input type="date" name="end_date" value="{{ $estimation->departure_date->format('Y-m-d') }}"
-                                   class="w-full rounded-lg border-gray-300 focus:border-primary-500 focus:ring-primary-500 text-sm">
+                                   class="admin-input w-full">
                         </div>
                     </div>
 
                     {{-- Status Awal --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Status Awal</label>
-                        <select name="status" class="w-full rounded-lg border-gray-300 focus:border-primary-500 focus:ring-primary-500 text-sm">
+                        <select name="status" class="admin-input w-full">
                             <option value="pending">Pending (Menunggu Konfirmasi)</option>
                             <option value="confirmed">Confirmed (Terkonfirmasi)</option>
                         </select>
@@ -305,7 +305,7 @@
                     {{-- Catatan --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Catatan</label>
-                        <textarea name="notes" rows="2" class="w-full rounded-lg border-gray-300 focus:border-primary-500 focus:ring-primary-500 text-sm">{{ $estimation->notes }}</textarea>
+                        <textarea name="notes" rows="2" class="admin-input w-full">{{ $estimation->notes }}</textarea>
                     </div>
                 </div>
 

@@ -25,8 +25,8 @@
     <div class="admin-card-body">
         <form method="GET" action="{{ route('admin.proposals.index') }}">
             <div class="flex gap-3">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari proposal..." class="form-input py-1 px-2 rounded-md shadow-md border border-gray-500 flex-1">
-                <select name="status" class="form-input py-1 px-2 rounded-md shadow-md border border-gray-500 cursor-pointer w-48">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari proposal..." class="form-input py-2 px-3 rounded-md shadow-md border border-gray-300 flex-1">
+                <select name="status" class="form-input py-2 px-3 rounded-md shadow-md border border-gray-300 cursor-pointer w-48">
                     <option value="">Semua Status</option>
                     @foreach(\App\Enums\ProposalStatus::labels() as $val => $label)
                         <option value="{{ $val }}" {{ request('status') === $val ? 'selected' : '' }}>{{ $label }}</option>

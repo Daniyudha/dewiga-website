@@ -99,29 +99,29 @@
     <div class="admin-card-body">
         <form method="GET" action="{{ route('admin.visit-reports.index') }}" class="flex justify-between flex-wrap items-center gap-3">
             <div class="inline-flex items-center gap-2 flex-wrap">
-                <input type="text" name="institution" value="{{ request('institution') }}" placeholder="Search institution..." class="form-input py-1 px-2 shadow-md rounded-md border border-gray-500 flex-1">
+                <input type="text" name="institution" value="{{ request('institution') }}" placeholder="Search institution..." class="form-input py-2 px-3 shadow-md rounded-md border border-gray-300 flex-1">
             </div>
             <div class="inline-flex items-center gap-2">
-                <select name="year" class="form-input w-18 py-1 px-2 shadow-md rounded-md border border-gray-500 text-sm">
+                <select name="year" class="form-input w-18 py-2 px-3 shadow-md rounded-md border border-gray-300 text-sm">
                     @foreach($years as $y)
                         <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
                     @endforeach
                 </select>
-                <select name="visit_type" class="form-input w-36 py-1 px-2 shadow-md rounded-md border border-gray-500 text-sm">
+                <select name="visit_type" class="form-input w-36 py-2 px-3 shadow-md rounded-md border border-gray-300 text-sm">
                     <option value="">Semua Tipe</option>
                     <option value="booking" {{ request('visit_type') == 'booking' ? 'selected' : '' }}>Booking</option>
                     <option value="open_trip" {{ request('visit_type') == 'open_trip' ? 'selected' : '' }}>Open Trip</option>
                 </select>
-                <select name="guest_type" class="form-input w-32 py-1 px-2 shadow-md rounded-md border border-gray-500 text-sm">
+                <select name="guest_type" class="form-input w-32 py-2 px-3 shadow-md rounded-md border border-gray-300 text-sm">
                     <option value="">Semua Tamu</option>
                     <option value="lokal" {{ request('guest_type') == 'lokal' ? 'selected' : '' }}>Lokal</option>
                     <option value="asing" {{ request('guest_type') == 'asing' ? 'selected' : '' }}>Asing</option>
                 </select>
-                <button type="submit" class="admin-btn-sm admin-btn-primary"><i class="fas fa-search mr-1"></i> Filter</button>
+                <button type="submit" class="admin-btn-md admin-btn-primary"><i class="fas fa-search mr-1"></i> Filter</button>
                 @if(request('year') || request('institution') || request('visit_type') || request('guest_type'))
                     <a href="{{ route('admin.visit-reports.index') }}" class="admin-btn-sm admin-btn-secondary">Reset</a>
                 @endif
-                <a href="{{ route('admin.visit-reports.export', request()->query()) }}" class="admin-btn-sm admin-btn-success ml-auto">
+                <a href="{{ route('admin.visit-reports.export', request()->query()) }}" class="admin-btn-md admin-btn-success ml-auto">
                     <i class="fas fa-download mr-1"></i> Export CSV
                 </a>
             </div>
