@@ -8,6 +8,9 @@ Auth::routes(['register' => false]);
 
 Route::post('api/midtrans/webhook', [\App\Http\Controllers\MidtransWebhookController::class, 'handle'])->name('midtrans.webhook');
 
+// Public estimation view (no login required, for sharing via WhatsApp)
+Route::get('estimasi/{estimationNumber}', [\App\Http\Controllers\PublicEstimationController::class, 'show'])->name('public.estimation.show');
+
 Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']], function () {
 
     // Admin routes - no language prefix
