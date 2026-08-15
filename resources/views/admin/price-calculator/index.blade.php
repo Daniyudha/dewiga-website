@@ -89,7 +89,8 @@
                                     @php
                                         $waNum = preg_replace('/[^0-9]/', '', $est->whatsapp);
                                         if (substr($waNum, 0, 1) === '0') $waNum = '62' . substr($waNum, 1);
-                                        $waText = rawurlencode("Halo Bapak/Ibu,\n\nBerikut estimasi kunjungan ke Desa Wisata Gabugan.\n\nNomor Estimasi: {$est->estimation_number}\nInstansi: {$est->institution_name}\nPeserta: {$est->service_participant_count} orang\nEstimasi: " . formatPrice($est->rounded_price_per_person) . "/orang\nTotal: " . formatPrice($est->quotation_total) . "\n\nSalam,\nDesa Wisata Gabugan");
+                                        $pdfUrl = route('admin.price-calculator.pdf-view', $est);
+                                        $waText = rawurlencode("Halo Bapak/Ibu,\n\nBerikut estimasi kunjungan ke Desa Wisata Gabugan.\n\nNomor Estimasi: {$est->estimation_number}\nInstansi: {$est->institution_name}\nPeserta: {$est->service_participant_count} orang\nEstimasi: " . formatPrice($est->rounded_price_per_person) . "/orang\nTotal: " . formatPrice($est->quotation_total) . "\n\nPDF Estimasi: {$pdfUrl}\n\nSalam,\nDesa Wisata Gabugan");
                                     @endphp
                                     <a href="https://wa.me/{{ $waNum }}?text={{ $waText }}" class="admin-btn-sm admin-btn-success" title="Kirim WhatsApp" target="_blank">
                                         <i class="fab fa-whatsapp"></i>
@@ -97,9 +98,9 @@
                                     <a href="{{ route('admin.price-calculator.pdf-download', $est) }}" class="admin-btn-sm admin-btn-warning" title="Download PDF" target="_blank">
                                         <i class="fas fa-download"></i>
                                     </a>
-                                    <form action="{{ route('admin.price-calculator.destroy', $est) }}" method="POST" class="inline" onclick="showDeleteModal(this.closest('form'))">
+                                    <form action="{{ route('admin.price-calculator.destroy', $est) }}" method="POST" class="inline">
                                         @csrf @method('DELETE')
-                                        <button type="submit" class="admin-btn-sm admin-btn-danger" title="Hapus">
+                                        <button type="button" onclick="showDeleteModal(this.closest('form'))" class="admin-btn-sm admin-btn-danger" title="Hapus">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>

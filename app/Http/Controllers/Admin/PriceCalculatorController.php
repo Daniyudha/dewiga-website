@@ -76,6 +76,7 @@ class PriceCalculatorController extends Controller
     {
         try {
             $data = $request->validated();
+            \Illuminate\Support\Facades\Log::info('PRICE_CALC_STORE', ['raw_validated' => $data]);
 
             // FIX: Fill participant counts FIRST from student/companion (inputs are disabled so not submitted)
             $data['service_participant_count'] = (int) ($data['service_participant_count'] ?? 0);
@@ -90,6 +91,14 @@ class PriceCalculatorController extends Controller
             // Always recalculate server-side to ensure items & totals are correct
             // even if client-side calculator (JS) failed in production.
             $result = $this->calculatorService->calculate($data);
+            \Illuminate\Support\Facades\Log::info('PRICE_CALC_STORE_RESULT', [
+                'items_count' => count($result['items']),
+                'subtotal' => $result['subtotal'],
+                'service_participants' => $data['service_participant_count'],
+                'activity_participants' => $data['activity_participant_count'],
+                'live_in_nights' => $request->input('live_in_nights'),
+                'meal_count' => $request->input('meal_count'),
+            ]);
             $data['_server_result'] = $result;
             $estimation = $this->calculatorService->save($data);
 
