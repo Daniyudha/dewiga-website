@@ -137,7 +137,10 @@ class PriceCalculatorService
      */
     public function save(array $data): PriceEstimation
     {
-        $result = $this->calculate($data);
+        // If a server-calculated result is provided (from controller), use it directly
+        // to guarantee items & totals are always correct even if client calc failed.
+        $result = $data['_server_result'] ?? $this->calculate($data);
+        unset($data['_server_result']);
 
         return DB::transaction(function () use ($data, $result) {
             $estimation = PriceEstimation::create([
