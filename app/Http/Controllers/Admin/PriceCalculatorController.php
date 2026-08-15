@@ -57,7 +57,10 @@ class PriceCalculatorController extends Controller
     public function calculate(StorePriceEstimationRequest $request)
     {
         $data = $request->validated();
-        // Ensure activity participants is at least student count if not set
+        // FIX: Fill participant counts from student/companion (inputs are disabled so not submitted)
+        if (empty($data['service_participant_count'])) {
+            $data['service_participant_count'] = (int) ($data['student_count'] ?? 0) + (int) ($data['companion_count'] ?? 0);
+        }
         if (empty($data['activity_participant_count']) && !empty($data['student_count'])) {
             $data['activity_participant_count'] = (int) $data['student_count'];
         }
@@ -73,13 +76,8 @@ class PriceCalculatorController extends Controller
     {
         try {
             $data = $request->validated();
-            // Ensure activity participants is at least student count if not set
-            if (empty($data['activity_participant_count']) && !empty($data['student_count'])) {
-                $data['activity_participant_count'] = (int) $data['student_count'];
-            }
-            // Always recalculate server-side to ensure items & totals are correct
-            // even if client-side calculator (JS) failed in production.
-            $result = $this->calculatorService->calculate($data);
+
+            // FIX: Fill participant counts FIRST from student/companion (inputs are disabled so not submitted)
             $data['service_participant_count'] = (int) ($data['service_participant_count'] ?? 0);
             if (empty($data['service_participant_count'])) {
                 $data['service_participant_count'] = (int) ($data['student_count'] ?? 0) + (int) ($data['companion_count'] ?? 0);
@@ -88,6 +86,10 @@ class PriceCalculatorController extends Controller
             if (empty($data['activity_participant_count'])) {
                 $data['activity_participant_count'] = (int) ($data['student_count'] ?? 0);
             }
+
+            // Always recalculate server-side to ensure items & totals are correct
+            // even if client-side calculator (JS) failed in production.
+            $result = $this->calculatorService->calculate($data);
             $data['_server_result'] = $result;
             $estimation = $this->calculatorService->save($data);
 
