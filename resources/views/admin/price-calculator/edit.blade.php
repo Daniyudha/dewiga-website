@@ -166,23 +166,23 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="admin-label">Jumlah Siswa <span class="text-red-500">*</span></label>
-                        <input type="number" name="student_count" class="admin-input" required min="1" value="{{ old('student_count', $estimation->student_count) }}">
+                        <input type="number" name="student_count" id="student_count" class="admin-input" required min="1" value="{{ old('student_count', $estimation->student_count) }}">
                     </div>
                     <div>
                         <label class="admin-label">Jumlah Pendamping</label>
-                        <input type="number" name="companion_count" class="admin-input" min="0" value="{{ old('companion_count', $estimation->companion_count) }}">
+                        <input type="number" name="companion_count" id="companion_count" class="admin-input" min="0" value="{{ old('companion_count', $estimation->companion_count) }}">
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="admin-label">Jumlah Peserta Layanan Utama <span class="text-red-500">*</span></label>
-                        <input type="number" name="service_participant_count" id="service_participant_count" class="admin-input" required min="1" value="{{ old('service_participant_count', $estimation->service_participant_count) }}">
-                        <p class="text-xs text-gray-400 mt-1">Default: jumlah siswa + pendamping. Dapat diubah manual.</p>
+                        <input type="number" name="service_participant_count" id="service_participant_count" class="admin-input" required min="1" value="{{ old('service_participant_count', $estimation->student_count + $estimation->companion_count) }}" disabled>
+                        <p class="text-xs text-gray-400 mt-1">Otomatis: jumlah siswa + pendamping</p>
                     </div>
                     <div>
                         <label class="admin-label">Jumlah Peserta Kegiatan</label>
-                        <input type="number" name="activity_participant_count" id="activity_participant_count" class="admin-input" min="0" value="{{ old('activity_participant_count', $estimation->activity_participant_count > 0 ? $estimation->activity_participant_count : $estimation->student_count) }}">
-                        <p class="text-xs text-gray-400 mt-1">Default: jumlah siswa. Dapat diubah manual.</p>
+                        <input type="number" name="activity_participant_count" id="activity_participant_count" class="admin-input" min="0" value="{{ old('activity_participant_count', $estimation->student_count) }}" disabled>
+                        <p class="text-xs text-gray-400 mt-1">Otomatis: jumlah siswa</p>
                     </div>
                 </div>
             </div>
@@ -426,10 +426,53 @@
                 </h3>
             </div>
             <div class="admin-card-body" id="resultsContainer">
-                <div class="text-center py-8 text-gray-400">
-                    <i class="fas fa-calculator text-4xl mb-3"></i>
-                    <p>Klik "Hitung Estimasi" untuk melihat hasil</p>
-                </div>
+                @if($estimation->items->count() > 0)
+                    <div class="overflow-x-auto">
+                        <table class="admin-table text-xs">
+                            <thead>
+                                <tr>
+                                    <th>Komponen</th>
+                                    <th>Qty</th>
+                                    <th>Harga Satuan</th>
+                                    <th>Jumlah</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($estimation->items as $item)
+                                    <tr>
+                                        <td class="font-medium">{{ $item->item_name }}</td>
+                                        <td>{{ $item->quantity }}</td>
+                                        <td class="font-mono">{{ formatPrice($item->unit_price) }}</td>
+                                        <td class="font-mono font-semibold">{{ formatPrice($item->total) }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-4 space-y-2 border-t pt-4">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Grand Total Biaya:</span>
+                            <span class="font-bold font-mono">{{ formatPrice($estimation->subtotal) }}</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Harga Aktual per Orang:</span>
+                            <span class="font-mono">{{ formatPrice($estimation->actual_price_per_person) }}</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Harga per Orang:</span>
+                            <span class="font-bold font-mono text-primary-600">{{ formatPrice($estimation->rounded_price_per_person) }}</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-600">Total Quotation:</span>
+                            <span class="font-bold font-mono text-primary-600">{{ formatPrice($estimation->quotation_total) }}</span>
+                        </div>
+                    </div>
+                @else
+                    <div class="text-center py-8 text-gray-400">
+                        <i class="fas fa-calculator text-4xl mb-3"></i>
+                        <p>Klik "Hitung Estimasi" untuk melihat hasil</p>
+                    </div>
+                @endif
             </div>
         </div>
         {{-- Actions Mobile --}}
@@ -452,6 +495,7 @@
 @endsection
 
 @push('scripts')
+@include('admin.price-calculator._client-calculator')
 <script>
 const calculatorForm = document.querySelector('#calculatorForm');
 const calculateBtns = document.querySelectorAll('.calculate-btn');
@@ -460,6 +504,36 @@ const resultsContainer = document.getElementById('resultsContainer');
 let lastCalculationResult = null;
 let calculateTimeout = null;
 let addonItemIndex = {{ max(count($stored['addon_items']), 0) }};
+
+// Auto-calc participant counts like create page
+function autoCalcServiceParticipantsEdit() {
+    const students = parseInt(document.getElementById('student_count').value) || 0;
+    const companions = parseInt(document.getElementById('companion_count').value) || 0;
+    const spc = document.getElementById('service_participant_count');
+    if (!spc.dataset.manual) { spc.value = students + companions; }
+}
+
+function autoCalcActivityParticipantsEdit() {
+    const students = parseInt(document.getElementById('student_count').value) || 0;
+    const apc = document.getElementById('activity_participant_count');
+    if (!apc.dataset.manual) { apc.value = students; }
+}
+
+document.getElementById('student_count')?.addEventListener('input', function() {
+    delete document.getElementById('service_participant_count').dataset.manual;
+    delete document.getElementById('activity_participant_count').dataset.manual;
+    autoCalcServiceParticipantsEdit(); autoCalcActivityParticipantsEdit(); debouncedCalculate();
+});
+document.getElementById('companion_count')?.addEventListener('input', function() {
+    delete document.getElementById('service_participant_count').dataset.manual;
+    autoCalcServiceParticipantsEdit(); debouncedCalculate();
+});
+document.getElementById('service_participant_count')?.addEventListener('input', function() {
+    this.dataset.manual = '1'; debouncedCalculate();
+});
+document.getElementById('activity_participant_count')?.addEventListener('input', function() {
+    this.dataset.manual = '1'; debouncedCalculate();
+});
 
 // Cooking toggle
 document.getElementById('cooking_active')?.addEventListener('change', function() {
@@ -506,37 +580,26 @@ function getAddonItemsData() {
     return items;
 }
 
-async function performCalculation() {
+function performCalculation() {
     const formData = new FormData(calculatorForm);
     const data = {};
     formData.forEach((value, key) => { data[key] = value; });
+
+    // Baca langsung dari DOM karena input ini disabled dan tidak masuk FormData
+    data.service_participant_count = document.getElementById('service_participant_count').value;
+    data.activity_participant_count = document.getElementById('activity_participant_count').value;
+    data.student_count = document.getElementById('student_count').value;
+
     data.cooking_active = document.getElementById('cooking_active').checked ? '1' : '0';
     data.pickup_active = document.getElementById('pickup_active').checked ? '1' : '0';
     data.other_addon_active = document.getElementById('other_addon_active').checked ? '1' : '0';
     data.rounding_type = document.getElementById('rounding_type').value;
     data.addon_items = getAddonItemsData();
 
-    try {
-        const response = await fetch('{{ url('admin/price-calculator/calculate') }}', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-        if (!response.ok) {
-            const errData = await response.json();
-            if (errData.errors) showToast(Object.values(errData.errors).flat().join('<br>'), 'error');
-            return;
-        }
-        const result = await response.json();
-        lastCalculationResult = result;
-        renderResults(result);
-    } catch (error) {
-        showToast('Gagal melakukan perhitungan', 'error');
-    }
+    // Client-side calculation (no AJAX / no 404)
+    const result = clientCalculate(data);
+    lastCalculationResult = result;
+    renderResults(result);
 }
 
 function formatCurrency(amount) {

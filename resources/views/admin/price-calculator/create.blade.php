@@ -354,6 +354,7 @@
 @endsection
 
 @push('scripts')
+@include('admin.price-calculator._client-calculator')
 <script>
 const calculatorForm = document.getElementById('calculatorForm');
 const calculateBtn = document.getElementById('calculateBtn');
@@ -427,38 +428,27 @@ function getAddonItemsData() {
     return items;
 }
 
-async function performCalculation() {
+function performCalculation() {
     const formData = new FormData(calculatorForm);
     const data = {};
     formData.forEach((value, key) => { data[key] = value; });
+
+    // Baca langsung dari DOM karena input ini disabled dan tidak masuk FormData
+    data.service_participant_count = document.getElementById('service_participant_count').value;
+    data.activity_participant_count = document.getElementById('activity_participant_count').value;
+    data.student_count = document.getElementById('student_count').value;
+
     data.cooking_active = document.getElementById('cooking_active').checked ? '1' : '0';
     data.pickup_active = document.getElementById('pickup_active').checked ? '1' : '0';
     data.other_addon_active = document.getElementById('other_addon_active').checked ? '1' : '0';
     data.rounding_type = document.getElementById('rounding_type').value;
     data.addon_items = getAddonItemsData();
 
-    try {
-        const response = await fetch('{{ url('admin/price-calculator/calculate') }}', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-        if (!response.ok) {
-            const errData = await response.json();
-            if (errData.errors) showToast(Object.values(errData.errors).flat().join('<br>'), 'error');
-            return;
-        }
-        const result = await response.json();
-        lastCalculationResult = result;
-        renderResults(result);
-        saveBtn.disabled = false;
-    } catch (error) {
-        showToast('Gagal melakukan perhitungan', 'error');
-    }
+    // Client-side calculation (no AJAX / no 404)
+    const result = clientCalculate(data);
+    lastCalculationResult = result;
+    renderResults(result);
+    saveBtn.disabled = false;
 }
 
 function formatCurrency(amount) {
