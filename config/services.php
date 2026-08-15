@@ -35,4 +35,14 @@ return [
         'timeout' => env('GROQ_TIMEOUT', 30),
     ],
 
+    'midtrans' => [
+        'server_key' => env('MIDTRANS_IS_PRODUCTION', false)
+            ? env('MIDTRANS_PROD_SERVER_KEY')
+            : env('MIDTRANS_SANDBOX_SERVER_KEY'),
+        'client_key' => env('MIDTRANS_IS_PRODUCTION', false)
+            ? env('MIDTRANS_PROD_CLIENT_KEY')
+            : env('MIDTRANS_SANDBOX_CLIENT_KEY'),
+        'is_production' => env('MIDTRANS_IS_PRODUCTION', false),
+    ],
+
 ];

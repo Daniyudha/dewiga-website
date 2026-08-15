@@ -106,7 +106,7 @@
                         </p>
                         <form method="POST" action="{{ route('admin.schedules.rundown.reset-from-template', [$schedule, $rundown]) }}" class="flex gap-3 items-end">
                             @csrf
-                            <select name="rundown_template_id" class="form-input text-sm flex-1" required>
+                            <select name="rundown_template_id" class="admin-input w-full shadow-md rounded-md border border-gray-300 text-sm flex-1" required>
                                 <option value="">Pilih Template</option>
                                 @foreach($templates as $t)
                                     <option value="{{ $t->id }}" {{ $rundown->rundown_template_id == $t->id ? 'selected' : '' }}>{{ $t->name }}</option>
@@ -155,8 +155,8 @@
                         @csrf
                         <div class="space-y-4">
                             <div>
-                                <label class="form-label">Pilih Template <span class="text-red-500">*</span></label>
-                                <select name="rundown_template_id" class="form-input" required>
+                                <label class="admin-label">Pilih Template <span class="text-red-500">*</span></label>
+                                <select name="rundown_template_id" class="admin-input w-full shadow-md rounded-md border border-gray-300" required>
                                     <option value="">-- Pilih Template --</option>
                                     @foreach($templates as $t)
                                         <option value="{{ $t->id }}">{{ $t->name }} ({{ $t->duration_days }} Hari)</option>
@@ -164,13 +164,13 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="form-label">Judul Rundown</label>
-                                <input type="text" name="title" class="form-input" 
+                                <label class="admin-label">Judul Rundown</label>
+                                <input type="text" name="title" class="admin-input w-full shadow-md rounded-md border border-gray-300" 
                                        value="Rundown {{ $schedule->visitor_name ?? 'Jadwal #'.$schedule->id }}" placeholder="Otomatis dari template">
                             </div>
                             <div>
-                                <label class="form-label">Catatan</label>
-                                <textarea name="notes" rows="2" class="form-input" placeholder="Opsional"></textarea>
+                                <label class="admin-label">Catatan</label>
+                                <textarea name="notes" rows="2" class="admin-input w-full shadow-md rounded-md border border-gray-300" placeholder="Opsional"></textarea>
                             </div>
                         </div>
                         <div class="flex justify-end gap-3 mt-6 pt-4 border-t">
@@ -196,13 +196,13 @@
                         @csrf
                         <div class="space-y-4">
                             <div>
-                                <label class="form-label">Judul Rundown</label>
-                                <input type="text" name="title" class="form-input" 
+                                <label class="admin-label">Judul Rundown</label>
+                                <input type="text" name="title" class="admin-input w-full shadow-md rounded-md border border-gray-300" 
                                        value="Rundown {{ $schedule->visitor_name ?? 'Jadwal #'.$schedule->id }}">
                             </div>
                             <div>
-                                <label class="form-label">Catatan</label>
-                                <textarea name="notes" rows="2" class="form-input" placeholder="Opsional"></textarea>
+                                <label class="admin-label">Catatan</label>
+                                <textarea name="notes" rows="2" class="admin-input w-full shadow-md rounded-md border border-gray-300" placeholder="Opsional"></textarea>
                             </div>
                             <p class="text-sm text-gray-500">
                                 <i class="fas fa-info-circle mr-1"></i>

@@ -13,10 +13,6 @@
     </a>
 </div>
 
-@if(session('success'))
-    <div class="mb-4 px-4 py-3 rounded-lg text-sm font-medium bg-green-100 text-green-800 border border-green-200">{{ session('success') }}</div>
-@endif
-
 <div class="admin-card">
     <div class="admin-card-header">
         <h3 class="font-heading font-semibold text-gray-800">Informasi User</h3>

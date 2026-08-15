@@ -1,9 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 Auth::routes(['register' => false]);
+
+Route::post('api/midtrans/webhook', [\App\Http\Controllers\MidtransWebhookController::class, 'handle'])->name('midtrans.webhook');
 
 Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']], function () {
 
@@ -31,6 +34,8 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         Route::get('schedules/{schedule}/show', [\App\Http\Controllers\Admin\ScheduleController::class, 'show'])->name('schedules.show');
         Route::patch('schedules/{schedule}/toggle-active', [\App\Http\Controllers\Admin\ScheduleController::class, 'toggleActive'])->name('schedules.toggle-active');
         Route::patch('schedules/{schedule}/update-status', [\App\Http\Controllers\Admin\ScheduleController::class, 'updateStatus'])->name('schedules.update-status');
+        Route::post('schedules/{schedule}/generate-midtrans-link', [\App\Http\Controllers\Admin\ScheduleController::class, 'generateMidtransPaymentLink'])->name('schedules.generate-midtrans-link');
+        Route::delete('schedules/{schedule}/payments/{payment}', [\App\Http\Controllers\Admin\ScheduleController::class, 'destroyPayment'])->name('schedules.payments.destroy');
 
         // Open Trip Registrations
         Route::get('open-trip-registrations/{schedule}/export', [\App\Http\Controllers\Admin\OpenTripRegistrationController::class, 'export'])->name('open-trip-registrations.export');

@@ -26,6 +26,7 @@ class ScheduleRequest extends FormRequest
             ],
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'visitor_name' => 'nullable|string|max:255',
+            'number_phone' => 'nullable|string|max:20',
             'quota' => 'required|integer|min:1',
             'is_active' => 'sometimes|boolean',
         ];

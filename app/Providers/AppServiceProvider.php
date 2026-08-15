@@ -5,7 +5,9 @@ namespace App\Providers;
 use App\Models\HeroSetting;
 use App\Services\Chat\AIProviderInterface;
 use App\Services\Chat\GroqProvider;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,6 +27,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Force HTTPS for all generated URLs when running in production
+        // (prevents Mixed Content when site is accessed over HTTPS)
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+            Request::setTrustedProxies(
+                ['*'],
+                Request::HEADER_X_FORWARDED_PROTO
+            );
+        }
+
         Paginator::useTailwind();
 
         // Share hero settings with all frontend views

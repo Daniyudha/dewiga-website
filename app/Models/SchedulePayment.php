@@ -23,6 +23,9 @@ class SchedulePayment extends Model
         'notes',
         'status',
         'created_by',
+        'midtrans_order_id',
+        'midtrans_payment_token',
+        'midtrans_payment_link',
     ];
 
     protected $casts = [
@@ -42,6 +45,7 @@ class SchedulePayment extends Model
         'cash' => 'Tunai',
         'bank_transfer' => 'Transfer Bank',
         'qris' => 'QRIS',
+        'midtrans' => 'Midtrans Online',
         'other' => 'Lainnya',
     ];
 

@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\ScheduleStatus;
 use App\Models\Schedule;
+use App\Models\SchedulePayment;
 use App\Models\TravelPackage;
 use App\Models\RundownTemplate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ScheduleRequest;
+use App\Services\MidtransService;
+use App\Services\SchedulePaymentService;
 use App\Services\ScheduleStatusService;
 use Illuminate\Http\Request;
 
@@ -190,6 +193,111 @@ class ScheduleController extends Controller
                 'alert-type' => 'error',
             ]);
         }
+    }
+
+    /**
+     * Generate Midtrans payment link for a schedule.
+     */
+    public function generateMidtransPaymentLink(Request $request, Schedule $schedule, MidtransService $midtrans)
+    {
+        try {
+            if (!$midtrans->isConfigured()) {
+                return redirect()->back()->with([
+                    'message' => 'Midtrans belum dikonfigurasi. Silakan cek konfigurasi MIDTRANS_SERVER_KEY di .env',
+                    'alert-type' => 'error',
+                ]);
+            }
+
+            $amount = (float) ($request->input('amount') ?? $schedule->amount ?? 0);
+            if ($amount <= 0) {
+                return redirect()->back()->with([
+                    'message' => 'Jumlah pembayaran tidak valid.',
+                    'alert-type' => 'error',
+                ]);
+            }
+
+            $paymentType = $request->input('payment_type', 'settlement');
+            $orderId = $schedule->schedule_code . '-' . strtoupper(substr(uniqid(), -6));
+
+            // Create SchedulePayment record first
+            $payment = $schedule->payments()->create([
+                'payment_number' => \App\Models\SchedulePayment::generatePaymentNumber(),
+                'payment_type' => in_array($paymentType, array_keys(\App\Models\SchedulePayment::PAYMENT_TYPES)) ? $paymentType : 'settlement',
+                'amount' => $amount,
+                'payment_date' => now(),
+                'payment_method' => 'midtrans',
+                'status' => 'pending',
+                'created_by' => auth()->id(),
+            ]);
+
+            // Get traveler details from schedule
+            $customerName = $schedule->institution ?? $schedule->visitor_name ?? 'Customer Dewiga';
+            $customerEmail = $schedule->customer_email ?? 'customer@example.com';
+            $customerPhone = $schedule->number_phone ?? '';
+
+            // Build Midtrans request payload
+            $itemDetails = $midtrans->buildItemDetails($schedule, $amount);
+            $payload = [
+                'transaction_details' => [
+                    'order_id' => $orderId,
+                    'gross_amount' => (int) round($amount),
+                ],
+                'item_details' => $itemDetails,
+                'customer_details' => [
+                    'first_name' => mb_substr($customerName, 0, 50),
+                    'email' => $customerEmail,
+                    'phone' => $customerPhone,
+                ],
+                'credit_card' => [
+                    'secure' => true,
+                ],
+            ];
+
+            $result = $midtrans->createTransaction($payload);
+
+            if (!$result['success']) {
+                $payment->update(['status' => 'failed']);
+                return redirect()->back()->with([
+                    'message' => $result['message'],
+                    'alert-type' => 'error',
+                ]);
+            }
+
+            // Save Midtrans response to payment record
+            $payment->update([
+                'midtrans_order_id' => $orderId,
+                'midtrans_payment_token' => $result['data']['token'] ?? null,
+                'midtrans_payment_link' => $result['data']['redirect_url'] ?? null,
+            ]);
+
+            return redirect()->back()->with([
+                'message' => 'Link pembayaran Midtrans berhasil dibuat!',
+                'alert-type' => 'success',
+                'midtrans_payment_link' => $result['data']['redirect_url'] ?? null,
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'message' => 'Gagal membuat link pembayaran: ' . $e->getMessage(),
+                'alert-type' => 'error',
+            ]);
+        }
+    }
+
+    /**
+     * Delete a schedule payment.
+     */
+    public function destroyPayment(Schedule $schedule, SchedulePayment $payment)
+    {
+        if ($payment->schedule_id !== $schedule->id) {
+            abort(404);
+        }
+
+        $payment->delete();
+
+        return redirect()->back()->with([
+            'message' => 'Data pembayaran berhasil dihapus!',
+            'alert-type' => 'success',
+        ]);
     }
 
     /**

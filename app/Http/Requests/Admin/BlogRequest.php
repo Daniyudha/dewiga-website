@@ -34,6 +34,8 @@ class BlogRequest extends FormRequest
                     'category_id' => 'required',
                     'meta_keywords_id' => 'nullable',
                     'meta_keywords_en' => 'nullable',
+                    'status' => 'nullable|in:draft,scheduled,published',
+                    'published_at' => 'nullable|date|required_if:status,scheduled',
                 ];
             }
             case 'PUT':
@@ -49,6 +51,8 @@ class BlogRequest extends FormRequest
                     'category_id' => 'required',
                     'meta_keywords_id' => 'nullable',
                     'meta_keywords_en' => 'nullable',
+                    'status' => 'nullable|in:draft,scheduled,published',
+                    'published_at' => 'nullable|date|required_if:status,scheduled',
                 ];
             }
         }

@@ -15,6 +15,27 @@
         </a>
     </div>
 
+    {{-- Status Filter --}}
+    <div class="admin-card mb-6">
+        <div class="admin-card-body">
+            <form method="GET" action="{{ route('admin.blogs.index') }}" class="flex flex-wrap items-center gap-3">
+                <label class="text-sm font-medium text-gray-700">{{ __('Status') }}:</label>
+                <select name="status" class="admin-input w-auto min-w-[150px]" onchange="this.form.submit()">
+                    <option value="">{{ __('All Status') }}</option>
+                    <option value="published" {{ request('status') == 'published' ? 'selected' : '' }}>{{ __('Published') }}</option>
+                    <option value="scheduled" {{ request('status') == 'scheduled' ? 'selected' : '' }}>{{ __('Scheduled') }}</option>
+                    <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>{{ __('Draft') }}</option>
+                </select>
+
+                @if(request('status'))
+                    <a href="{{ route('admin.blogs.index') }}" class="admin-btn-sm admin-btn-secondary text-red-600">
+                        <i class="fas fa-times"></i> {{ __('Clear Filter') }}
+                    </a>
+                @endif
+            </form>
+        </div>
+    </div>
+
     {{-- Table Card --}}
     <div class="admin-card">
         <div class="overflow-x-auto">
@@ -26,6 +47,9 @@
                         <th>{{ __('Image') }}</th>
                         <th>{{ __('Excerpt') }}</th>
                         <th>{{ __('Category') }}</th>
+                        <th>{{ __('Date') }}</th>
+                        <th>{{ __('Author') }}</th>
+                        <th>{{ __('Status') }}</th>
                         <th class="!text-center">{{ __('Action') }}</th>
                     </tr>
                 </thead>
@@ -53,6 +77,31 @@
                                     <span class="admin-badge-gray">{{ __('No Category') }}</span>
                                 @endif
                             </td>
+                            <td class="whitespace-nowrap text-gray-600">
+                                {{ $blog->created_at->format('d M Y') }}
+                            </td>
+                            <td class="whitespace-nowrap">
+                                @if($blog->user)
+                                    <div class="flex items-center gap-2">
+                                        <img src="https://i.pravatar.cc/24?u={{ urlencode($blog->user->email) }}"
+                                             alt="{{ $blog->user->name }}"
+                                             class="w-6 h-6 rounded-full object-cover border border-gray-200 flex-shrink-0">
+                                        <span class="text-sm text-gray-700">{{ $blog->user->name }}</span>
+                                    </div>
+                                @else
+                                    <span class="text-xs text-gray-400">-</span>
+                                @endif
+                            </td>
+                            <td>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $blog->status_badge }}">
+                                    {{ $blog->status_label }}
+                                </span>
+                                @if($blog->status === 'scheduled' && $blog->published_at)
+                                    <div class="text-[11px] text-gray-400 mt-1">
+                                        {{ $blog->published_at->format('d M Y H:i') }}
+                                    </div>
+                                @endif
+                            </td>
                             <td>
                                 <div class="flex items-center justify-center gap-4">
                                     <a href="{{ route('admin.blogs.edit', [$blog]) }}" class="text-blue-600 hover:text-blue-800 transition-colors">
@@ -70,7 +119,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center py-8 text-gray-500">
+                            <td colspan="9" class="text-center py-8 text-gray-500">
                                 <i class="fas fa-inbox text-3xl text-gray-300 block mb-2"></i>
                                 {{ __('No blogs found.') }}
                                 <a href="{{ route('admin.blogs.create') }}" class="text-primary-600 hover:underline block mt-1">

@@ -76,6 +76,21 @@
                         @enderror
                     </div>
 
+                    {{-- Phone Number --}}
+                    <div>
+                        <label for="number_phone" class="block text-sm font-medium text-gray-700 mb-1">
+                            {{ __('Phone Number / WhatsApp') }}
+                        </label>
+                        <input type="text" name="number_phone" id="number_phone"
+                            class="admin-input w-full @error('number_phone') border-red-500 @enderror"
+                            value="{{ old('number_phone', $schedule->number_phone) }}"
+                            placeholder="{{ __('e.g. 081234567890') }}">
+                        <p class="text-xs text-gray-400 mt-1">{{ __('Used for sending payment links via WhatsApp') }}</p>
+                        @error('number_phone')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     {{-- Start Date --}}
                     <div>
                         <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">

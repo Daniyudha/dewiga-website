@@ -28,17 +28,17 @@
             <div class="admin-card-body space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="form-label">Judul Rundown</label>
-                        <input type="text" name="title" value="{{ $rundown->title }}" class="form-input" required>
+                        <label class="admin-label">Judul Rundown</label>
+                        <input type="text" name="title" value="{{ $rundown->title }}" class="admin-input w-full shadow-md rounded-md border border-gray-300" required>
                     </div>
                     <div>
-                        <label class="form-label">Template</label>
-                        <p class="form-input bg-gray-50">{{ $rundown->template?->name ?? 'Kustom (tanpa template)' }}</p>
+                        <label class="admin-label">Template</label>
+                        <p class="admin-input w-full shadow-md rounded-md border border-gray-300 bg-gray-50">{{ $rundown->template?->name ?? 'Kustom (tanpa template)' }}</p>
                     </div>
                 </div>
                 <div>
-                    <label class="form-label">Catatan</label>
-                    <textarea name="notes" rows="2" class="form-input">{{ $rundown->notes }}</textarea>
+                    <label class="admin-label">Catatan</label>
+                    <textarea name="notes" rows="2" class="admin-input w-full shadow-md rounded-md border border-gray-300">{{ $rundown->notes }}</textarea>
                 </div>
                 <div class="flex justify-end gap-3">
                     <button type="submit" class="admin-btn-sm admin-btn-primary">
@@ -101,14 +101,14 @@
                                 <td colspan="5" class="p-3 bg-amber-50">
                                     <form method="POST" action="{{ route('admin.schedules.rundown.update-item', [$schedule, $rundown, $item]) }}" class="grid grid-cols-1 md:grid-cols-6 gap-2">
                                         @csrf @method('PUT')
-                                        <input type="number" name="day_number" value="{{ $item->day_number }}" class="form-input text-sm" min="1">
-                                        <input type="date" name="activity_date" value="{{ $item->activity_date?->format('Y-m-d') }}" class="form-input text-sm">
-                                        <input type="time" name="start_time" value="{{ $item->start_time }}" class="form-input text-sm">
-                                        <input type="time" name="end_time" value="{{ $item->end_time }}" class="form-input text-sm">
-                                        <input type="text" name="activity_name" value="{{ $item->activity_name }}" class="form-input text-sm" required>
-                                        <input type="text" name="location" value="{{ $item->location }}" class="form-input text-sm" placeholder="Lokasi">
-                                        <input type="text" name="person_in_charge" value="{{ $item->person_in_charge }}" class="form-input text-sm" placeholder="PJ">
-                                        <input type="text" name="description" value="{{ $item->description }}" class="form-input text-sm" placeholder="Keterangan">
+                                        <input type="number" name="day_number" value="{{ $item->day_number }}" class="admin-input w-full shadow-md rounded-md border border-gray-300 text-sm" min="1">
+                                        <input type="date" name="activity_date" value="{{ $item->activity_date?->format('Y-m-d') }}" class="admin-input w-full shadow-md rounded-md border border-gray-300 text-sm">
+                                        <input type="time" name="start_time" value="{{ $item->start_time }}" class="admin-input w-full shadow-md rounded-md border border-gray-300 text-sm">
+                                        <input type="time" name="end_time" value="{{ $item->end_time }}" class="admin-input w-full shadow-md rounded-md border border-gray-300 text-sm">
+                                        <input type="text" name="activity_name" value="{{ $item->activity_name }}" class="admin-input w-full shadow-md rounded-md border border-gray-300 text-sm" required>
+                                        <input type="text" name="location" value="{{ $item->location }}" class="admin-input w-full shadow-md rounded-md border border-gray-300 text-sm" placeholder="Lokasi">
+                                        <input type="text" name="person_in_charge" value="{{ $item->person_in_charge }}" class="admin-input w-full shadow-md rounded-md border border-gray-300 text-sm" placeholder="PJ">
+                                        <input type="text" name="description" value="{{ $item->description }}" class="admin-input w-full shadow-md rounded-md border border-gray-300 text-sm" placeholder="Keterangan">
                                         <div class="md:col-span-6 flex gap-2">
                                             <button type="submit" class="admin-btn-xs admin-btn-primary">Simpan</button>
                                             <button type="button" onclick="hideEditItemForm({{ $item->id }})" class="admin-btn-xs admin-btn-secondary">Batal</button>
@@ -194,36 +194,36 @@
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="form-label">Hari ke- <span class="text-red-500">*</span></label>
-                        <input type="number" name="day_number" value="{{ $groupedItems->count() }}" class="form-input" min="1" required>
+                        <label class="admin-label">Hari ke- <span class="text-red-500">*</span></label>
+                        <input type="number" name="day_number" value="{{ $groupedItems->count() }}" class="admin-input w-full shadow-md rounded-md border border-gray-300" min="1" required>
                     </div>
                     <div>
-                        <label class="form-label">Tanggal</label>
-                        <input type="date" name="activity_date" class="form-input">
+                        <label class="admin-label">Tanggal</label>
+                        <input type="date" name="activity_date" class="admin-input w-full shadow-md rounded-md border border-gray-300">
                     </div>
                     <div>
-                        <label class="form-label">Jam Mulai</label>
-                        <input type="time" name="start_time" class="form-input">
+                        <label class="admin-label">Jam Mulai</label>
+                        <input type="time" name="start_time" class="admin-input w-full shadow-md rounded-md border border-gray-300">
                     </div>
                     <div>
-                        <label class="form-label">Jam Selesai</label>
-                        <input type="time" name="end_time" class="form-input">
+                        <label class="admin-label">Jam Selesai</label>
+                        <input type="time" name="end_time" class="admin-input w-full shadow-md rounded-md border border-gray-300">
                     </div>
                     <div class="md:col-span-2">
-                        <label class="form-label">Nama Kegiatan <span class="text-red-500">*</span></label>
-                        <input type="text" name="activity_name" class="form-input" required>
+                        <label class="admin-label">Nama Kegiatan <span class="text-red-500">*</span></label>
+                        <input type="text" name="activity_name" class="admin-input w-full shadow-md rounded-md border border-gray-300" required>
                     </div>
                     <div>
-                        <label class="form-label">Lokasi</label>
-                        <input type="text" name="location" class="form-input">
+                        <label class="admin-label">Lokasi</label>
+                        <input type="text" name="location" class="admin-input w-full shadow-md rounded-md border border-gray-300">
                     </div>
                     <div>
-                        <label class="form-label">Penanggung Jawab</label>
-                        <input type="text" name="person_in_charge" class="form-input">
+                        <label class="admin-label">Penanggung Jawab</label>
+                        <input type="text" name="person_in_charge" class="admin-input w-full shadow-md rounded-md border border-gray-300">
                     </div>
                     <div class="md:col-span-2">
-                        <label class="form-label">Deskripsi</label>
-                        <textarea name="description" rows="2" class="form-input"></textarea>
+                        <label class="admin-label">Deskripsi</label>
+                        <textarea name="description" rows="2" class="admin-input w-full shadow-md rounded-md border border-gray-300"></textarea>
                     </div>
                 </div>
                 <div class="flex justify-end gap-3 mt-6 pt-4 border-t">

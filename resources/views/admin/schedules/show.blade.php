@@ -264,9 +264,23 @@
                 <i class="fas fa-credit-card text-primary-600 mr-2"></i>
                 Riwayat Pembayaran
             </h3>
-            <button type="button" onclick="showPaymentModal()" class="admin-btn-sm admin-btn-primary">
-                <i class="fas fa-plus mr-1"></i> Tambah Pembayaran
-            </button>
+            <div class="flex items-center gap-2 flex-wrap">
+                <form action="{{ route('admin.schedules.generate-midtrans-link', $schedule) }}" method="POST" class="inline-flex items-center gap-2">
+                    @csrf
+                    <select name="payment_type" class="admin-select text-sm py-2 px-3 border border-gray-300 shadow-md rounded-md">
+                        @foreach(\App\Models\SchedulePayment::PAYMENT_TYPES as $key => $label)
+                            <option value="{{ $key }}" {{ $key === 'settlement' ? 'selected' : '' }}>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                    <input type="number" name="amount" value="{{ $paymentSummary['sisa_pembayaran'] > 0 ? $paymentSummary['sisa_pembayaran'] : ($schedule->amount ?? '') }}" min="1" class="admin-input w-36 py-2 px-3 shadow-md rounded-md" placeholder="Jumlah (Rp)">
+                    <button type="submit" class="py-2 px-3 shadow-md rounded-md bg-blue-500 hover:bg-blue-700 text-white">
+                        <i class="fas fa-link mr-1"></i> Buat Link Midtrans
+                    </button>
+                </form>
+                <button type="button" onclick="showPaymentModal()" class="admin-btn-md admin-btn-primary">
+                    <i class="fas fa-plus mr-1"></i> Tambah Pembayaran
+                </button>
+            </div>
         </div>
         <div class="admin-card-body p-0">
             <div class="overflow-x-auto">
@@ -280,22 +294,79 @@
                             <th>Nominal</th>
                             <th>Status</th>
                             <th>Referensi</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($schedule->payments as $payment)
+                            @php
+                                $waPaymentLink = $payment->midtrans_payment_link
+                                    ? $waService->getPaymentLinkWhatsAppUrl($schedule, $payment)
+                                    : null;
+                            @endphp
                             <tr>
                                 <td class="font-mono text-sm">{{ $payment->payment_number ?? '-' }}</td>
                                 <td>{{ $payment->type_label }}</td>
                                 <td>{{ $payment->method_label }}</td>
                                 <td>{{ $payment->payment_date->format('d/m/Y') }}</td>
                                 <td class="font-mono font-medium">{{ formatPrice($payment->amount) }}</td>
-                                <td><span class="px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-800">{{ ucfirst($payment->status) }}</span></td>
-                                <td class="text-sm">{{ $payment->reference_number ?? '-' }}</td>
+                                <td>
+                                    <span class="px-2 py-0.5 text-xs rounded-full {{ $payment->status === 'paid' ? 'bg-green-100 text-green-800' : ($payment->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
+                                        {{ ucfirst($payment->status) }}
+                                    </span>
+                                </td>
+                                <td class="text-sm">
+                                    @if($payment->midtrans_payment_link)
+                                        <a href="{{ $payment->midtrans_payment_link }}" target="_blank" class="text-primary-600 hover:underline inline-flex items-center">
+                                            <i class="fas fa-external-link-alt mr-1"></i> Link Bayar
+                                        </a>
+                                        @if($payment->reference_number)
+                                            <div class="text-xs text-gray-400 mt-0.5">{{ $payment->reference_number }}</div>
+                                        @endif
+                                    @else
+                                        {{ $payment->reference_number ?? '-' }}
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="flex items-center gap-1.5">
+                                        @if($payment->midtrans_payment_link)
+                                            <button type="button"
+                                                onclick="copyPaymentLink('{{ $payment->midtrans_payment_link }}', this)"
+                                                class="inline-flex items-center justify-center w-8 h-8 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700"
+                                                title="Salin link pembayaran">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                            @if($waPaymentLink)
+                                                <a href="{{ $waPaymentLink }}" target="_blank"
+                                                    class="inline-flex items-center justify-center w-8 h-8 rounded-md bg-green-100 hover:bg-green-200 text-green-700"
+                                                    title="Kirim link via WhatsApp">
+                                                    <i class="fab fa-whatsapp"></i>
+                                                </a>
+                                            @else
+                                                <button type="button"
+                                                    onclick="alert('Nomor WhatsApp customer belum ditemukan pada data jadwal ini. Pastikan nomor HP booking / open trip / estimasi telah diisi.')"
+                                                    class="inline-flex items-center justify-center w-8 h-8 rounded-md bg-green-100 hover:bg-green-200 text-green-700"
+                                                    title="Nomor WhatsApp customer belum ditemukan">
+                                                    <i class="fab fa-whatsapp"></i>
+                                                </button>
+                                            @endif
+                                        @endif
+                                        <form action="{{ route('admin.schedules.payments.destroy', [$schedule, $payment]) }}" method="POST"
+                                            onsubmit="return confirm('Hapus data pembayaran {{ $payment->payment_number }}?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="inline-flex items-center justify-center w-8 h-8 rounded-md bg-red-100 hover:bg-red-200 text-red-700"
+                                                title="Hapus data pembayaran">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center py-6 text-gray-500">Belum ada pembayaran</td>
+                                <td colspan="8" class="text-center py-6 text-gray-500">Belum ada pembayaran</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -356,8 +427,25 @@
 
 @push('styles')
 <style>
-.tab-link { @apply px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent whitespace-nowrap hover:text-gray-700 hover:border-gray-300 cursor-pointer; }
-.tab-link.active { @apply text-primary-600 border-primary-500; }
+.tab-link {
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b7280;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+}
+.tab-link:hover {
+    color: #374151;
+    border-bottom-color: #d1d5db;
+}
+.tab-link.active {
+    color: #059669;
+    border-bottom-color: #059669;
+    font-weight: 600;
+}
 </style>
 @endpush
 
@@ -375,6 +463,39 @@ function switchTab(tabName) {
 
 function showPaymentModal() {
     alert('Form tambah pembayaran akan ditambahkan di FASE selanjutnya.');
+}
+
+function copyPaymentLink(url, btn) {
+    // Fallback: copy via temporary textarea (works in all browsers)
+    const textarea = document.createElement('textarea');
+    textarea.value = url;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+        document.execCommand('copy');
+    } catch (err) {
+        // Clipboard API fallback
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(url);
+        }
+    }
+    document.body.removeChild(textarea);
+
+    // Show icon-only feedback on button
+    const originalHtml = btn.innerHTML;
+    const originalTitle = btn.title;
+    btn.innerHTML = '<i class="fas fa-check"></i>';
+    btn.title = 'Link tersalin!';
+    btn.classList.remove('bg-gray-100', 'hover:bg-gray-200', 'text-gray-700');
+    btn.classList.add('bg-green-100', 'text-green-700');
+    setTimeout(() => {
+        btn.innerHTML = originalHtml;
+        btn.title = originalTitle;
+        btn.classList.add('bg-gray-100', 'hover:bg-gray-200', 'text-gray-700');
+        btn.classList.remove('bg-green-100', 'text-green-700');
+    }, 2000);
 }
 </script>
 @endpush

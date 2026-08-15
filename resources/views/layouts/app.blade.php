@@ -27,6 +27,25 @@
 </head>
 <body class="bg-gray-100 min-h-screen">
 
+    {{-- Global: Make date inputs clickable on whole field --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('input[type="date"], input[type="datetime-local"]').forEach(function(input) {
+                input.style.cursor = 'pointer';
+                input.addEventListener('click', function() {
+                    if (!this.disabled && typeof this.showPicker === 'function') {
+                        try { this.showPicker(); } catch (e) {}
+                    }
+                });
+                input.addEventListener('focus', function() {
+                    if (!this.disabled && typeof this.showPicker === 'function') {
+                        try { this.showPicker(); } catch (e) {}
+                    }
+                });
+            });
+        });
+    </script>
+
     {{-- Overlay for mobile sidebar --}}
     <div id="sidebarOverlay" class="sidebar-overlay hidden" onclick="toggleSidebar()"></div>
 

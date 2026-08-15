@@ -15,9 +15,22 @@ class BlogController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $blogs = Blog::latest()->with('category')->paginate(10);
+        // Auto-publish scheduled blogs whose published_at time has passed
+        Blog::where('status', Blog::STATUS_SCHEDULED)
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now())
+            ->update(['status' => Blog::STATUS_PUBLISHED]);
+
+        $query = Blog::with('category', 'user');
+
+        // Filter by status
+        if ($request->status && in_array($request->status, ['draft', 'scheduled', 'published'])) {
+            $query->where('status', $request->status);
+        }
+
+        $blogs = $query->latest()->paginate(10);
 
         return view('admin.blogs.index', compact('blogs'));
     }
@@ -42,11 +55,27 @@ class BlogController extends Controller
                 'blog/images', 'public'
             );
             $slug = Str::slug($request->title_en ?? $request->title, '-');
+            $uniqueSlug = $this->makeUniqueSlug($slug);
 
-            Blog::create($request->except('image') + [
-                'slug' => $slug,
+            $status = $request->status ?? Blog::STATUS_DRAFT;
+            $publishedAt = $request->published_at ?? now();
+
+            if ($status === Blog::STATUS_SCHEDULED && $publishedAt) {
+                $status = Blog::STATUS_SCHEDULED;
+            } elseif ($status === Blog::STATUS_PUBLISHED) {
+                $status = Blog::STATUS_PUBLISHED;
+                $publishedAt = $request->published_at ?? now();
+            } else {
+                $status = Blog::STATUS_DRAFT;
+                $publishedAt = null;
+            }
+
+            Blog::create($request->except(['image', 'status', 'published_at']) + [
+                'slug' => $uniqueSlug,
                 'image' => $image,
                 'user_id' => auth()->id(),
+                'status' => $status,
+                'published_at' => $publishedAt,
             ]);
         }
 
@@ -81,14 +110,36 @@ class BlogController extends Controller
     {
         if($request->validated()) {
             $slug = Str::slug($request->title_en ?? $request->title, '-');
-            if($request->image) {
+            $uniqueSlug = $this->makeUniqueSlug($slug, $blog->id);
+
+            $status = $request->status ?? $blog->status;
+            $publishedAt = $request->published_at ?? $blog->published_at;
+
+            if ($status === Blog::STATUS_PUBLISHED) {
+                $publishedAt = $request->published_at ?? now();
+            } elseif ($status === Blog::STATUS_SCHEDULED && !$publishedAt) {
+                $publishedAt = $request->published_at;
+            } elseif ($status === Blog::STATUS_DRAFT) {
+                $publishedAt = null;
+            }
+
+            if ($request->image) {
                 File::delete('storage/'. $blog->image);
                 $image = $request->file('image')->store(
                     'blog/images', 'public'
                 );
-                $blog->update($request->except('image') + ['slug' => $slug, 'image' => $image]);
-            }else {
-                $blog->update($request->validated() + ['slug' => $slug]);
+                $blog->update($request->except(['image', 'status', 'published_at']) + [
+                    'slug' => $uniqueSlug,
+                    'image' => $image,
+                    'status' => $status,
+                    'published_at' => $publishedAt,
+                ]);
+            } else {
+                $blog->update($request->validated() + [
+                    'slug' => $uniqueSlug,
+                    'status' => $status,
+                    'published_at' => $publishedAt,
+                ]);
             }
         }
 
@@ -110,5 +161,30 @@ class BlogController extends Controller
             'message' => 'Success Deleted !',
             'alert-type' => 'danger'
         ]);
+    }
+
+    /**
+     * Generate a unique slug by appending a counter if needed.
+     */
+    private function makeUniqueSlug(string $slug, ?int $ignoreId = null): string
+    {
+        $base = $slug;
+        $counter = 1;
+
+        while (true) {
+            $query = Blog::where('slug', $slug);
+
+            if ($ignoreId) {
+                $query->where('id', '!=', $ignoreId);
+            }
+
+            if (!$query->exists()) {
+                break;
+            }
+
+            $slug = $base . '-' . $counter++;
+        }
+
+        return $slug;
     }
 }

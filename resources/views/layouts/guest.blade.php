@@ -24,6 +24,25 @@
     @vite('resources/css/admin.css')
 
     @yield('styles')
+
+    {{-- Global: Make date inputs clickable on whole field --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('input[type="date"], input[type="datetime-local"]').forEach(function(input) {
+                input.style.cursor = 'pointer';
+                input.addEventListener('click', function() {
+                    if (!this.disabled && typeof this.showPicker === 'function') {
+                        try { this.showPicker(); } catch (e) {}
+                    }
+                });
+                input.addEventListener('focus', function() {
+                    if (!this.disabled && typeof this.showPicker === 'function') {
+                        try { this.showPicker(); } catch (e) {}
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="auth-wrapper">

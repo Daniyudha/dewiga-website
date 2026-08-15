@@ -301,7 +301,7 @@
         </div>
 
         {{-- Actions --}}
-        <div class="flex flex-wrap gap-3">
+        <div class="hidden lg:flex flex-wrap gap-3">
             <button type="button" id="calculateBtn" class="admin-btn-primary">
                 <i class="fas fa-calculator mr-2"></i>
                 Hitung Estimasi
@@ -333,6 +333,21 @@
                     <p>Klik "Hitung Estimasi" untuk melihat hasil</p>
                 </div>
             </div>
+        </div>
+        {{-- Actions --}}
+        <div class="lg:hidden flex-wrap gap-3 space-x-0 space-y-3">
+            <button type="button" id="calculateBtn" class="admin-btn-primary w-full">
+                <i class="fas fa-calculator mr-2"></i>
+                Hitung Estimasi
+            </button>
+            <button type="submit" class="admin-btn-success w-full">
+                <i class="fas fa-save mr-2"></i>
+                {{ isset($duplicate) && $duplicate ? 'Duplikasi Estimasi' : 'Simpan Perubahan' }}
+            </button>
+            <a href="{{ route('admin.price-calculator.index') }}" class="admin-btn-secondary w-full">
+                <i class="fas fa-times mr-2"></i>
+                Batal
+            </a>
         </div>
     </div>
 </div>
@@ -423,7 +438,7 @@ async function performCalculation() {
     data.addon_items = getAddonItemsData();
 
     try {
-        const response = await fetch('{{ route("admin.price-calculator.calculate") }}', {
+        const response = await fetch('{{ url('admin/price-calculator/calculate') }}', {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,

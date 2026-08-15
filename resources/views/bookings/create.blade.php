@@ -75,13 +75,6 @@
                     <h2 class="font-serif text-3xl font-bold text-[#053d2c] mb-2">@lang('messages.booking.title')</h2>
                     <p class="text-neutral-500 mb-6">{{ $travel_package->title ?? $travel_package->location }}</p>
 
-                    @if(session('message'))
-                    <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-xl mb-4">
-                        <i class="bx bx-check-circle mr-2"></i>
-                        {{ session('message') }}
-                    </div>
-                    @endif
-
                     <form method="POST" action="{{ route('booking.store') }}" class="space-y-4" id="bookingForm">
                         @csrf
                         <input type="hidden" name="travel_package_id" value="{{ $travel_package->id }}">

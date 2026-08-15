@@ -63,6 +63,7 @@ class PriceEstimationConversionService
                 'end_date' => $overrideData['end_date'] ?? $estimation->departure_date,
                 'visitor_name' => $overrideData['visitor_name']
                     ?? $estimation->institution_name . ' - ' . $estimation->contact_person,
+                'number_phone' => $overrideData['number_phone'] ?? $estimation->whatsapp ?? null,
                 'quota' => $overrideData['quota'] ?? max($totalParticipants, 1),
                 'booked' => 0,
                 'is_active' => true,

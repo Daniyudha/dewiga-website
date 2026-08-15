@@ -10,14 +10,6 @@
     </div>
 </div>
 
-@if(session('message'))
-    <div class="mb-4 px-4 py-3 rounded-lg text-sm font-medium
-        @if(session('alert-type') == 'success') bg-green-100 text-green-800 border border-green-200
-        @else bg-red-100 text-red-800 border border-red-200 @endif">
-        {{ session('message') }}
-    </div>
-@endif
-
 {{-- Summary Cards --}}
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
     <div class="admin-card">

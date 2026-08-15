@@ -29,15 +29,6 @@
         </a>
     </div>
 
-    {{-- Alert Messages --}}
-    @if(session('message'))
-        <div class="mb-4 px-4 py-3 rounded-lg text-sm font-medium
-            @if(session('alert-type') == 'success') bg-green-100 text-green-800 border border-green-200
-            @else bg-red-100 text-red-800 border border-red-200 @endif">
-            {{ session('message') }}
-        </div>
-    @endif
-
     {{-- Filter & Search --}}
     <div class="admin-card mb-6">
         <div class="admin-card-body">
@@ -51,9 +42,9 @@
                         <option value="{{ $val }}" {{ request('type') == $val ? 'selected' : '' }}>{{ $label }}</option>
                     @endforeach
                 </select>
-                <button type="submit" class="admin-btn-sm admin-btn-primary"><i class="fas fa-search mr-1"></i> Cari</button>
+                <button type="submit" class="admin-btn-md admin-btn-primary"><i class="fas fa-search mr-1"></i> Cari</button>
                 @if(request('search') || request('type'))
-                    <a href="{{ route('admin.schedules.index') }}" class="admin-btn-sm admin-btn-secondary text-red-600">
+                    <a href="{{ route('admin.schedules.index') }}" class="admin-btn-md admin-btn-secondary text-red-600">
                         <i class="fas fa-times"></i> Reset
                     </a>
                 @endif

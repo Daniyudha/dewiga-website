@@ -34,15 +34,6 @@
     <section class="py-16 bg-[#f8fdfb]">
         <div class="container mx-auto px-6 max-w-lg">
 
-            {{-- Flash --}}
-            @if(session()->has('message'))
-                <div class="px-4 py-3 rounded-2xl mb-6 text-sm font-medium flex items-center gap-2.5
-                    {{ session()->get('alert-type') === 'success' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-700 border border-red-200' }}">
-                    <i class="bx {{ session()->get('alert-type') === 'success' ? 'bxs-check-circle' : 'bxs-error-circle' }} text-base shrink-0"></i>
-                    <span>{{ session()->get('message') }}</span>
-                </div>
-            @endif
-
             {{-- Card --}}
             <div class="bg-white rounded-3xl shadow-sm border border-neutral-100 overflow-hidden">
                 

@@ -181,11 +181,87 @@
                     </p>
                 </div>
 
+                {{-- Publish Options --}}
+                <div class="border-t border-gray-200 pt-6 mt-6">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fas fa-paper-plane text-primary-600"></i>
+                        <h3 class="text-lg font-heading font-semibold text-gray-800">{{ __('Publish Options') }}</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {{-- Draft --}}
+                        <label class="status-option cursor-pointer relative p-4 rounded-xl border-2 border-gray-200 hover:border-yellow-400 hover:bg-yellow-50 transition-all text-left block {{ $blog->status === 'draft' ? 'border-yellow-400 bg-yellow-50' : '' }}">
+                            <input type="radio" name="status" value="draft" class="hidden status-radio" {{ $blog->status === 'draft' ? 'checked' : '' }}>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-yellow-100 text-yellow-700 flex items-center justify-center shrink-0">
+                                    <i class="fas fa-pen"></i>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-900">{{ __('Draft') }}</p>
+                                    <p class="text-xs text-gray-400">Simpan sebagai konsep</p>
+                                </div>
+                            </div>
+                        </label>
+
+                        {{-- Schedule --}}
+                        <label class="status-option cursor-pointer relative p-4 rounded-xl border-2 border-gray-200 hover:border-blue-400 hover:bg-blue-50 transition-all text-left block {{ $blog->status === 'scheduled' ? 'border-blue-400 bg-blue-50' : '' }}">
+                            <input type="radio" name="status" value="scheduled" class="hidden status-radio" {{ $blog->status === 'scheduled' ? 'checked' : '' }}>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-900">{{ __('Schedule') }}</p>
+                                    <p class="text-xs text-gray-400">Jadwalkan tanggal terbit</p>
+                                </div>
+                            </div>
+                        </label>
+
+                        {{-- Publish Now --}}
+                        <label class="status-option cursor-pointer relative p-4 rounded-xl border-2 border-gray-200 hover:border-green-400 hover:bg-green-50 transition-all text-left block {{ $blog->status === 'published' ? 'border-green-400 bg-green-50' : '' }}">
+                            <input type="radio" name="status" value="published" class="hidden status-radio" {{ $blog->status === 'published' ? 'checked' : '' }}>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center shrink-0">
+                                    <i class="fas fa-check-double"></i>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-900">{{ __('Publish Now') }}</p>
+                                    <p class="text-xs text-gray-400">Langsung terbitkan</p>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                        {{-- Schedule Date --}}
+                        <div class="admin-form-group mt-4">
+                            <label for="published_at" class="admin-form-label">
+                                <i class="fas fa-clock mr-1 text-gray-400"></i>
+                                {{ __('Publish Date & Time') }}
+                                <span class="text-xs text-gray-400 font-normal">({{ __('wajib diisi jika memilih Schedule') }})</span>
+                            </label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </span>
+                                <input type="datetime-local" id="published_at" name="published_at"
+                                       value="{{ old('published_at', $blog->published_at ? $blog->published_at->format('Y-m-d\TH:i') : '') }}"
+                                       class="admin-form-input !pl-10 @error('published_at') error @enderror"
+                                       style="cursor: pointer;"
+                                       {{ ($blog->status === 'scheduled' || old('status') === 'scheduled') ? '' : 'disabled' }}>
+                            </div>
+                            <p id="publishedAtError" class="text-red-500 text-xs mt-1 hidden">
+                                Tanggal & waktu wajib diisi jika memilih Schedule.
+                            </p>
+                            @error('published_at')
+                                <p class="admin-form-error">{{ $message }}</p>
+                            @enderror
+                        </div>
+                </div>
+
                 {{-- Submit --}}
                 <div class="flex items-center gap-3 pt-2">
                     <button type="submit" class="admin-btn-success">
                         <i class="fas fa-save"></i>
-                        {{ __('Update') }}
+                        {{ __('Simpan') }}
                     </button>
                     <a href="{{ route('admin.blogs.index') }}" class="admin-btn-secondary">
                         {{ __('Cancel') }}
@@ -197,6 +273,81 @@
 @endsection
 
 @push('scripts')
+<script>
+// Make datetime-local input open picker when clicking anywhere on the field
+document.addEventListener('DOMContentLoaded', function() {
+    var dateInput = document.getElementById('published_at');
+    if (dateInput) {
+        dateInput.addEventListener('click', function() {
+            if (!this.disabled && typeof this.showPicker === 'function') {
+                try { this.showPicker(); } catch (e) {}
+            }
+        });
+        dateInput.addEventListener('focus', function() {
+            if (!this.disabled && typeof this.showPicker === 'function') {
+                try { this.showPicker(); } catch (e) {}
+            }
+        });
+    }
+});
+
+// Status option highlight + enable/disable date picker
+document.querySelectorAll('.status-radio').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        document.querySelectorAll('.status-option').forEach(function(option) {
+            option.classList.remove('border-yellow-400', 'bg-yellow-50', 'border-blue-400', 'bg-blue-50', 'border-green-400', 'bg-green-50');
+            option.classList.add('border-gray-200');
+        });
+        var selected = this.closest('.status-option');
+        if (this.value === 'draft') {
+            selected.classList.remove('border-gray-200');
+            selected.classList.add('border-yellow-400', 'bg-yellow-50');
+        } else if (this.value === 'scheduled') {
+            selected.classList.remove('border-gray-200');
+            selected.classList.add('border-blue-400', 'bg-blue-50');
+        } else if (this.value === 'published') {
+            selected.classList.remove('border-gray-200');
+            selected.classList.add('border-green-400', 'bg-green-50');
+        }
+
+        // Toggle date picker enabled/disabled based on selected status
+        var dateInput = document.getElementById('published_at');
+        var dateError = document.getElementById('publishedAtError');
+        if (dateInput) {
+            if (this.value === 'scheduled') {
+                dateInput.disabled = false;
+                dateInput.required = true;
+                dateInput.classList.remove('opacity-50', 'bg-gray-100', 'cursor-not-allowed');
+                if (dateError) dateError.classList.add('hidden');
+            } else {
+                dateInput.disabled = true;
+                dateInput.required = false;
+                dateInput.classList.add('opacity-50', 'bg-gray-100', 'cursor-not-allowed');
+                if (dateError) dateError.classList.add('hidden');
+            }
+        }
+    });
+});
+
+// Form validation: if scheduled is selected but date is empty, block submit
+document.addEventListener('DOMContentLoaded', function() {
+    var form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            var selectedStatus = document.querySelector('.status-radio:checked');
+            var dateInput = document.getElementById('published_at');
+            var dateError = document.getElementById('publishedAtError');
+            if (selectedStatus && selectedStatus.value === 'scheduled' && dateInput && !dateInput.value) {
+                e.preventDefault();
+                dateInput.classList.add('border-red-500');
+                if (dateError) dateError.classList.remove('hidden');
+                document.querySelector('.status-option').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return false;
+            }
+        });
+    }
+});
+</script>
 <script>
 // Image preview
 document.getElementById('image').addEventListener('change', function(e) {

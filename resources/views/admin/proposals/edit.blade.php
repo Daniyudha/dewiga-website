@@ -28,12 +28,12 @@
                 <div class="admin-card-body space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="form-label">Judul Proposal</label>
-                            <input type="text" name="proposal_title" value="{{ old('proposal_title', $proposal->proposal_title ?? '') }}" class="form-input" placeholder="Program Kunjungan Edukasi...">
+                            <label class="admin-label">Judul Proposal</label>
+                            <input type="text" name="proposal_title" value="{{ old('proposal_title', $proposal->proposal_title ?? '') }}" class="admin-input w-full shadow-md rounded-md border border-gray-300" placeholder="Program Kunjungan Edukasi...">
                         </div>
                         <div>
-                            <label class="form-label">Template Rundown</label>
-                            <select name="rundown_template_id" class="form-input">
+                            <label class="admin-label">Template Rundown</label>
+                            <select name="rundown_template_id" class="admin-input w-full shadow-md rounded-md border border-gray-300">
                                 <option value="">-- Tanpa Template --</option>
                                 @foreach($templates as $t)
                                     <option value="{{ $t->id }}" {{ old('rundown_template_id', $proposal->rundown_template_id) == $t->id ? 'selected' : '' }}>{{ $t->name }} ({{ $t->duration_days }}H)</option>
@@ -42,8 +42,8 @@
                         </div>
                     </div>
                     <div>
-                        <label class="form-label">Tujuan Program</label>
-                        <textarea name="program_objective" rows="2" class="form-input" placeholder="Tujuan dari program...">{{ old('program_objective', $proposal->program_objective) }}</textarea>
+                        <label class="admin-label">Tujuan Program</label>
+                        <textarea name="program_objective" rows="2" class="admin-input w-full shadow-md rounded-md border border-gray-300" placeholder="Tujuan dari program...">{{ old('program_objective', $proposal->program_objective) }}</textarea>
                     </div>
                 </div>
             </div>
@@ -58,37 +58,37 @@
                 <div class="admin-card-body space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="form-label">Nama Sekolah / Instansi <span class="text-red-500">*</span></label>
-                            <input type="text" name="institution_name" value="{{ old('institution_name', $proposal->institution_name) }}" class="form-input" required>
+                            <label class="admin-label">Nama Sekolah / Instansi <span class="text-red-500">*</span></label>
+                            <input type="text" name="institution_name" value="{{ old('institution_name', $proposal->institution_name) }}" class="admin-input w-full shadow-md rounded-md border border-gray-300" required>
                         </div>
                         <div>
-                            <label class="form-label">Penanggung Jawab <span class="text-red-500">*</span></label>
-                            <input type="text" name="contact_person" value="{{ old('contact_person', $proposal->contact_person) }}" class="form-input" required>
+                            <label class="admin-label">Penanggung Jawab <span class="text-red-500">*</span></label>
+                            <input type="text" name="contact_person" value="{{ old('contact_person', $proposal->contact_person) }}" class="admin-input w-full shadow-md rounded-md border border-gray-300" required>
                         </div>
                         <div>
-                            <label class="form-label">No. WhatsApp <span class="text-red-500">*</span></label>
-                            <input type="text" name="whatsapp" value="{{ old('whatsapp', $proposal->whatsapp) }}" class="form-input" required>
+                            <label class="admin-label">No. WhatsApp <span class="text-red-500">*</span></label>
+                            <input type="text" name="whatsapp" value="{{ old('whatsapp', $proposal->whatsapp) }}" class="admin-input w-full shadow-md rounded-md border border-gray-300" required>
                         </div>
                         <div>
-                            <label class="form-label">Tanggal Kedatangan <span class="text-red-500">*</span></label>
-                            <input type="date" name="arrival_date" value="{{ old('arrival_date', $proposal->arrival_date->format('Y-m-d')) }}" class="form-input" required>
+                            <label class="admin-label">Tanggal Kedatangan <span class="text-red-500">*</span></label>
+                            <input type="date" name="arrival_date" value="{{ old('arrival_date', $proposal->arrival_date->format('Y-m-d')) }}" class="admin-input w-full shadow-md rounded-md border border-gray-300" required>
                         </div>
                         <div>
-                            <label class="form-label">Tanggal Kepulangan <span class="text-red-500">*</span></label>
-                            <input type="date" name="departure_date" value="{{ old('departure_date', $proposal->departure_date->format('Y-m-d')) }}" class="form-input" required>
+                            <label class="admin-label">Tanggal Kepulangan <span class="text-red-500">*</span></label>
+                            <input type="date" name="departure_date" value="{{ old('departure_date', $proposal->departure_date->format('Y-m-d')) }}" class="admin-input w-full shadow-md rounded-md border border-gray-300" required>
                         </div>
                         <div>
-                            <label class="form-label">Jumlah Siswa <span class="text-red-500">*</span></label>
-                            <input type="number" name="student_count" id="student_count" value="{{ old('student_count', $proposal->student_count) }}" class="form-input" min="0" required>
+                            <label class="admin-label">Jumlah Siswa <span class="text-red-500">*</span></label>
+                            <input type="number" name="student_count" id="student_count" value="{{ old('student_count', $proposal->student_count) }}" class="admin-input w-full shadow-md rounded-md border border-gray-300" min="0" required>
                         </div>
                         <div>
-                            <label class="form-label">Jumlah Pendamping</label>
-                            <input type="number" name="companion_count" id="companion_count" value="{{ old('companion_count', $proposal->companion_count) }}" class="form-input" min="0">
+                            <label class="admin-label">Jumlah Pendamping</label>
+                            <input type="number" name="companion_count" id="companion_count" value="{{ old('companion_count', $proposal->companion_count) }}" class="admin-input w-full shadow-md rounded-md border border-gray-300" min="0">
                         </div>
                     </div>
                     <div>
-                        <label class="form-label">Catatan</label>
-                        <textarea name="notes" rows="2" class="form-input">{{ old('notes', $proposal->notes) }}</textarea>
+                        <label class="admin-label">Catatan</label>
+                        <textarea name="notes" rows="2" class="admin-input w-full shadow-md rounded-md border border-gray-300">{{ old('notes', $proposal->notes) }}</textarea>
                     </div>
                 </div>
             </div>
@@ -111,34 +111,34 @@
                     @endphp
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            <label class="form-label">Live In (malam)</label>
-                            <input type="number" name="live_in_nights" id="live_in_nights" value="{{ old('live_in_nights', $liveInNights) }}" class="form-input" min="0">
+                            <label class="admin-label">Live In (malam)</label>
+                            <input type="number" name="live_in_nights" id="live_in_nights" value="{{ old('live_in_nights', $liveInNights) }}" class="admin-input w-full shadow-md rounded-md border border-gray-300" min="0">
                         </div>
                         <div>
-                            <label class="form-label">Makan (kali)</label>
-                            <input type="number" name="meal_count" id="meal_count" value="{{ old('meal_count', $mealCount) }}" class="form-input" min="0">
+                            <label class="admin-label">Makan (kali)</label>
+                            <input type="number" name="meal_count" id="meal_count" value="{{ old('meal_count', $mealCount) }}" class="admin-input w-full shadow-md rounded-md border border-gray-300" min="0">
                         </div>
                         <div>
-                            <label class="form-label">Snack (kali)</label>
-                            <input type="number" name="snack_count" id="snack_count" value="{{ old('snack_count', $snackCount) }}" class="form-input" min="0">
+                            <label class="admin-label">Snack (kali)</label>
+                            <input type="number" name="snack_count" id="snack_count" value="{{ old('snack_count', $snackCount) }}" class="admin-input w-full shadow-md rounded-md border border-gray-300" min="0">
                         </div>
                         <div>
-                            <label class="form-label">Kegiatan Reguler</label>
-                            <input type="number" name="regular_activity_count" id="regular_activity_count" value="{{ old('regular_activity_count', $regularActivity) }}" class="form-input" min="0">
+                            <label class="admin-label">Kegiatan Reguler</label>
+                            <input type="number" name="regular_activity_count" id="regular_activity_count" value="{{ old('regular_activity_count', $regularActivity) }}" class="admin-input w-full shadow-md rounded-md border border-gray-300" min="0">
                         </div>
                         <div>
-                            <label class="form-label">Sesi Kesenian</label>
-                            <input type="number" name="art_sessions" id="art_sessions" value="{{ old('art_sessions', $artSessions) }}" class="form-input" min="0">
+                            <label class="admin-label">Sesi Kesenian</label>
+                            <input type="number" name="art_sessions" id="art_sessions" value="{{ old('art_sessions', $artSessions) }}" class="admin-input w-full shadow-md rounded-md border border-gray-300" min="0">
                         </div>
                         <div>
-                            <label class="form-label">Pertunjukan Kesenian</label>
-                            <input type="number" name="cultural_performances" id="cultural_performances" value="{{ old('cultural_performances', $culturalPerformances) }}" class="form-input" min="0">
+                            <label class="admin-label">Pertunjukan Kesenian</label>
+                            <input type="number" name="cultural_performances" id="cultural_performances" value="{{ old('cultural_performances', $culturalPerformances) }}" class="admin-input w-full shadow-md rounded-md border border-gray-300" min="0">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            <label class="form-label">Pembulatan</label>
-                            <select name="rounding_type" class="form-input">
+                            <label class="admin-label">Pembulatan</label>
+                            <select name="rounding_type" class="admin-input w-full shadow-md rounded-md border border-gray-300">
                                 <option value="none" {{ $proposal->rounding_type == 'none' ? 'selected' : '' }}>Tanpa Pembulatan</option>
                                 <option value="up_1000" {{ $proposal->rounding_type == 'up_1000' ? 'selected' : '' }}>Ke atas Rp1.000</option>
                                 <option value="up_5000" {{ $proposal->rounding_type == 'up_5000' ? 'selected' : '' }}>Ke atas Rp5.000</option>

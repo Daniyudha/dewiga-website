@@ -13,14 +13,6 @@
         </a>
     </div>
 
-    @if(session('message'))
-        <div class="mb-4 px-4 py-3 rounded-lg text-sm font-medium
-            @if(session('alert-type') == 'success') bg-green-100 text-green-800 border border-green-200
-            @else bg-red-100 text-red-800 border border-red-200 @endif">
-            {{ session('message') }}
-        </div>
-    @endif
-
     <div class="admin-card max-w-2xl">
         <div class="admin-card-body">
             <form method="POST" action="{{ route('admin.guests.update', $guest) }}">

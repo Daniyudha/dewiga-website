@@ -108,7 +108,7 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <div class="lg:col-span-2">
         @php $updateRoute = !(isset($duplicate) && $duplicate); @endphp
-        <form method="POST" action="{{ $updateRoute ? route('admin.price-calculator.update', $estimation) : route('admin.price-calculator.store') }}" class="space-y-6">
+        <form method="POST" id="calculatorForm" action="{{ $updateRoute ? route('admin.price-calculator.update', $estimation) : route('admin.price-calculator.store') }}" class="space-y-6">
             @csrf
             @if($updateRoute) @method('PUT') @endif
 
@@ -398,9 +398,9 @@
             </div>
         </div>
 
-        {{-- Actions --}}
-        <div class="flex flex-wrap gap-3">
-            <button type="button" id="calculateBtn" class="admin-btn-primary">
+        {{-- Actions Desktop --}}
+        <div class="hidden lg:flex flex-wrap gap-3">
+            <button type="button" class="calculate-btn admin-btn-primary">
                 <i class="fas fa-calculator mr-2"></i>
                 Hitung Estimasi
             </button>
@@ -432,6 +432,21 @@
                 </div>
             </div>
         </div>
+        {{-- Actions Mobile --}}
+        <div class="lg:hidden flex-wrap gap-3 space-y-3">
+            <button type="button" class="calculate-btn admin-btn-primary w-full">
+                <i class="fas fa-calculator mr-2"></i>
+                Hitung Estimasi
+            </button>
+            <button type="submit" class="admin-btn-success w-full">
+                <i class="fas fa-save mr-2"></i>
+                {{ isset($duplicate) && $duplicate ? 'Duplikasi Estimasi' : 'Simpan Perubahan' }}
+            </button>
+            <a href="{{ route('admin.price-calculator.index') }}" class="admin-btn-secondary w-full">
+                <i class="fas fa-times mr-2"></i>
+                Batal
+            </a>
+        </div>
     </div>
 </div>
 @endsection
@@ -439,7 +454,7 @@
 @push('scripts')
 <script>
 const calculatorForm = document.querySelector('#calculatorForm');
-const calculateBtn = document.getElementById('calculateBtn');
+const calculateBtns = document.querySelectorAll('.calculate-btn');
 const resultsContainer = document.getElementById('resultsContainer');
 
 let lastCalculationResult = null;
@@ -502,7 +517,7 @@ async function performCalculation() {
     data.addon_items = getAddonItemsData();
 
     try {
-        const response = await fetch('{{ route("admin.price-calculator.calculate") }}', {
+        const response = await fetch('{{ url('admin/price-calculator/calculate') }}', {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -548,7 +563,18 @@ function renderResults(result) {
     resultsContainer.innerHTML = html;
 }
 
-calculateBtn.addEventListener('click', performCalculation);
+calculateBtns.forEach(function(btn) {
+    btn.addEventListener('click', performCalculation);
+});
+
+// Auto-calculate on page load so Ringkasan Estimasi appears immediately
+setTimeout(function() {
+    try {
+        performCalculation();
+    } catch (e) {
+        console.error('Auto-calculate error:', e);
+    }
+}, 300);
 
 // Addon item button
 document.getElementById('addAddonItemBtn')?.addEventListener('click', function() {

@@ -11,7 +11,9 @@ class BlogController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Blog::with('user')->latest();
+        $query = Blog::with('user')
+            ->published()
+            ->latest('published_at');
 
         if ($request->category) {
             $query->whereHas('category', function ($q) use ($request) {
@@ -27,8 +29,12 @@ class BlogController extends Controller
 
     public function show(Blog $blog)
     {
-        $relatedBlogs = Blog::with('user')->where('id','!=',$blog->id)
+        abort_unless($blog->is_public, 404);
+
+        $relatedBlogs = Blog::with('user')
+                ->where('id','!=',$blog->id)
                 ->where('category_id', $blog->category_id)
+                ->published()
                 ->get();
         $categories = Category::get();
         $travel_packages = TravelPackage::with('galleries')->get()->take(2);

@@ -55,6 +55,13 @@ class StorePriceEstimationRequest extends FormRequest
             'other_addon_price' => 'nullable|numeric|min:0',
             'other_addon_quantity' => 'nullable|integer|min:1',
 
+            // New dynamic add-on items format (used by create/edit JS)
+            'addon_items' => 'nullable|array',
+            'addon_items.*.name' => 'required_with:addon_items|string|max:255',
+            'addon_items.*.unit_price' => 'required_with:addon_items|numeric|min:0',
+            'addon_items.*.quantity' => 'nullable|integer|min:1',
+
+            // Legacy custom items format
             'custom_items' => 'nullable|array',
             'custom_items.*.name' => 'required_with:custom_items|string|max:255',
             'custom_items.*.quantity' => 'nullable|integer|min:1',
@@ -95,11 +102,20 @@ class StorePriceEstimationRequest extends FormRequest
             'other_addon_active' => $this->boolean('other_addon_active'),
         ]);
 
+        // Filter custom_items: only keep items with a name and unit_price > 0
         if ($this->has('custom_items') && is_array($this->custom_items)) {
             $filtered = array_filter($this->custom_items, function ($item) {
                 return !empty(trim($item['name'] ?? '')) && (float) ($item['unit_price'] ?? 0) > 0;
             });
             $this->merge(['custom_items' => array_values($filtered)]);
+        }
+
+        // Filter addon_items: only keep items with a name and unit_price > 0
+        if ($this->has('addon_items') && is_array($this->addon_items)) {
+            $filtered = array_filter($this->addon_items, function ($item) {
+                return !empty(trim($item['name'] ?? '')) && (float) ($item['unit_price'] ?? 0) > 0;
+            });
+            $this->merge(['addon_items' => array_values($filtered)]);
         }
     }
 }

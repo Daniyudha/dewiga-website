@@ -97,6 +97,25 @@
 
 <body class="{{ App::getLocale() === 'en' ? '' : '' }}">
 
+    {{-- Global: Make date inputs clickable on whole field --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('input[type="date"], input[type="datetime-local"]').forEach(function(input) {
+                input.style.cursor = 'pointer';
+                input.addEventListener('click', function() {
+                    if (!this.disabled && typeof this.showPicker === 'function') {
+                        try { this.showPicker(); } catch (e) {}
+                    }
+                });
+                input.addEventListener('focus', function() {
+                    if (!this.disabled && typeof this.showPicker === 'function') {
+                        try { this.showPicker(); } catch (e) {}
+                    }
+                });
+            });
+        });
+    </script>
+
     {{-- HEADER --}}
     <header
         id="header"
