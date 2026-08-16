@@ -67,11 +67,23 @@
                     </div>
                 </div>
                 <div class="flex gap-2 ml-4">
-                    <a href="{{ route('admin.proposals.show', $proposal) }}" class="admin-btn-xs admin-btn-primary">
+                    @php
+                        $waNumP = preg_replace('/[^0-9]/', '', $proposal->whatsapp);
+                        if (substr($waNumP, 0, 1) === '0') $waNumP = '62' . substr($waNumP, 1);
+                        $publicProposalUrlP = url('proposal/' . $proposal->estimation_number);
+                        $waTextP = rawurlencode("Halo Bapak/Ibu,\n\nBerikut proposal program kegiatan untuk {$proposal->institution_name}.\n\nNomor: {$proposal->proposal_number}\nProgram: {$proposal->proposal_title}\nPeserta: {$proposal->service_participant_count} orang\nTotal: " . formatPrice($proposal->quotation_total) . "\n\nLihat Proposal: {$publicProposalUrlP}\n\nSalam,\nDesa Wisata Gabugan");
+                    @endphp
+                    <a href="{{ route('admin.proposals.show', $proposal) }}" class="admin-btn-xs admin-btn-primary" title="Lihat Proposal">
                         <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.proposals.pdf-view', $proposal) }}" target="_blank" class="admin-btn-xs admin-btn-info">
+                    <a href="{{ $publicProposalUrlP }}" target="_blank" class="admin-btn-xs admin-btn-info" title="Link Publik">
+                        <i class="fas fa-link"></i>
+                    </a>
+                    <a href="{{ route('admin.proposals.pdf-view', $proposal) }}" target="_blank" class="admin-btn-xs admin-btn-warning" title="PDF">
                         <i class="fas fa-file-pdf"></i>
+                    </a>
+                    <a href="https://wa.me/{{ $waNumP }}?text={{ $waTextP }}" target="_blank" class="admin-btn-xs admin-btn-success" title="Kirim WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
                     </a>
                 </div>
             </div>

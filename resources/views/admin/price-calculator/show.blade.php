@@ -11,7 +11,8 @@
     @php
         $waNum = preg_replace('/[^0-9]/', '', $estimation->whatsapp);
         if (substr($waNum, 0, 1) === '0') $waNum = '62' . substr($waNum, 1);
-        $waText = rawurlencode("Halo Bapak/Ibu,\n\nBerikut estimasi kunjungan ke Desa Wisata Gabugan.\n\nNomor Estimasi: {$estimation->estimation_number}\nInstansi: {$estimation->institution_name}\nPeserta: {$estimation->service_participant_count} orang\nEstimasi: " . formatPrice($estimation->rounded_price_per_person) . "/orang\nTotal: " . formatPrice($estimation->quotation_total) . "\n\nSalam,\nDesa Wisata Gabugan");
+        $publicEstUrl = url('estimasi/' . $estimation->estimation_number);
+        $waText = rawurlencode("Halo Bapak/Ibu,\n\nBerikut estimasi kunjungan ke Desa Wisata Gabugan.\n\nNomor Estimasi: {$estimation->estimation_number}\nInstansi: {$estimation->institution_name}\nPeserta: {$estimation->service_participant_count} orang\nEstimasi: " . formatPrice($estimation->rounded_price_per_person) . "/orang\nTotal: " . formatPrice($estimation->quotation_total) . "\n\nLihat Detail Estimasi: {$publicEstUrl}\n\nSalam,\nDesa Wisata Gabugan");
     @endphp
     @php
         $isConverted = $estimation->isConvertedToSchedule();
@@ -36,6 +37,10 @@
         <a href="{{ route('admin.price-calculator.pdf-download', $estimation) }}" class="admin-btn-sm admin-btn-warning" target="_blank">
             <i class="fas fa-download mr-1"></i>
             Download PDF
+        </a>
+        <a href="{{ $publicEstUrl }}" class="admin-btn-sm admin-btn-info" target="_blank">
+            <i class="fas fa-link mr-1"></i>
+            Link Publik
         </a>
         <a href="https://wa.me/{{ $waNum }}?text={{ $waText }}" class="admin-btn-sm admin-btn-success" target="_blank">
             <i class="fab fa-whatsapp mr-1"></i>

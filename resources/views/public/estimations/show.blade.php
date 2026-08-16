@@ -159,6 +159,24 @@
             font-weight: 600;
             margin-top: 4px;
         }
+        .btn-download {
+            display: inline-block;
+            background: #0a4a35;
+            color: #fff !important;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        .toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+            background: #eef3f1;
+            flex-wrap: wrap;
+        }
         @media (max-width: 600px) {
             .container { border-radius: 8px; }
             .body { padding: 18px 16px; }
@@ -251,7 +269,10 @@
                 @endif
             </div>
 
-            <div style="text-align:center;">
+            <div style="text-align:center; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                <a href="{{ route('public.estimation.pdf', $estimation->estimation_number) }}" class="btn-download" target="_blank">
+                    ⬇ Download PDF
+                </a>
                 <a href="https://api.whatsapp.com/send?phone=6281328856252&text={{ urlencode('Assalamualaikum, saya ingin bertanya mengenai estimasi ' . $estimation->estimation_number . ' (' . $estimation->institution_name . ')') }}" class="btn-whatsapp" target="_blank">
                     Tanya-Tanya via WhatsApp
                 </a>

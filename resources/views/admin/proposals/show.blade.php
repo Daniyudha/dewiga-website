@@ -30,9 +30,21 @@
                 <i class="fas fa-calendar-check mr-1"></i> Lihat Schedule
             </a>
         @endif
-        <a href="{{ route('admin.proposals.send-whatsapp', $proposal) }}" class="admin-btn-sm admin-btn-success" target="_blank">
+        @php
+            $publicProposalUrl = url('proposal/' . $proposal->estimation_number);
+            $waShareNum = preg_replace('/[^0-9]/', '', $proposal->whatsapp);
+            if (substr($waShareNum, 0, 1) === '0') $waShareNum = '62' . substr($waShareNum, 1);
+            $waShareText = rawurlencode("Halo Bapak/Ibu,\n\nBerikut proposal program kegiatan untuk {$proposal->institution_name}.\n\nNomor: " . ($proposal->proposal_number ?? $proposal->estimation_number) . "\nProgram: {$proposal->proposal_title}\nPeserta: {$proposal->service_participant_count} orang\nTotal: " . formatPrice($proposal->quotation_total) . "\n\nLihat Proposal: {$publicProposalUrl}\n\nSalam,\nDesa Wisata Gabugan");
+        @endphp
+        <a href="{{ $publicProposalUrl }}" class="admin-btn-sm admin-btn-info" target="_blank" title="Buka Link Publik Proposal">
+            <i class="fas fa-link mr-1"></i> Link Publik
+        </a>
+        <a href="https://wa.me/{{ $waShareNum }}?text={{ $waShareText }}" target="_blank" class="admin-btn-sm admin-btn-success" title="Kirim WhatsApp Proposal">
             <i class="fab fa-whatsapp mr-1"></i> Kirim WA
         </a>
+        <button type="button" class="admin-btn-sm admin-btn-secondary" title="Salin Link Publik" onclick="navigator.clipboard.writeText('{{ $publicProposalUrl }}'); alert('Link proposal berhasil disalin: {{ $publicProposalUrl }}');">
+            <i class="fas fa-copy mr-1"></i> Salin
+        </button>
         <a href="{{ route('admin.proposals.pdf-view', $proposal) }}" target="_blank" class="admin-btn-sm admin-btn-info">
             <i class="fas fa-file-pdf mr-1"></i> View PDF
         </a>
@@ -114,18 +126,18 @@
         </div>
     </div>
     <div class="admin-card-body border-t border-gray-100">
-        <form method="POST" action="{{ route('admin.proposals.update-program', $proposal) }}" class="flex gap-3 items-end">
+        <label class="form-label text-xs">Ganti Template Rundown</label>
+        <form method="POST" action="{{ route('admin.proposals.update-program', $proposal) }}" class="flex gap-3 items-center justify-start max-w-md">
             @csrf
             <div class="flex-1">
-                <label class="form-label text-xs">Ganti Template Rundown</label>
-                <select name="rundown_template_id" class="form-input text-sm">
+                <select name="rundown_template_id" class="admin-input w-full shadow-md rounded-md border border-gray-300">
                     <option value="">-- Hapus Template --</option>
                     @foreach($templates as $t)
                         <option value="{{ $t->id }}" {{ $selectedTemplate->id == $t->id ? 'selected' : '' }}>{{ $t->name }} ({{ $t->duration_days }}H)</option>
                     @endforeach
                 </select>
             </div>
-            <button type="submit" class="admin-btn-sm admin-btn-secondary text-sm">
+            <button type="submit" class="admin-btn-md admin-btn-secondary text-sm">
                 <i class="fas fa-sync mr-1"></i> Ganti
             </button>
         </form>
@@ -143,18 +155,17 @@
         <div class="text-center py-4">
             <div class="text-gray-300 mb-2"><i class="fas fa-clipboard-list text-4xl"></i></div>
             <p class="text-sm text-gray-500 mb-3">Belum ada template rundown yang dipilih.</p>
-            <form method="POST" action="{{ route('admin.proposals.update-program', $proposal) }}" class="flex gap-3 items-end justify-center max-w-md mx-auto">
+            <form method="POST" action="{{ route('admin.proposals.update-program', $proposal) }}" class="flex gap-3 items-center justify-center max-w-md mx-auto">
                 @csrf
                 <div class="flex-1">
-                    <label class="form-label text-xs">Pilih Template Rundown</label>
-                    <select name="rundown_template_id" class="form-input text-sm">
+                    <select name="rundown_template_id" class="admin-input w-full shadow-md rounded-md border border-gray-300">
                         <option value="">-- Pilih Template --</option>
                         @foreach($templates as $t)
                             <option value="{{ $t->id }}">{{ $t->name }} ({{ $t->duration_days }}H, {{ $t->items_count ?? $t->items->count() }} kegiatan)</option>
                         @endforeach
                     </select>
                 </div>
-                <button type="submit" class="admin-btn-sm admin-btn-primary text-sm">
+                <button type="submit" class="admin-btn-md admin-btn-primary text-sm">
                     <i class="fas fa-check mr-1"></i> Pilih
                 </button>
             </form>

@@ -10,6 +10,12 @@ Route::post('api/midtrans/webhook', [\App\Http\Controllers\MidtransWebhookContro
 
 // Public estimation view (no login required, for sharing via WhatsApp)
 Route::get('estimasi/{estimationNumber}', [\App\Http\Controllers\PublicEstimationController::class, 'show'])->name('public.estimation.show');
+// Public estimation PDF download (same PDF as admin, no login)
+Route::get('estimasi/{estimationNumber}/pdf', [\App\Http\Controllers\PublicEstimationController::class, 'pdf'])->name('public.estimation.pdf');
+// Public proposal view (no login required, for sharing via WhatsApp)
+Route::get('proposal/{estimationNumber}', [\App\Http\Controllers\PublicProposalController::class, 'show'])->name('public.proposal.show');
+// Public proposal PDF download (same PDF as admin, no login)
+Route::get('proposal/{estimationNumber}/pdf', [\App\Http\Controllers\PublicProposalController::class, 'pdf'])->name('public.proposal.pdf');
 
 Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']], function () {
 
