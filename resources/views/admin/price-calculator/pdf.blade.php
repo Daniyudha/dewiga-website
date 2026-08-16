@@ -34,7 +34,7 @@
         }
 
         .content {
-            padding: 110px 60px 80px 60px;
+            padding: 110px 55px 10px 55px;
             position: relative;
         }
 
@@ -228,7 +228,7 @@
             margin-bottom: 8px;
         }
         .signoff .signoff-img {
-            width: 150px;
+            width: 130px;
             height: auto;
             margin: 3px 0;
         }
@@ -411,7 +411,6 @@
         @endphp
         <div class="signoff">
             @if($signoffExists) <img src="{{ $signoffPath }}" alt="TTD" class="signoff-img"> @endif
-            <p style="font-size:6px; color:#666; margin-top:2px;">Rural Culture Experience</p>
         </div>
     </div>
 </body>
