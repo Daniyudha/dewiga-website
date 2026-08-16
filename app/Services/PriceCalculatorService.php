@@ -730,12 +730,14 @@ class PriceCalculatorService
             $freq = max(1, (int) ($item['frequency'] ?? 1));
             $unit = trim($item['unit'] ?? 'item');
             $unitPrice = max(0, (float) ($item['unit_price'] ?? 0));
+            $multiplier = max(1, (int) ($item['multiplier'] ?? 1));
+            $multiplierActive = !empty($item['multiplier_active']);
 
             if ($unitPrice <= 0) {
                 continue;
             }
 
-            $total = $qty * $freq * $unitPrice;
+            $total = $qty * $freq * $unitPrice * ($multiplierActive ? $multiplier : 1);
             $pricePerPerson = $serviceParticipants > 0 ? $total / $serviceParticipants : 0;
 
             $this->items[] = [
@@ -753,6 +755,8 @@ class PriceCalculatorService
                     'frequency' => $freq,
                     'unit' => $unit,
                     'unit_price' => $unitPrice,
+                    'multiplier' => $multiplier,
+                    'multiplier_active' => $multiplierActive,
                 ],
             ];
         }

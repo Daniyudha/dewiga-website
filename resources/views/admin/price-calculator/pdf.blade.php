@@ -361,7 +361,12 @@
                         @if(str_starts_with($item->item_code, 'custom_addon') || $item->item_code === 'other_addon')
                         <tr>
                             <td>{{ $cNum++ }}</td>
-                            <td>{{ $item->item_name }}</td>
+                            <td>
+                                {{ $item->item_name }}
+                                @if($item->has_multiplier)
+                                <br><span style="font-size:7px; color:#6b7280;">× {{ $item->multiplier }} (hari / periode / lainnya)</span>
+                                @endif
+                            </td>
                             <td>{{ $item->calculation_details['description'] ?? ($item->item_code === 'other_addon' ? 'Add-on' : '-') }}</td>
                             <td>{{ $item->quantity }}</td>
                             <td>{{ $item->frequency }}</td>

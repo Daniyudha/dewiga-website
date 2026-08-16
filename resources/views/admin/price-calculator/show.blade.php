@@ -148,7 +148,12 @@
                         <tbody>
                             @foreach($estimation->items as $item)
                                 <tr>
-                                    <td class="font-medium">{{ $item->item_code === 'guide_fund' ? 'Pemandu' : $item->item_name }}</td>
+                                    <td class="font-medium">
+                                        {{ $item->item_code === 'guide_fund' ? 'Pemandu' : $item->item_name }}
+                                        @if($item->has_multiplier)
+                                        <br><span class="text-xs text-gray-400">× {{ $item->multiplier }} (hari / periode / lainnya)</span>
+                                        @endif
+                                    </td>
                                     <td>{{ $item->quantity }}</td>
                                     <td>{{ $item->frequency }} {{ $item->unit }}</td>
                                     <td class="font-mono">{{ formatPrice($item->unit_price) }}</td>

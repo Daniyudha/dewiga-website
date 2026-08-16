@@ -211,10 +211,12 @@ function clientCalculate(data) {
         const name = item.name || ('Add-on ' + (idx + 1));
         const price = parseFloat(item.unit_price) || 0;
         const qty = parseInt(item.quantity) || 1;
+        const multiplier = parseInt(item.multiplier) || 1;
+        const multiplierActive = item.multiplier_active === '1' || item.multiplier_active === true || item.multiplier_active === 1;
         if (name && price > 0) {
             items.push({
                 code: 'custom_addon_' + (idx + 1), name: name, quantity: qty, frequency: 1, unit: 'unit',
-                unit_price: price, price_per_person: 0, total: qty * price
+                unit_price: price, price_per_person: 0, total: qty * price * (multiplierActive ? multiplier : 1)
             });
         }
     });

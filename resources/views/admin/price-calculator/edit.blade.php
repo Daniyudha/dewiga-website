@@ -80,6 +80,8 @@
                     'name' => $item->item_name,
                     'unit_price' => (float) $item->unit_price,
                     'quantity' => $item->quantity,
+                    'multiplier' => (int) ($details['multiplier'] ?? 1),
+                    'multiplier_active' => (bool) ($details['multiplier_active'] ?? false),
                 ];
                 break;
         }
@@ -362,6 +364,14 @@
                                     <div><label class="admin-label text-xs">Harga Satuan (Rp)</label><input type="number" class="admin-input ao-price" min="0" value="{{ $addon['unit_price'] }}" step="1000" readonly></div>
                                     <div><label class="admin-label text-xs">Jumlah</label><input type="number" class="admin-input ao-qty" min="1" value="{{ $addon['quantity'] }}"></div>
                                 </div>
+                                <div class="flex items-center gap-3 mt-2">
+                                    <label class="flex items-center gap-2 text-xs font-medium text-gray-600">
+                                        <input type="checkbox" class="ao-multiplier-active" {{ !empty($addon['multiplier_active']) ? 'checked' : '' }}>
+                                        Aktifkan Pengali
+                                    </label>
+                                    <input type="number" class="admin-input ao-multiplier w-24" min="1" value="{{ $addon['multiplier'] ?? 1 }}" placeholder="Pengali" {{ !empty($addon['multiplier_active']) ? '' : 'disabled' }}>
+                                    <span class="text-xs text-gray-400">Digunakan untuk pengalian hari / periode / lainnya</span>
+                                </div>
                             </div>
                             @endforeach
                         </div>
@@ -573,19 +583,21 @@ function getAddonItemsData() {
     const items = [];
     document.querySelectorAll('.addon-item-row').forEach(row => {
         const qty = parseInt(row.querySelector('.ao-qty')?.value) || 1;
+        const multiplier = parseInt(row.querySelector('.ao-multiplier')?.value) || 1;
+        const multiplierActive = row.querySelector('.ao-multiplier-active')?.checked || false;
         // New dropdown format: ao-addon select
         const code = row.querySelector('.ao-addon')?.value;
         if (code) {
             const addon = PRICE_DATA.addons.find(a => a.code === code);
             if (addon && addon.price > 0) {
-                items.push({ name: addon.name, unit_price: addon.price, quantity: qty });
+                items.push({ name: addon.name, unit_price: addon.price, quantity: qty, multiplier, multiplier_active: multiplierActive ? '1' : '0' });
             }
             return;
         }
         // Legacy format: ao-name + ao-price
         const name = row.querySelector('.ao-name')?.value?.trim();
         const price = parseFloat(row.querySelector('.ao-price')?.value) || 0;
-        if (name && price > 0) items.push({ name, unit_price: price, quantity: qty });
+        if (name && price > 0) items.push({ name, unit_price: price, quantity: qty, multiplier, multiplier_active: multiplierActive ? '1' : '0' });
     });
     return items;
 }
@@ -661,7 +673,7 @@ calculatorForm.addEventListener('submit', function() {
         return; // No addons, skip injection
     }
     addonItems.forEach((item, idx) => {
-        ['name', 'unit_price', 'quantity'].forEach(field => {
+        ['name', 'unit_price', 'quantity', 'multiplier', 'multiplier_active'].forEach(field => {
             const input = document.createElement('input');
             input.type = 'hidden';
             input.name = `addon_items[${idx}][${field}]`;
@@ -691,18 +703,45 @@ document.getElementById('addAddonItemBtn')?.addEventListener('click', function()
             <span class="text-sm font-medium text-gray-700">Add-on ${addonItemIndex}</span>
             <button type="button" class="admin-btn-sm admin-btn-danger" onclick="this.closest('.addon-item-row').remove(); debouncedCalculate();"><i class="fas fa-trash"></i> Hapus</button>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div><label class="admin-label text-xs">Pilih Add-on</label>
-                <select class="admin-input ao-addon">
-                    <option value="">-- Pilih Add-on --</option>
-                    ${PRICE_DATA.addons.map(a => `<option value="${a.code}">${a.name} (${formatCurrency(a.price)})</option>`).join('')}
-                </select>
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div><label class="admin-label text-xs">Nama Add-on</label><input type="text" class="admin-input ao-name" placeholder="Nama add-on"></div>
+            <div><label class="admin-label text-xs">Harga Satuan (Rp)</label><input type="number" class="admin-input ao-price" min="0" value="0" step="1000"></div>
             <div><label class="admin-label text-xs">Jumlah</label><input type="number" class="admin-input ao-qty" min="1" value="1"></div>
+        </div>
+        <div class="flex items-center gap-3 mt-2">
+            <label class="flex items-center gap-2 text-xs font-medium text-gray-600">
+                <input type="checkbox" class="ao-multiplier-active">
+                Aktifkan Pengali
+            </label>
+            <input type="number" class="admin-input ao-multiplier w-24" min="1" value="1" placeholder="Pengali" disabled>
+            <span class="text-xs text-gray-400">Digunakan untuk pengalian hari / periode / lainnya</span>
         </div>`;
     container.appendChild(row);
     row.querySelectorAll('input').forEach(el => el.addEventListener('input', debouncedCalculate));
     row.querySelectorAll('input, select').forEach(el => el.addEventListener('change', debouncedCalculate));
+
+    // Sync multiplier input disabled state with checkbox
+    const multCheck = row.querySelector('.ao-multiplier-active');
+    const multInput = row.querySelector('.ao-multiplier');
+    function syncMult() {
+        multInput.disabled = !multCheck.checked;
+        if (!multCheck.checked) multInput.value = 1;
+    }
+    multCheck.addEventListener('change', () => { syncMult(); debouncedCalculate(); });
+    syncMult();
+});
+
+// Sync multiplier state for pre-rendered (stored) rows
+document.querySelectorAll('.addon-item-row').forEach(row => {
+    const multCheck = row.querySelector('.ao-multiplier-active');
+    const multInput = row.querySelector('.ao-multiplier');
+    if (!multCheck || !multInput) return;
+    function syncStoredMult() {
+        multInput.disabled = !multCheck.checked;
+        if (!multCheck.checked) multInput.value = 1;
+    }
+    multCheck.addEventListener('change', () => { syncStoredMult(); debouncedCalculate(); });
+    syncStoredMult();
 });
 </script>
 @endpush

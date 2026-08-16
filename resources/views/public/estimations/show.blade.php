@@ -265,7 +265,12 @@
                     <tbody>
                         @foreach($addonItems as $item)
                         <tr>
-                            <td>{{ $item->item_name }}</td>
+                            <td>
+                                {{ $item->item_name }}
+                                @if($item->has_multiplier)
+                                <br><small style="color:#8a9a93; font-size:11px;">× {{ $item->multiplier }} (hari / periode / lainnya)</small>
+                                @endif
+                            </td>
                             <td class="num">{{ $item->quantity }}</td>
                             <td class="num">{{ $item->frequency }}</td>
                             <td class="num">{{ $item->unit }}</td>

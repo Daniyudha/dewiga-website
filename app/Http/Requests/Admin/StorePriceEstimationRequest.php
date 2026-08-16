@@ -60,6 +60,8 @@ class StorePriceEstimationRequest extends FormRequest
             'addon_items.*.name' => 'required_with:addon_items|string|max:255',
             'addon_items.*.unit_price' => 'required_with:addon_items|numeric|min:0',
             'addon_items.*.quantity' => 'nullable|integer|min:1',
+            'addon_items.*.multiplier' => 'nullable|integer|min:1',
+            'addon_items.*.multiplier_active' => 'nullable|in:0,1',
 
             // Legacy custom items format
             'custom_items' => 'nullable|array',

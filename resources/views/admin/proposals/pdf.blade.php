@@ -242,7 +242,12 @@
             <tbody>
                 @foreach($proposal->items as $item)
                 <tr>
-                    <td>{{ $item->item_code === 'guide_fund' ? 'Pemandu' : $item->item_name }}</td>
+                    <td>
+                        {{ $item->item_code === 'guide_fund' ? 'Pemandu' : $item->item_name }}
+                        @if($item->has_multiplier)
+                        <br><span style="font-size:7px; color:#6b7280;">× {{ $item->multiplier }} (pengali)</span>
+                        @endif
+                    </td>
                     <td class="text-center">{{ $item->quantity }}</td>
                     <td class="text-center">{{ $item->frequency }} {{ $item->unit }}</td>
                     <td class="text-right text-mono">IDR {{ number_format($item->unit_price, 0, ',', '.') }}</td>
