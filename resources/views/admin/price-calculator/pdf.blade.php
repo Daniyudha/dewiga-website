@@ -41,7 +41,7 @@
         .header {
             text-align: center;
             margin-bottom: 8px;
-            margin-top: 80px;
+            margin-top: 50px;
         }
         .header h1 {
             font-size: 14px;
@@ -97,7 +97,7 @@
         }
 
         .component-list {
-            margin: 8px 0;
+            margin: 6px 0;
             padding: 0;
         }
         .component-card {
@@ -106,7 +106,7 @@
             backdrop-filter: blur(8px);
             border: 0.5px solid rgba(22, 101, 52, 0.2);
             border-radius: 3px;
-            padding: 5px 10px;
+            padding: 2px 10px;
             margin: 3px 3px;
             font-size: 10px;
             color: #166534;
@@ -122,14 +122,14 @@
         table.items th {
             background: #166534;
             color: white;
-            padding: 3px 3px;
+            padding: 2px 2px;
             text-align: left;
             font-size: 9px;
             text-transform: uppercase;
             letter-spacing: 0.2px;
         }
         table.items td {
-            padding: 2.5px 3px;
+            padding: 2px 3px;
             border-bottom: 0.5px solid #ddd;
             vertical-align: middle;
         }
