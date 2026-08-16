@@ -13,7 +13,6 @@ class PublicProposalController extends Controller
     public function pdf(string $estimationNumber)
     {
         $proposal = PriceEstimation::where('estimation_number', $estimationNumber)
-            ->whereNotNull('proposal_title')
             ->with(['items' => fn($q) => $q->orderBy('sort_order'), 'createdBy'])
             ->firstOrFail();
 
@@ -36,7 +35,6 @@ class PublicProposalController extends Controller
     public function show(string $estimationNumber)
     {
         $estimation = PriceEstimation::where('estimation_number', $estimationNumber)
-            ->whereNotNull('proposal_title')
             ->with(['items' => fn($q) => $q->orderBy('sort_order'), 'createdBy'])
             ->firstOrFail();
 
