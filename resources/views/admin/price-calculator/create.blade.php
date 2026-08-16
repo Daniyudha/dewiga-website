@@ -526,7 +526,7 @@ document.getElementById('addAddonItemBtn')?.addEventListener('click', function()
             <div><label class="admin-label text-xs">Pilih Add-on</label>
                 <select class="admin-input ao-addon">
                     <option value="">-- Pilih Add-on --</option>
-                    ${PRICE_DATA.addons.map(a => `<option value="${a.code}">${a.name} (${formatPrice(a.price)})</option>`).join('')}
+                    ${PRICE_DATA.addons.map(a => `<option value="${a.code}">${a.name} (${formatCurrency(a.price)})</option>`).join('')}
                 </select>
             </div>
             <div><label class="admin-label text-xs">Jumlah</label><input type="number" class="admin-input ao-qty" min="1" value="1"></div>
