@@ -311,10 +311,10 @@
                     <th style="width:4%">No</th>
                     <th style="width:26%">Komponen</th>
                     <th style="width:7%">Qty</th>
-                    <th style="width:9%">Frekuensi</th>
-                    <th style="width:14%">Harga Satuan</th>
-                    <th style="width:14%; text-align: center;">Harga/Orang</th>
-                    <th style="width:14%; text-align: center;">Jumlah</th>
+                    <th style="width:9%;">Frekuensi</th>
+                    <th style="width:14%; text-align: right;">Harga Satuan</th>
+                    <th style="width:14%; text-align: right;">Harga/Orang</th>
+                    <th style="width:14%; text-align: right;">Jumlah</th>
                 </tr>
             </thead>
             <tbody>
@@ -327,7 +327,13 @@
                         <td>{{ $item->quantity }}</td>
                         <td>{{ $item->frequency }} {{ $item->unit }}</td>
                         <td class="text-mono text-right">Rp {{ number_format($item->unit_price, 0, ',', '.') }}</td>
-                        <td class="text-mono text-right">Rp {{ number_format($item->price_per_person, 0, ',', '.') }}</td>
+                        <td class="text-mono text-right">
+                            @if(in_array($item->item_code, ['cultural_performance', 'live_music', 'professional_sound', 'stage_lighting', 'sound_lighting_package', 'pickup', 'cooking_competition']))
+                                -
+                            @else
+                                Rp {{ number_format($item->price_per_person, 0, ',', '.') }}
+                            @endif
+                        </td>
                         <td class="text-mono text-right">Rp {{ number_format($item->total, 0, ',', '.') }}</td>
                     </tr>
                 @endforeach

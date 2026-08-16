@@ -58,13 +58,17 @@
         .info-table td:first-child { font-weight: bold; width: 140px; color: #555; }
 
         .day-title { background: #166534; color: white; padding: 5px 10px; font-size: 10pt; font-weight: bold; margin-bottom: 5px; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
-        th { background: #dcfce7; padding: 3px 5px; text-align: left; font-size: 7.5pt; border: 1px solid #86efac; }
-        td { padding: 2px 5px; border: 1px solid #ddd; font-size: 7.5pt; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 6px; font-size: 9pt; }
+        th { background: #166534; color: white; padding: 3px 4px; text-align: left; font-size: 8pt; text-transform: uppercase; letter-spacing: 0.2px; border: none; }
+        td { padding: 2.5px 4px; border-bottom: 0.5px solid #ddd; border-left: none; border-right: none; border-top: none; vertical-align: middle; font-size: 8pt; }
+        tr:nth-child(even) { background: rgba(22, 101, 52, 0.03); }
+        .text-right { text-align: right; }
+        .text-mono { font-family: 'Courier', monospace; }
         .time-col { width: 55px; font-family: 'Courier', monospace; white-space: nowrap; }
         
-        .compact-table th { padding: 2px 4px; font-size: 7pt; }
-        .compact-table td { padding: 2px 4px; font-size: 7pt; }
+        .compact-table th { background: #166534; color: white; padding: 2px 4px; font-size: 7.5pt; text-transform: uppercase; letter-spacing: 0.2px; border: none; }
+        .compact-table td { padding: 2px 4px; border-bottom: 0.5px solid #ddd; border-left: none; border-right: none; border-top: none; font-size: 7.5pt; }
+        .compact-table tr:nth-child(even) { background: rgba(22, 101, 52, 0.03); }
 
         .price-total { font-weight: bold; color: #166534; }
 
@@ -225,16 +229,31 @@
         <div class="page-number">{{ $pageNum }}</div>
         <div class="section-title">Penawaran Harga</div>
         <table>
-            <thead><tr><th>Komponen</th><th>Qty</th><th>Frekuensi</th><th>Harga Satuan</th><th>Harga/Orang</th><th>Jumlah</th></tr></thead>
+            <thead>
+                <tr>
+                    <th>Komponen</th>
+                    <th class="text-center">Qty</th>
+                    <th class="text-center">Frekuensi</th>
+                    <th class="text-right">Harga Satuan</th>
+                    <th class="text-right">Harga/Orang</th>
+                    <th class="text-right">Jumlah</th>
+                </tr>
+            </thead>
             <tbody>
                 @foreach($proposal->items as $item)
                 <tr>
                     <td>{{ $item->item_code === 'guide_fund' ? 'Pemandu' : $item->item_name }}</td>
-                    <td>{{ $item->quantity }}</td>
-                    <td>{{ $item->frequency }} {{ $item->unit }}</td>
-                    <td style="text-align:right;">IDR {{ number_format($item->unit_price, 0, ',', '.') }}</td>
-                    <td style="text-align:right;">IDR {{ number_format($item->price_per_person, 0, ',', '.') }}</td>
-                    <td style="text-align:right; font-weight:bold;">IDR {{ number_format($item->total, 0, ',', '.') }}</td>
+                    <td class="text-center">{{ $item->quantity }}</td>
+                    <td class="text-center">{{ $item->frequency }} {{ $item->unit }}</td>
+                    <td class="text-right text-mono">IDR {{ number_format($item->unit_price, 0, ',', '.') }}</td>
+                    <td class="text-right text-mono">
+                        @if(in_array($item->item_code, ['cultural_performance', 'live_music', 'professional_sound', 'stage_lighting', 'sound_lighting_package', 'custom_addon_1', 'custom_addon_2', 'custom_addon_3', 'custom_addon_4', 'custom_addon_5', 'other_addon', 'pickup', 'cooking_competition']))
+                            -
+                        @else
+                            IDR {{ number_format($item->price_per_person, 0, ',', '.') }}
+                        @endif
+                    </td>
+                    <td class="text-right text-mono" style="font-weight:bold;">IDR {{ number_format($item->total, 0, ',', '.') }}</td>
                 </tr>
                 @endforeach
             </tbody>

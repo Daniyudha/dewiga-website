@@ -331,7 +331,7 @@ class PriceCalculatorService
 
         $this->items[] = [
             'code' => 'guide_fund',
-            'name' => 'Kas dan Pemandu',
+            'name' => 'Pemandu',
             'quantity' => $participants,
             'frequency' => 1,
             'unit' => 'paket',

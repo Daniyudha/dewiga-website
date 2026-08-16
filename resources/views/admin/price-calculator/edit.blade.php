@@ -358,8 +358,8 @@
                                     <button type="button" class="admin-btn-sm admin-btn-danger" onclick="this.closest('.addon-item-row').remove(); debouncedCalculate();"><i class="fas fa-trash"></i> Hapus</button>
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div><label class="admin-label text-xs">Nama Add-on</label><input type="text" class="admin-input ao-name" value="{{ $addon['name'] }}"></div>
-                                    <div><label class="admin-label text-xs">Harga Satuan (Rp)</label><input type="number" class="admin-input ao-price" min="0" value="{{ $addon['unit_price'] }}" step="1000"></div>
+                                    <div><label class="admin-label text-xs">Nama Add-on</label><input type="text" class="admin-input ao-name" value="{{ $addon['name'] }}" readonly></div>
+                                    <div><label class="admin-label text-xs">Harga Satuan (Rp)</label><input type="number" class="admin-input ao-price" min="0" value="{{ $addon['unit_price'] }}" step="1000" readonly></div>
                                     <div><label class="admin-label text-xs">Jumlah</label><input type="number" class="admin-input ao-qty" min="1" value="{{ $addon['quantity'] }}"></div>
                                 </div>
                             </div>
@@ -572,9 +572,19 @@ function debouncedCalculate() {
 function getAddonItemsData() {
     const items = [];
     document.querySelectorAll('.addon-item-row').forEach(row => {
-        const name = row.querySelector('.ao-name').value?.trim();
-        const price = parseFloat(row.querySelector('.ao-price').value) || 0;
-        const qty = parseInt(row.querySelector('.ao-qty').value) || 1;
+        const qty = parseInt(row.querySelector('.ao-qty')?.value) || 1;
+        // New dropdown format: ao-addon select
+        const code = row.querySelector('.ao-addon')?.value;
+        if (code) {
+            const addon = PRICE_DATA.addons.find(a => a.code === code);
+            if (addon && addon.price > 0) {
+                items.push({ name: addon.name, unit_price: addon.price, quantity: qty });
+            }
+            return;
+        }
+        // Legacy format: ao-name + ao-price
+        const name = row.querySelector('.ao-name')?.value?.trim();
+        const price = parseFloat(row.querySelector('.ao-price')?.value) || 0;
         if (name && price > 0) items.push({ name, unit_price: price, quantity: qty });
     });
     return items;
@@ -630,6 +640,37 @@ calculateBtns.forEach(function(btn) {
     btn.addEventListener('click', performCalculation);
 });
 
+// FIX: Inject addon_items + ensure rounding_type into form before submit
+calculatorForm.addEventListener('submit', function() {
+    // Remove any previously injected hidden inputs
+    this.querySelectorAll('input[name^="addon_items"]').forEach(el => el.remove());
+    this.querySelectorAll('input[name="rounding_type"]').forEach(el => el.remove());
+
+    // Ensure rounding_type is always sent (sync from select)
+    const roundingSelect = this.querySelector('#rounding_type');
+    if (roundingSelect) {
+        const hiddenRt = document.createElement('input');
+        hiddenRt.type = 'hidden';
+        hiddenRt.name = 'rounding_type';
+        hiddenRt.value = roundingSelect.value;
+        this.appendChild(hiddenRt);
+    }
+
+    const addonItems = getAddonItemsData();
+    if (!this.querySelector('#other_addon_active').checked || addonItems.length === 0) {
+        return; // No addons, skip injection
+    }
+    addonItems.forEach((item, idx) => {
+        ['name', 'unit_price', 'quantity'].forEach(field => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = `addon_items[${idx}][${field}]`;
+            input.value = item[field] ?? '';
+            this.appendChild(input);
+        });
+    });
+});
+
 // Auto-calculate on page load so Ringkasan Estimasi appears immediately
 setTimeout(function() {
     try {
@@ -650,13 +691,18 @@ document.getElementById('addAddonItemBtn')?.addEventListener('click', function()
             <span class="text-sm font-medium text-gray-700">Add-on ${addonItemIndex}</span>
             <button type="button" class="admin-btn-sm admin-btn-danger" onclick="this.closest('.addon-item-row').remove(); debouncedCalculate();"><i class="fas fa-trash"></i> Hapus</button>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div><label class="admin-label text-xs">Nama Add-on</label><input type="text" class="admin-input ao-name" placeholder="Nama add-on"></div>
-            <div><label class="admin-label text-xs">Harga Satuan (Rp)</label><input type="number" class="admin-input ao-price" min="0" value="0" step="1000"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div><label class="admin-label text-xs">Pilih Add-on</label>
+                <select class="admin-input ao-addon">
+                    <option value="">-- Pilih Add-on --</option>
+                    ${PRICE_DATA.addons.map(a => `<option value="${a.code}">${a.name} (${formatPrice(a.price)})</option>`).join('')}
+                </select>
+            </div>
             <div><label class="admin-label text-xs">Jumlah</label><input type="number" class="admin-input ao-qty" min="1" value="1"></div>
         </div>`;
     container.appendChild(row);
     row.querySelectorAll('input').forEach(el => el.addEventListener('input', debouncedCalculate));
+    row.querySelectorAll('input, select').forEach(el => el.addEventListener('change', debouncedCalculate));
 });
 </script>
 @endpush

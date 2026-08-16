@@ -79,7 +79,7 @@ function clientCalculate(data) {
         });
     }
 
-    // 4. Kas dan Pemandu
+    // 4. Pemandu
     if (serviceParticipants > 0) {
         const tier = getTier('guide_fund', serviceParticipants);
         // Fallback: find nearest tier
@@ -95,7 +95,7 @@ function clientCalculate(data) {
         }
         if (tierPrice > 0) {
             items.push({
-                code: 'guide_fund', name: 'Kas dan Pemandu', quantity: serviceParticipants, frequency: 1, unit: 'paket',
+                code: 'guide_fund', name: 'Pemandu', quantity: serviceParticipants, frequency: 1, unit: 'paket',
                 unit_price: tierPrice, price_per_person: tierPrice, total: serviceParticipants * tierPrice
             });
         }

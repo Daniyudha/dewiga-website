@@ -148,11 +148,17 @@
                         <tbody>
                             @foreach($estimation->items as $item)
                                 <tr>
-                                    <td class="font-medium">{{ $item->item_name }}</td>
+                                    <td class="font-medium">{{ $item->item_code === 'guide_fund' ? 'Pemandu' : $item->item_name }}</td>
                                     <td>{{ $item->quantity }}</td>
                                     <td>{{ $item->frequency }} {{ $item->unit }}</td>
                                     <td class="font-mono">{{ formatPrice($item->unit_price) }}</td>
-                                    <td class="font-mono">{{ formatPrice($item->price_per_person) }}</td>
+                                    <td class="font-mono">
+                                        @if(in_array($item->item_code, ['cultural_performance', 'live_music', 'professional_sound', 'stage_lighting', 'sound_lighting_package', 'custom_addon_1', 'custom_addon_2', 'custom_addon_3', 'custom_addon_4', 'custom_addon_5', 'other_addon', 'pickup', 'cooking_competition']))
+                                            -
+                                        @else
+                                            {{ formatPrice($item->price_per_person) }}
+                                        @endif
+                                    </td>
                                     <td class="font-mono font-semibold">{{ formatPrice($item->total) }}</td>
                                 </tr>
                             @endforeach
@@ -189,6 +195,9 @@
                             @case('up_1000') Ke atas Rp1.000 @break
                             @case('up_5000') Ke atas Rp5.000 @break
                             @case('up_10000') Ke atas Rp10.000 @break
+                            @case('down_1000') Ke bawah Rp1.000 @break
+                            @case('down_5000') Ke bawah Rp5.000 @break
+                            @case('down_10000') Ke bawah Rp10.000 @break
                             @default Tanpa Pembulatan
                         @endswitch
                     </span>

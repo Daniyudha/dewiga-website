@@ -214,9 +214,13 @@
                 </div>
             </div>
 
+            @php
+                $mainItems = $estimation->items->sortBy('sort_order')->reject(fn($i) => str_starts_with($i->item_code, 'custom_addon') || $i->item_code === 'other_addon');
+                $addonItems = $estimation->items->filter(fn($i) => str_starts_with($i->item_code, 'custom_addon') || $i->item_code === 'other_addon');
+            @endphp
             <h2>Rincian Biaya</h2>
             <div class="table-wrap">
-                @if($estimation->items->count() > 0)
+                @if($mainItems->count() > 0)
                 <table>
                     <thead>
                         <tr>
@@ -228,9 +232,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($estimation->items->sortBy('sort_order') as $item)
+                        @foreach($mainItems as $item)
                         <tr>
-                            <td>{{ $item->item_name }}</td>
+                            <td>{{ $item->item_code === 'guide_fund' ? 'Pemandu' : $item->item_name }}</td>
                             <td class="num">{{ $item->quantity }}</td>
                             <td class="num">{{ $item->frequency }} {{ $item->unit }}</td>
                             <td class="num">{{ formatPrice($item->unit_price) }}</td>
@@ -244,6 +248,36 @@
                 @endif
             </div>
 
+            @if($addonItems->count() > 0)
+            <h2>Item Tambahan</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nama Item</th>
+                            <th class="num">Qty</th>
+                            <th class="num">Frekuensi</th>
+                            <th class="num">Satuan</th>
+                            <th class="num">Harga Satuan</th>
+                            <th class="num">Jumlah</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($addonItems as $item)
+                        <tr>
+                            <td>{{ $item->item_name }}</td>
+                            <td class="num">{{ $item->quantity }}</td>
+                            <td class="num">{{ $item->frequency }}</td>
+                            <td class="num">{{ $item->unit }}</td>
+                            <td class="num">{{ formatPrice($item->unit_price) }}</td>
+                            <td class="num">{{ formatPrice($item->total) }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            @endif
+
             <div class="summary">
                 <div class="summary-row">
                     <span>Grand Total Biaya</span>
@@ -254,7 +288,7 @@
                     <span>{{ formatPrice($estimation->actual_price_per_person) }}</span>
                 </div>
                 <div class="summary-row">
-                    <span>Harga per Orang</span>
+                    <span>Harga per Orang (Setelah Pembulatan)</span>
                     <span>{{ formatPrice($estimation->rounded_price_per_person) }}</span>
                 </div>
                 <div class="summary-row total">
