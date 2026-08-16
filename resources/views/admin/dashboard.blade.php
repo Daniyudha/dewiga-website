@@ -113,24 +113,24 @@
     </div>
 
     {{-- Charts --}}
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         {{-- Daily Visits Chart --}}
-        <div class="admin-card">
+        <div class="admin-card col-span-1 lg:col-span-2">
             <div class="admin-card-header">
                 <h3 class="font-heading font-semibold text-gray-800">{{ __('Daily Visits (Periode)') }}</h3>
             </div>
             <div class="admin-card-body">
-                <canvas id="dailyVisitsChart" height="200"></canvas>
+                <canvas id="dailyVisitsChart" height="300"></canvas>
             </div>
         </div>
 
         {{-- Device Stats Chart --}}
-        <div class="admin-card">
+        <div class="admin-card col-span-1">
             <div class="admin-card-header">
                 <h3 class="font-heading font-semibold text-gray-800">{{ __('Device Distribution') }}</h3>
             </div>
             <div class="admin-card-body">
-                <canvas id="deviceChart" height="200"></canvas>
+                <canvas id="deviceChart" height="300"></canvas>
             </div>
         </div>
     </div>
