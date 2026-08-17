@@ -120,17 +120,19 @@ function clientCalculate(data) {
         }
     }
 
-    // 6. Kesenian Peserta
+    // 6. Kesenian Peserta (harga per sesi, TIDAK dikali jumlah peserta)
     const artSessions = parseInt(data.art_sessions) || 0;
     if (artSessions > 0 && activityParticipants > 0) {
         const tier = getTier('participant_art_activity', activityParticipants);
         if (tier && tier.price > 0) {
             const overCount = Math.max(0, activityParticipants - tier.max);
             const extraCost = overCount > 0 ? overCount * tier.additional : 0;
-            const total = activityParticipants * artSessions * tier.price + extraCost;
+            const sessionPrice = tier.price + extraCost;
+            const total = sessionPrice * artSessions;
+            const pricePerPerson = activityParticipants > 0 ? total / activityParticipants : 0;
             items.push({
                 code: 'participant_art_activity', name: 'Kegiatan Kesenian Peserta', quantity: activityParticipants, frequency: artSessions, unit: 'sesi',
-                unit_price: tier.price, price_per_person: artSessions * tier.price, total: total
+                unit_price: sessionPrice, price_per_person: pricePerPerson, total: total
             });
         }
     }
