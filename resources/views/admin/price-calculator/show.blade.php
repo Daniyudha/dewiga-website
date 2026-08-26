@@ -158,7 +158,11 @@
                                     <td>{{ $item->frequency }} {{ $item->unit }}</td>
                                     <td class="font-mono">{{ formatPrice($item->unit_price) }}</td>
                                     <td class="font-mono">
-                                        @if(in_array($item->item_code, ['cultural_performance', 'live_music', 'professional_sound', 'stage_lighting', 'sound_lighting_package', 'custom_addon_1', 'custom_addon_2', 'custom_addon_3', 'custom_addon_4', 'custom_addon_5', 'other_addon', 'pickup', 'cooking_competition']))
+                                        @php
+                                            $isFixPrice = in_array($item->item_code, ['cultural_performance', 'live_music', 'professional_sound', 'stage_lighting', 'sound_lighting_package', 'other_addon', 'pickup', 'cooking_competition'])
+                                                || str_starts_with($item->item_code, 'custom_addon');
+                                        @endphp
+                                        @if($isFixPrice)
                                             -
                                         @else
                                             {{ formatPrice($item->price_per_person) }}

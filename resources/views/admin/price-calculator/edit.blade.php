@@ -71,11 +71,6 @@
                 $stored['live_music_performances'] = $details['performances'] ?? $item->frequency;
                 break;
             case 'other_addon':
-            case 'custom_addon_1':
-            case 'custom_addon_2':
-            case 'custom_addon_3':
-            case 'custom_addon_4':
-            case 'custom_addon_5':
                 $stored['addon_items'][] = [
                     'name' => $item->item_name,
                     'unit_price' => (float) $item->unit_price,
@@ -83,6 +78,17 @@
                     'multiplier' => (int) ($details['multiplier'] ?? 1),
                     'multiplier_active' => (bool) ($details['multiplier_active'] ?? false),
                 ];
+                break;
+            default:
+                if (str_starts_with($item->item_code, 'custom_addon')) {
+                    $stored['addon_items'][] = [
+                        'name' => $item->item_name,
+                        'unit_price' => (float) $item->unit_price,
+                        'quantity' => $item->quantity,
+                        'multiplier' => (int) ($details['multiplier'] ?? 1),
+                        'multiplier_active' => (bool) ($details['multiplier_active'] ?? false),
+                    ];
+                }
                 break;
         }
     }

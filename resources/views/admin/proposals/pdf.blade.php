@@ -252,7 +252,11 @@
                     <td class="text-center">{{ $item->frequency }} {{ $item->unit }}</td>
                     <td class="text-right text-mono">IDR {{ number_format($item->unit_price, 0, ',', '.') }}</td>
                     <td class="text-right text-mono">
-                        @if(in_array($item->item_code, ['cultural_performance', 'live_music', 'professional_sound', 'stage_lighting', 'sound_lighting_package', 'custom_addon_1', 'custom_addon_2', 'custom_addon_3', 'custom_addon_4', 'custom_addon_5', 'other_addon', 'pickup', 'cooking_competition']))
+                        @php
+                            $isFixPrice = in_array($item->item_code, ['cultural_performance', 'live_music', 'professional_sound', 'stage_lighting', 'sound_lighting_package', 'other_addon', 'pickup', 'cooking_competition'])
+                                || str_starts_with($item->item_code, 'custom_addon');
+                        @endphp
+                        @if($isFixPrice)
                             -
                         @else
                             IDR {{ number_format($item->price_per_person, 0, ',', '.') }}
