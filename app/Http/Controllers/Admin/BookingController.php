@@ -114,6 +114,7 @@ class BookingController extends Controller
             $schedule = Schedule::create([
                 'travel_package_id' => $validated['travel_package_id'],
                 'visitor_name' => $validated['name'],
+                'guest_type' => $validated['guest_type'] ?? 'lokal',
                 'start_date' => $startDate,
                 'end_date' => $validated['end_date'] ?? null,
                 'quota' => $validated['people_count'] ?? 1,

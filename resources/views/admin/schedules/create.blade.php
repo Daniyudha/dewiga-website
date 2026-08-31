@@ -73,6 +73,20 @@
                         @enderror
                     </div>
 
+                    {{-- Guest Type --}}
+                    <div>
+                        <label for="guest_type" class="block text-sm font-medium text-gray-700 mb-1">
+                            {{ __('Guest Type') }}
+                        </label>
+                        <select name="guest_type" id="guest_type" class="admin-input w-full @error('guest_type') border-red-500 @enderror">
+                            <option value="lokal" {{ old('guest_type') == 'lokal' ? 'selected' : '' }}>Lokal</option>
+                            <option value="asing" {{ old('guest_type') == 'asing' ? 'selected' : '' }}>Asing</option>
+                        </select>
+                        @error('guest_type')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     {{-- Phone Number --}}
                     <div>
                         <label for="number_phone" class="block text-sm font-medium text-gray-700 mb-1">

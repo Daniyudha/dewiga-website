@@ -94,7 +94,7 @@
                 <input type="text" name="institution" value="{{ request('institution') }}" placeholder="Search institution..." class="form-input py-2 px-3 shadow-md rounded-md border border-gray-300 flex-1">
             </div>
             <div class="inline-flex items-center gap-2">
-                <select name="year" class="form-input w-18 py-2 px-3 shadow-md rounded-md border border-gray-300 text-sm">
+                <select name="year" class="form-input w-20 py-2 px-3 shadow-md rounded-md border border-gray-300 text-sm">
                     @foreach($years as $y)
                         <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
                     @endforeach
@@ -104,7 +104,7 @@
                     <option value="booking" {{ request('visit_type') == 'booking' ? 'selected' : '' }}>Booking</option>
                     <option value="open_trip" {{ request('visit_type') == 'open_trip' ? 'selected' : '' }}>Open Trip</option>
                 </select>
-                <select name="guest_type" class="form-input w-32 py-2 px-3 shadow-md rounded-md border border-gray-300 text-sm">
+                <select name="guest_type" class="form-input w-36 py-2 px-3 shadow-md rounded-md border border-gray-300 text-sm">
                     <option value="">Semua Tamu</option>
                     <option value="lokal" {{ request('guest_type') == 'lokal' ? 'selected' : '' }}>Lokal</option>
                     <option value="asing" {{ request('guest_type') == 'asing' ? 'selected' : '' }}>Asing</option>
@@ -160,10 +160,18 @@
                                 @endif
                             </td>
                             <td class="px-4 py-3 text-center">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                    {{ ($visit->guest_type ?? 'lokal') === 'asing' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' }}">
-                                    {{ $visit->guest_type_label ?? 'Lokal' }}
-                                </span>
+                                <form method="POST" action="{{ route('admin.visit-reports.update-guest-type') }}" class="inline-flex items-center gap-1">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="hidden" name="type" value="{{ $visit->type_key ?? 'schedule' }}">
+                                    <input type="hidden" name="id" value="{{ $visit->id }}">
+                                    <select name="guest_type" onchange="this.form.submit()"
+                                            class="text-xs font-medium rounded-full border-0 py-1 pl-3 pr-8 cursor-pointer
+                                                   {{ ($visit->guest_type ?? 'lokal') === 'asing' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800' }}">
+                                        <option value="lokal" {{ ($visit->guest_type ?? 'lokal') === 'lokal' ? 'selected' : '' }}>Lokal</option>
+                                        <option value="asing" {{ ($visit->guest_type ?? 'lokal') === 'asing' ? 'selected' : '' }}>Asing</option>
+                                    </select>
+                                </form>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-700 text-center">
                                 {{ $visit->start_date ? date('d/m/Y', strtotime($visit->start_date)) : '-' }}

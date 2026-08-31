@@ -20,6 +20,7 @@ class Schedule extends Model
         'is_active' => 'boolean',
         'type' => 'string',
         'status' => 'string',
+        'guest_type' => 'string',
     ];
 
     protected static function booted()

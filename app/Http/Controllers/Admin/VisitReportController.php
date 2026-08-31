@@ -116,9 +116,11 @@ class VisitReportController extends Controller
                     $los = 1;
                 }
 
-                $guestType = $booking->guest_type ?? 'lokal';
+                $guestType = $schedule->guest_type ?? $booking->guest_type ?? 'lokal';
 
                 return (object) [
+                    'id' => $schedule->id,
+                    'type_key' => 'schedule',
                     'visitor_name' => $booking->name ?? $schedule->visitor_name ?? '-',
                     'institution' => $booking->institution ?? '-',
                     'number_phone' => $booking->number_phone ?? '-',
@@ -153,6 +155,8 @@ class VisitReportController extends Controller
                 $guestType = $registration->guest_type ?? 'lokal';
 
                 return (object) [
+                    'id' => $registration->id,
+                    'type_key' => 'open_trip',
                     'visitor_name' => $registration->name ?? '-',
                     'institution' => $registration->institution ?? '-',
                     'number_phone' => $registration->number_phone ?? '-',
@@ -190,6 +194,37 @@ class VisitReportController extends Controller
         $visits = $visits->sortByDesc('start_date')->values();
 
         return $visits;
+    }
+
+    /**
+     * Update guest type (lokal/asing) from the visit report table.
+     */
+    public function updateGuestType(Request $request)
+    {
+        $validated = $request->validate([
+            'type' => 'required|in:schedule,open_trip',
+            'id' => 'required|integer',
+            'guest_type' => 'required|in:lokal,asing',
+        ]);
+
+        if ($validated['type'] === 'schedule') {
+            $schedule = Schedule::findOrFail($validated['id']);
+            $schedule->update(['guest_type' => $validated['guest_type']]);
+
+            // Keep the underlying booking in sync if one exists.
+            $booking = Booking::where('schedule_id', $schedule->id)->first();
+            if ($booking) {
+                $booking->update(['guest_type' => $validated['guest_type']]);
+            }
+        } else {
+            $registration = OpenTripRegistration::findOrFail($validated['id']);
+            $registration->update(['guest_type' => $validated['guest_type']]);
+        }
+
+        return redirect()->back()->with([
+            'message' => 'Tipe tamu berhasil diperbarui!',
+            'alert-type' => 'success',
+        ]);
     }
 
     private function getSummary($visits)

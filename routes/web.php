@@ -55,6 +55,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         Route::resource('guests', \App\Http\Controllers\Admin\GuestController::class)->except('show');
         Route::get('visit-reports', [\App\Http\Controllers\Admin\VisitReportController::class, 'index'])->name('visit-reports.index');
         Route::get('visit-reports/export', [\App\Http\Controllers\Admin\VisitReportController::class, 'export'])->name('visit-reports.export');
+        Route::patch('visit-reports/update-guest-type', [\App\Http\Controllers\Admin\VisitReportController::class, 'updateGuestType'])->name('visit-reports.update-guest-type');
         Route::resource('transactions', \App\Http\Controllers\Admin\TransactionController::class)->except('show');
 
         // Partner Logos

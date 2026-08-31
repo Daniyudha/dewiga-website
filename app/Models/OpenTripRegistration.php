@@ -23,6 +23,7 @@ class OpenTripRegistration extends Model
         'notes',
         'amount',
         'people_count',
+        'guest_type',
         'description',
     ];
 
@@ -32,6 +33,7 @@ class OpenTripRegistration extends Model
         'end_date' => 'date',
         'amount' => 'decimal:0',
         'people_count' => 'integer',
+        'guest_type' => 'string',
     ];
 
     public function schedule()
