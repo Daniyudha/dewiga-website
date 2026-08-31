@@ -102,7 +102,7 @@
     @if($user->hasAnyPermission(['guests.view', 'transactions.view']))
     <div class="nav-section mb-6">
         <div class="nav-section-title px-3 py-2 text-xs font-semibold text-white/40 uppercase tracking-wider">
-            Data Base
+            DataBase
         </div>
         @if($user->hasAnyPermission(['guests.view', 'guests.create', 'guests.edit']))
         <div class="nav-item">

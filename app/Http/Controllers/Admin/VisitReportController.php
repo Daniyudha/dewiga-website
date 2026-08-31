@@ -98,6 +98,7 @@ class VisitReportController extends Controller
     private function getVisitData(int $year, Request $request)
     {
         $scheduleVisits = Schedule::query()
+            ->with('priceEstimation', 'bookings')
             ->whereYear('start_date', $year)
             ->where('is_active', true)
             ->whereIn('type', ['confirmed', 'pending'])
@@ -107,7 +108,8 @@ class VisitReportController extends Controller
                 $start = $schedule->start_date ? \Carbon\Carbon::parse($schedule->start_date) : null;
                 $end = $schedule->end_date ? \Carbon\Carbon::parse($schedule->end_date) : null;
 
-                $booking = Booking::where('schedule_id', $schedule->id)->first();
+                $booking = $schedule->bookings->first();
+                $estimation = $schedule->priceEstimation;
 
                 $los = 0;
                 if ($start && $end) {
@@ -116,14 +118,22 @@ class VisitReportController extends Controller
                     $los = 1;
                 }
 
-                $guestType = $schedule->guest_type ?? $booking->guest_type ?? 'lokal';
+                $guestType = $schedule->guest_type ?? $booking?->guest_type ?? 'lokal';
 
                 return (object) [
                     'id' => $schedule->id,
                     'type_key' => 'schedule',
-                    'visitor_name' => $booking->name ?? $schedule->visitor_name ?? '-',
-                    'institution' => $booking->institution ?? '-',
-                    'number_phone' => $booking->number_phone ?? '-',
+                    'visitor_name' => $booking?->name
+                        ?? $estimation?->contact_person
+                        ?? $schedule->visitor_name
+                        ?? '-',
+                    'institution' => $booking?->institution
+                        ?? $estimation?->institution_name
+                        ?? '-',
+                    'number_phone' => $booking?->number_phone
+                        ?? $schedule->number_phone
+                        ?? $estimation?->whatsapp
+                        ?? '-',
                     'guest_type' => $guestType,
                     'guest_type_label' => $guestType === 'asing' ? 'Asing' : 'Lokal',
                     'start_date' => $schedule->start_date,

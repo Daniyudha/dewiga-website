@@ -19,6 +19,10 @@
         $convertedSchedule = $isConverted ? $estimation->getConvertedSchedule() : null;
     @endphp
     <div class="flex gap-2 flex-wrap">
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $estimation->quotation_status_badge }}">
+            {{ $estimation->quotation_status_label }}
+        </span>
+
         @if($isConverted && $convertedSchedule)
             <a href="{{ route('admin.schedules.index') }}?search={{ $convertedSchedule->id }}" class="admin-btn-sm admin-btn-success">
                 <i class="fas fa-calendar-check mr-1"></i>
@@ -29,6 +33,30 @@
                 <i class="fas fa-calendar-plus mr-1"></i>
                 Jadikan Schedule
             </button>
+
+            @if($estimation->quotation_status !== \App\Enums\QuotationStatus::REJECTED)
+            <form action="{{ route('admin.price-calculator.update-quotation-status', $estimation) }}" method="POST" onsubmit="return confirm('Tolak quotation ini? Data tidak akan dihapus.')">
+                @csrf
+                @method('PATCH')
+                <input type="hidden" name="status" value="rejected">
+                <button type="submit" class="admin-btn-sm admin-btn-warning">
+                    <i class="fas fa-times mr-1"></i>
+                    Tolak Quotation
+                </button>
+            </form>
+            @endif
+
+            @if($estimation->quotation_status !== \App\Enums\QuotationStatus::CANCELLED)
+            <form action="{{ route('admin.price-calculator.update-quotation-status', $estimation) }}" method="POST" onsubmit="return confirm('Batalkan quotation ini? Data tidak akan dihapus.')">
+                @csrf
+                @method('PATCH')
+                <input type="hidden" name="status" value="cancelled">
+                <button type="submit" class="admin-btn-sm admin-btn-danger">
+                    <i class="fas fa-ban mr-1"></i>
+                    Batalkan Quotation
+                </button>
+            </form>
+            @endif
         @endif
         <a href="{{ route('admin.price-calculator.pdf-view', $estimation) }}" class="admin-btn-sm admin-btn-info" target="_blank">
             <i class="fas fa-file-pdf mr-1"></i>

@@ -105,6 +105,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
             Route::delete('{priceEstimation}', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'destroy'])->name('destroy');
             Route::post('{priceEstimation}/recalculate', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'recalculate'])->name('recalculate');
             Route::post('{priceEstimation}/convert-to-schedule', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'convertToSchedule'])->name('convert-to-schedule');
+            Route::patch('{priceEstimation}/quotation-status', [\App\Http\Controllers\Admin\PriceCalculatorController::class, 'updateQuotationStatus'])->name('update-quotation-status');
         });
 
         // Proposal Program (extends price-calculator)

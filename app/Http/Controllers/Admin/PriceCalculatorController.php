@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\QuotationStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StorePriceEstimationRequest;
 use App\Models\PriceEstimation;
+use App\Services\GuestSyncService;
 use App\Services\PriceCalculatorService;
 use App\Services\PriceEstimationConversionService;
 use Illuminate\Http\Request;
@@ -100,7 +102,11 @@ class PriceCalculatorController extends Controller
                 'meal_count' => $request->input('meal_count'),
             ]);
             $data['_server_result'] = $result;
+            $data['quotation_status'] = QuotationStatus::DRAFT;
             $estimation = $this->calculatorService->save($data);
+
+            // Sync guest (deduplicated)
+            app(GuestSyncService::class)->syncFromPriceEstimation($estimation);
 
             return redirect()
                 ->route('admin.price-calculator.show', $estimation)
@@ -245,12 +251,32 @@ class PriceCalculatorController extends Controller
     }
 
     /**
+     * Update quotation status (approve / reject / cancel) without deleting data.
+     */
+    public function updateQuotationStatus(Request $request, PriceEstimation $priceEstimation)
+    {
+        $validated = $request->validate([
+            'status' => 'required|string|in:' . implode(',', QuotationStatus::all()),
+        ]);
+
+        $priceEstimation->update(['quotation_status' => $validated['status']]);
+
+        return redirect()->back()->with([
+            'message' => 'Status quotation berhasil diubah menjadi ' . QuotationStatus::label($validated['status']) . '!',
+            'alert-type' => 'success',
+        ]);
+    }
+
+    /**
      * Convert a Price Estimation to a Schedule.
      */
     public function convertToSchedule(Request $request, PriceEstimation $priceEstimation)
     {
         try {
             $schedule = $this->conversionService->convert($priceEstimation, $request->all());
+
+            // Mark quotation as approved once converted into a schedule.
+            $priceEstimation->update(['quotation_status' => QuotationStatus::APPROVED]);
 
             return redirect()
                 ->route('admin.schedules.index', $schedule)

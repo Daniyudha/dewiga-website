@@ -28,6 +28,7 @@ class Guest extends Model
             'manual' => 'Manual',
             'booking' => 'Booking',
             'open_trip' => 'Open Trip',
+            'estimation' => 'Estimasi',
         ];
 
         return $labels[$this->source] ?? $this->source;
@@ -42,6 +43,7 @@ class Guest extends Model
             'manual' => 'bg-gray-100 text-gray-800',
             'booking' => 'bg-blue-100 text-blue-800',
             'open_trip' => 'bg-purple-100 text-purple-800',
+            'estimation' => 'bg-teal-100 text-teal-800',
         ];
 
         return $badges[$this->source] ?? 'bg-gray-100 text-gray-800';

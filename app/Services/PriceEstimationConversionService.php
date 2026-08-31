@@ -79,6 +79,9 @@ class PriceEstimationConversionService
             // Create schedule
             $schedule = Schedule::create($scheduleData);
 
+            // Sync guest record from estimation (deduplicated)
+            app(\App\Services\GuestSyncService::class)->syncFromPriceEstimation($estimation);
+
             // Log the conversion
             Log::info('Price Estimation converted to Schedule', [
                 'estimation_id' => $estimation->id,

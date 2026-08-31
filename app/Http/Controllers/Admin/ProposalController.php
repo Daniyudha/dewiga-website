@@ -9,6 +9,7 @@ use App\Models\PriceEstimation;
 use App\Models\PriceEstimationItem;
 use App\Models\RundownTemplate;
 use App\Models\ProposalSetting;
+use App\Services\GuestSyncService;
 use App\Services\PriceCalculatorService;
 use App\Services\PriceEstimationConversionService;
 use App\Services\RundownService;
@@ -110,6 +111,9 @@ class ProposalController extends Controller
 
                 return $estimation;
             });
+
+            // Sync guest (deduplicated)
+            app(GuestSyncService::class)->syncFromPriceEstimation($estimation);
 
             return redirect()
                 ->route('admin.proposals.show', $estimation)

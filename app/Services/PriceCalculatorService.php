@@ -161,6 +161,7 @@ class PriceCalculatorService
                 'quotation_total' => $result['quotation_total'],
                 'difference_amount' => $result['difference_amount'],
                 'notes' => $data['notes'] ?? null,
+                'quotation_status' => $data['quotation_status'] ?? 'draft',
                 'created_by' => Auth::id(),
             ]);
 

@@ -33,6 +33,7 @@ class PriceEstimation extends Model
         'rounded_price_per_person' => 'decimal:2',
         'quotation_total' => 'decimal:2',
         'difference_amount' => 'decimal:2',
+        'quotation_status' => 'string',
     ];
 
     public function items(): HasMany
@@ -51,6 +52,22 @@ class PriceEstimation extends Model
     public function schedule()
     {
         return $this->hasOne(Schedule::class, 'price_estimation_id');
+    }
+
+    /**
+     * Get quotation status label.
+     */
+    public function getQuotationStatusLabelAttribute(): string
+    {
+        return \App\Enums\QuotationStatus::label($this->quotation_status);
+    }
+
+    /**
+     * Get quotation status badge class.
+     */
+    public function getQuotationStatusBadgeAttribute(): string
+    {
+        return \App\Enums\QuotationStatus::badgeClass($this->quotation_status);
     }
 
     /**
