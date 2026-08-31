@@ -44,6 +44,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         Route::patch('schedules/{schedule}/toggle-active', [\App\Http\Controllers\Admin\ScheduleController::class, 'toggleActive'])->name('schedules.toggle-active');
         Route::patch('schedules/{schedule}/update-status', [\App\Http\Controllers\Admin\ScheduleController::class, 'updateStatus'])->name('schedules.update-status');
         Route::post('schedules/{schedule}/generate-midtrans-link', [\App\Http\Controllers\Admin\ScheduleController::class, 'generateMidtransPaymentLink'])->name('schedules.generate-midtrans-link');
+        Route::post('schedules/{schedule}/payments', [\App\Http\Controllers\Admin\ScheduleController::class, 'storePayment'])->name('schedules.payments.store');
         Route::delete('schedules/{schedule}/payments/{payment}', [\App\Http\Controllers\Admin\ScheduleController::class, 'destroyPayment'])->name('schedules.payments.destroy');
 
         // Open Trip Registrations

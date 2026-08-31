@@ -284,6 +284,29 @@ class ScheduleController extends Controller
     }
 
     /**
+     * Store a manual payment record for a schedule.
+     */
+    public function storePayment(Request $request, Schedule $schedule, SchedulePaymentService $paymentService)
+    {
+        $validated = $request->validate([
+            'payment_type' => 'required|string|in:' . implode(',', array_keys(SchedulePayment::PAYMENT_TYPES)),
+            'amount' => 'required|numeric|min:1',
+            'payment_date' => 'required|date',
+            'payment_method' => 'required|string|in:' . implode(',', array_keys(SchedulePayment::PAYMENT_METHODS)),
+            'reference_number' => 'nullable|string|max:100',
+            'notes' => 'nullable|string|max:1000',
+            'proof_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        ]);
+
+        $paymentService->recordPayment($schedule, $validated, $request->file('proof_file'));
+
+        return redirect()->back()->with([
+            'message' => 'Pembayaran berhasil ditambahkan!',
+            'alert-type' => 'success',
+        ]);
+    }
+
+    /**
      * Delete a schedule payment.
      */
     public function destroyPayment(Schedule $schedule, SchedulePayment $payment)

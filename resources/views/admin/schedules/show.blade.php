@@ -422,6 +422,75 @@
         </div>
     </div>
 </div>
+
+{{-- Tambah Pembayaran Modal --}}
+<div id="paymentModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-heading font-semibold text-gray-900">
+                <i class="fas fa-plus-circle text-primary-600 mr-2"></i>
+                Tambah Pembayaran
+            </h3>
+            <button type="button" onclick="hidePaymentModal()" class="text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form method="POST" action="{{ route('admin.schedules.payments.store', $schedule) }}" enctype="multipart/form-data">
+            @csrf
+            <div class="px-6 py-4 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="admin-label">Jenis Pembayaran</label>
+                        <select name="payment_type" class="admin-input w-full" required>
+                            @foreach(\App\Models\SchedulePayment::PAYMENT_TYPES as $key => $label)
+                                <option value="{{ $key }}">{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="admin-label">Nominal (Rp)</label>
+                        <input type="number" name="amount" min="1" step="0.01" class="admin-input w-full" placeholder="0" required>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="admin-label">Tanggal Pembayaran</label>
+                        <input type="date" name="payment_date" value="{{ now()->format('Y-m-d') }}" class="admin-input w-full" required>
+                    </div>
+                    <div>
+                        <label class="admin-label">Metode Pembayaran</label>
+                        <select name="payment_method" class="admin-input w-full" required>
+                            @foreach(\App\Models\SchedulePayment::PAYMENT_METHODS as $key => $label)
+                                <option value="{{ $key }}" {{ $key === 'bank_transfer' ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="admin-label">Nomor Referensi</label>
+                    <input type="text" name="reference_number" class="admin-input w-full" placeholder="Opsional">
+                </div>
+                <div>
+                    <label class="admin-label">Catatan</label>
+                    <textarea name="notes" rows="2" class="admin-input w-full" placeholder="Opsional"></textarea>
+                </div>
+                <div>
+                    <label class="admin-label">Bukti Pembayaran</label>
+                    <input type="file" name="proof_file" class="admin-input w-full" accept=".jpg,.jpeg,.png,.pdf">
+                    <p class="text-xs text-gray-400 mt-1">Format: JPG, PNG, atau PDF (maks 2MB).</p>
+                </div>
+            </div>
+            <div class="flex justify-end gap-3 px-6 py-4 border-t border-gray-200">
+                <button type="button" onclick="hidePaymentModal()" class="admin-btn-sm admin-btn-secondary">
+                    Batal
+                </button>
+                <button type="submit" class="admin-btn-sm admin-btn-primary">
+                    <i class="fas fa-save mr-1"></i> Simpan Pembayaran
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 </div>
 @endsection
 
@@ -462,7 +531,11 @@ function switchTab(tabName) {
 }
 
 function showPaymentModal() {
-    alert('Form tambah pembayaran akan ditambahkan di FASE selanjutnya.');
+    document.getElementById('paymentModal').classList.remove('hidden');
+}
+
+function hidePaymentModal() {
+    document.getElementById('paymentModal').classList.add('hidden');
 }
 
 function copyPaymentLink(url, btn) {
