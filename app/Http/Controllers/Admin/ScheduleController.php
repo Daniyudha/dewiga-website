@@ -12,6 +12,7 @@ use App\Http\Requests\Admin\ScheduleRequest;
 use App\Services\MidtransService;
 use App\Services\SchedulePaymentService;
 use App\Services\ScheduleStatusService;
+use App\Services\TransactionSyncService;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -298,7 +299,10 @@ class ScheduleController extends Controller
             'proof_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
-        $paymentService->recordPayment($schedule, $validated, $request->file('proof_file'));
+        $payment = $paymentService->recordPayment($schedule, $validated, $request->file('proof_file'));
+
+        // Sync to finance (transactions) — the record is created with status 'paid'.
+        app(TransactionSyncService::class)->syncFromSchedulePayment($payment);
 
         return redirect()->back()->with([
             'message' => 'Pembayaran berhasil ditambahkan!',
@@ -314,6 +318,8 @@ class ScheduleController extends Controller
         if ($payment->schedule_id !== $schedule->id) {
             abort(404);
         }
+
+        app(TransactionSyncService::class)->deleteFromSchedulePayment($payment);
 
         $payment->delete();
 

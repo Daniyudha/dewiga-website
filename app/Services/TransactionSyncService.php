@@ -11,13 +11,17 @@ class TransactionSyncService
 {
     public function syncFromSchedulePayment(SchedulePayment $payment): ?Transaction
     {
+        // Only record actual income once the payment is confirmed paid.
+        if ($payment->status !== 'paid') {
+            return null;
+        }
+
         $schedule = $payment->schedule;
         if (!$schedule) {
             return null;
         }
 
-        $existing = Transaction::where('description', 'like', "%Pembayaran #{$payment->id}%")
-            ->first();
+        $existing = $this->findSchedulePaymentTransaction($payment);
 
         if ($existing) {
             return $existing;
@@ -47,6 +51,24 @@ class TransactionSyncService
             'balance' => $lastBalance + $payment->amount,
             'notes' => 'Otomatis dari pembayaran #' . $payment->id,
         ]);
+    }
+
+    /**
+     * Find the transaction generated from a schedule payment (by note).
+     */
+    private function findSchedulePaymentTransaction(SchedulePayment $payment): ?Transaction
+    {
+        return Transaction::where('notes', 'like', '%pembayaran #' . $payment->id . '%')
+            ->first();
+    }
+
+    /**
+     * Remove the financial transaction linked to a schedule payment.
+     */
+    public function deleteFromSchedulePayment(SchedulePayment $payment): void
+    {
+        $this->findSchedulePaymentTransaction($payment)?->delete();
+        $this->recalculateBalances();
     }
 
     public function syncFromBooking(Booking $booking): ?Transaction
@@ -113,7 +135,7 @@ class TransactionSyncService
 
     public function syncAllExisting(): array
     {
-        $counts = ['bookings' => 0, 'open_trips' => 0];
+        $counts = ['bookings' => 0, 'open_trips' => 0, 'schedule_payments' => 0];
 
         Booking::where('status', 'confirmed')
             ->whereNotNull('amount')
@@ -132,6 +154,15 @@ class TransactionSyncService
                 foreach ($registrations as $registration) {
                     $this->syncFromOpenTrip($registration);
                     $counts['open_trips']++;
+                }
+            });
+
+        SchedulePayment::where('status', 'paid')
+            ->where('amount', '>', 0)
+            ->chunk(100, function ($payments) use (&$counts) {
+                foreach ($payments as $payment) {
+                    $this->syncFromSchedulePayment($payment);
+                    $counts['schedule_payments']++;
                 }
             });
 

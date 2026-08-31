@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SchedulePayment;
 use App\Services\MidtransService;
+use App\Services\TransactionSyncService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -46,6 +47,7 @@ class MidtransWebhookController extends Controller
                         'status' => 'paid',
                         'reference_number' => $request->input('transaction_id') ?? $payment->reference_number,
                     ]);
+                    app(TransactionSyncService::class)->syncFromSchedulePayment($payment);
                 } elseif ($fraudStatus === 'challenge') {
                     $payment->update(['status' => 'challenge']);
                 }
@@ -56,6 +58,7 @@ class MidtransWebhookController extends Controller
                     'status' => 'paid',
                     'reference_number' => $request->input('transaction_id') ?? $payment->reference_number,
                 ]);
+                app(TransactionSyncService::class)->syncFromSchedulePayment($payment);
                 break;
 
             case 'pending':
