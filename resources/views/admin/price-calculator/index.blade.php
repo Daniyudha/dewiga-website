@@ -63,7 +63,14 @@
                 </thead>
                 <tbody>
                     @forelse($estimations as $est)
-                        <tr>
+                        @php
+                            $rowClass = match($est->quotation_status) {
+                                \App\Enums\QuotationStatus::CANCELLED, \App\Enums\QuotationStatus::REJECTED => 'bg-red-50',
+                                \App\Enums\QuotationStatus::APPROVED => 'bg-green-50',
+                                default => '',
+                            };
+                        @endphp
+                        <tr class="{{ $rowClass }}">
                             <td class="font-mono text-sm font-medium">{{ $est->estimation_number }}</td>
                             <td>{{ $est->institution_name }}</td>
                             <td>{{ $est->arrival_date->format('d/m/Y') }} - {{ $est->departure_date->format('d/m/Y') }}</td>

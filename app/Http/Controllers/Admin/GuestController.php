@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Guest;
+use App\Services\GuestSyncService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -29,6 +30,20 @@ class GuestController extends Controller
         $guests = $query->orderBy('created_at', 'desc')->paginate(20)->withQueryString();
 
         return view('admin.guests.index', compact('guests'));
+    }
+
+    /**
+     * Manual backfill/sync tamu dari booking, open trip, dan estimasi.
+     */
+    public function syncAll(GuestSyncService $service)
+    {
+        $counts = $service->syncAllExisting();
+
+        return redirect()->back()->with([
+            'message' => 'Sinkronisasi tamu selesai: ' . $counts['bookings'] . ' booking, '
+                . $counts['open_trips'] . ' open trip, ' . $counts['estimations'] . ' estimasi diproses.',
+            'alert-type' => 'success',
+        ]);
     }
 
     public function create()

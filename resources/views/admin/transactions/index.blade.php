@@ -8,9 +8,17 @@
         <h1 class="text-2xl font-heading font-bold text-gray-900">Data Keuangan</h1>
         <p class="text-sm text-gray-500 mt-1">Kelola pemasukan, pengeluaran, dan saldo keuangan</p>
     </div>
-    <a href="{{ route('admin.transactions.create') }}" class="admin-btn-primary">
-        <i class="fas fa-plus mr-1"></i> Tambah Transaksi
-    </a>
+    <div class="flex gap-2">
+        <form method="POST" action="{{ route('admin.transactions.sync') }}">
+            @csrf
+            <button type="submit" class="admin-btn-secondary" onclick="return confirm('Sinkronkan semua pembayaran booking, open trip, dan schedule ke data keuangan (tanpa duplikat)?')">
+                <i class="fas fa-sync-alt mr-1"></i> Sync Data Keuangan
+            </button>
+        </form>
+        <a href="{{ route('admin.transactions.create') }}" class="admin-btn-primary">
+            <i class="fas fa-plus mr-1"></i> Tambah Transaksi
+        </a>
+    </div>
 </div>
 
 {{-- Summary Cards --}}

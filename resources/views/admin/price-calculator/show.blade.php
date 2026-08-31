@@ -34,19 +34,7 @@
                 Jadikan Schedule
             </button>
 
-            @if($estimation->quotation_status !== \App\Enums\QuotationStatus::REJECTED)
-            <form action="{{ route('admin.price-calculator.update-quotation-status', $estimation) }}" method="POST" onsubmit="return confirm('Tolak quotation ini? Data tidak akan dihapus.')">
-                @csrf
-                @method('PATCH')
-                <input type="hidden" name="status" value="rejected">
-                <button type="submit" class="admin-btn-sm admin-btn-warning">
-                    <i class="fas fa-times mr-1"></i>
-                    Tolak Quotation
-                </button>
-            </form>
-            @endif
-
-            @if($estimation->quotation_status !== \App\Enums\QuotationStatus::CANCELLED)
+            @if(!in_array($estimation->quotation_status, [\App\Enums\QuotationStatus::CANCELLED, \App\Enums\QuotationStatus::REJECTED]))
             <form action="{{ route('admin.price-calculator.update-quotation-status', $estimation) }}" method="POST" onsubmit="return confirm('Batalkan quotation ini? Data tidak akan dihapus.')">
                 @csrf
                 @method('PATCH')
@@ -54,6 +42,16 @@
                 <button type="submit" class="admin-btn-sm admin-btn-danger">
                     <i class="fas fa-ban mr-1"></i>
                     Batalkan Quotation
+                </button>
+            </form>
+            @else
+            <form action="{{ route('admin.price-calculator.update-quotation-status', $estimation) }}" method="POST" onsubmit="return confirm('Aktifkan kembali quotation ini?')">
+                @csrf
+                @method('PATCH')
+                <input type="hidden" name="status" value="draft">
+                <button type="submit" class="admin-btn-sm admin-btn-secondary">
+                    <i class="fas fa-undo mr-1"></i>
+                    Aktifkan Kembali
                 </button>
             </form>
             @endif

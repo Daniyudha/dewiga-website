@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Transaction;
+use App\Services\TransactionSyncService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -43,6 +44,20 @@ class TransactionController extends Controller
         $saldoBerjalan = $latest ? $latest->balance : 0;
 
         return view('admin.transactions.index', compact('transactions', 'totalDebit', 'totalCredit', 'saldoAkhir', 'saldoBerjalan'));
+    }
+
+    /**
+     * Manual backfill/sync transaksi keuangan dari booking, open trip, dan pembayaran schedule.
+     */
+    public function syncAll(TransactionSyncService $service)
+    {
+        $counts = $service->syncAllExisting();
+
+        return redirect()->back()->with([
+            'message' => 'Sinkronisasi keuangan selesai: ' . $counts['bookings'] . ' booking, '
+                . $counts['open_trips'] . ' open trip, ' . $counts['schedule_payments'] . ' pembayaran schedule diproses.',
+            'alert-type' => 'success',
+        ]);
     }
 
     public function create()

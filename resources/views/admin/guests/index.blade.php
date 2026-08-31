@@ -9,10 +9,19 @@
             <h1 class="text-2xl font-heading font-bold text-gray-900">Database Tamu</h1>
             <p class="text-sm text-gray-500 mt-1">Menampung semua data tamu dari booking, open trip, dan input manual</p>
         </div>
-        <a href="{{ route('admin.guests.create') }}" class="admin-btn-primary">
-            <i class="fas fa-plus"></i>
-            Tambah Tamu Manual
-        </a>
+        <div class="flex gap-2">
+            <form method="POST" action="{{ route('admin.guests.sync') }}">
+                @csrf
+                <button type="submit" class="admin-btn-secondary" onclick="return confirm('Sinkronkan semua data booking, open trip, dan estimasi ke database tamu (tanpa duplikat)?')">
+                    <i class="fas fa-sync-alt"></i>
+                    Sync Database Tamu
+                </button>
+            </form>
+            <a href="{{ route('admin.guests.create') }}" class="admin-btn-primary">
+                <i class="fas fa-plus"></i>
+                Tambah Tamu Manual
+            </a>
+        </div>
     </div>
 
     {{-- Filter & Search --}}
