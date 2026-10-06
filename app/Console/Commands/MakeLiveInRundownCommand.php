@@ -110,47 +110,51 @@ class MakeLiveInRundownCommand extends Command
         $areaDesa = 'Lingkungan Desa Wisata Gabugan';
         $areaEdukasi = 'Area Edukasi Desa Wisata Gabugan';
 
+        // Penanggung jawab (PIC)
+        $panitia = 'Panitia Pendamping';
+        $ota = 'Orang Tua Asuh';
+        $fasilitator = 'Fasilitator / Tim Edukasi';
+
         return [
-            // Hari 1 — Kedatangan (malam)
+            // Hari 1 — Kedatangan (malam, tanpa makan malam)
             1 => [
-                ['start_time' => '19:00', 'end_time' => '19:30', 'activity_name' => 'Kedatangan dan Penyambutan', 'location' => $pendopo],
-                ['start_time' => '19:30', 'end_time' => '20:00', 'activity_name' => 'Pembagian Homestay dan Orientasi Singkat', 'location' => $homestay],
-                ['start_time' => '20:00', 'end_time' => '21:00', 'activity_name' => 'Makan Malam', 'location' => $homestay],
-                ['start_time' => '21:00', 'end_time' => null, 'activity_name' => 'Istirahat dan Menginap', 'location' => $homestay],
+                ['start_time' => '19:00', 'end_time' => '19:30', 'activity_name' => 'Kedatangan dan Penyambutan', 'location' => $pendopo, 'person_in_charge' => $panitia, 'description' => 'Peserta tiba dan disambut. Opsi: sambutan singkat dari kepala desa/pengelola desa wisata dan pengenalan tim pendamping.'],
+                ['start_time' => '19:30', 'end_time' => '20:00', 'activity_name' => 'Pembagian Homestay dan Orientasi Singkat', 'location' => $homestay, 'person_in_charge' => $panitia, 'description' => 'Pembagian kelompok homestay beserta orang tua asuh, briefing tata tertib, dan gambaran jadwal kegiatan.'],
+                ['start_time' => '20:00', 'end_time' => null, 'activity_name' => 'Istirahat dan Menginap', 'location' => $homestay, 'person_in_charge' => $ota, 'description' => 'Peserta beristirahat dan menginap di homestay masing-masing bersama orang tua asuh.'],
             ],
             // Hari 2
             2 => [
-                ['start_time' => '05:30', 'end_time' => '06:00', 'activity_name' => 'Bangun Pagi dan Ibadah', 'location' => $homestay],
-                ['start_time' => '06:00', 'end_time' => '07:00', 'activity_name' => 'Olahraga dan Piket Bersama Orang Tua Asuh', 'location' => $areaDesa],
-                ['start_time' => '07:00', 'end_time' => '08:00', 'activity_name' => 'Makan Pagi (Sarapan)', 'location' => $homestay],
-                ['start_time' => '08:00', 'end_time' => '10:00', 'activity_name' => 'Kegiatan Bersama Warga / Orang Tua Asuh', 'location' => $areaDesa],
-                ['start_time' => '10:00', 'end_time' => '12:00', 'activity_name' => 'Aktivitas Pendidikan 1', 'location' => $areaEdukasi, 'description' => '(Sesuaikan tema aktivitas pendidikan)'],
-                ['start_time' => '12:00', 'end_time' => '13:30', 'activity_name' => 'Makan Siang, Istirahat, dan Ibadah', 'location' => $homestay],
-                ['start_time' => '13:30', 'end_time' => '15:30', 'activity_name' => 'Aktivitas Pendidikan 2', 'location' => $areaEdukasi, 'description' => '(Sesuaikan tema aktivitas pendidikan)'],
-                ['start_time' => '15:30', 'end_time' => '17:00', 'activity_name' => 'Kegiatan Bersama Orang Tua Asuh (Lanjutan)', 'location' => $areaDesa],
-                ['start_time' => '17:00', 'end_time' => '18:30', 'activity_name' => 'Makan Malam, Istirahat, dan Ibadah', 'location' => $homestay],
-                ['start_time' => '19:00', 'end_time' => '21:00', 'activity_name' => 'Refleksi dan Malam Keakraban', 'location' => $pendopo],
+                ['start_time' => '05:30', 'end_time' => '06:00', 'activity_name' => 'Bangun Pagi dan Ibadah', 'location' => $homestay, 'person_in_charge' => $ota, 'description' => 'Bangun pagi, ibadah, dan persiapan diri sebelum memulai kegiatan.'],
+                ['start_time' => '06:00', 'end_time' => '07:00', 'activity_name' => 'Olahraga dan Piket Bersama Orang Tua Asuh', 'location' => $areaDesa, 'person_in_charge' => $ota, 'description' => 'Opsi: senam pagi, jalan sehat, menyapu halaman, memberi makan ternak, atau membantu pekerjaan rumah bersama orang tua asuh.'],
+                ['start_time' => '07:00', 'end_time' => '08:00', 'activity_name' => 'Makan Pagi (Sarapan)', 'location' => $homestay, 'person_in_charge' => $ota, 'description' => 'Sarapan bersama keluarga homestay.'],
+                ['start_time' => '08:00', 'end_time' => '10:00', 'activity_name' => 'Kegiatan Bersama Warga / Orang Tua Asuh', 'location' => $areaDesa, 'person_in_charge' => $ota, 'description' => 'Pilih salah satu kegiatan bersama warga: (1) bertani/berkebun, (2) beternak, (3) gotong royong lingkungan, (4) membantu UMKM setempat.'],
+                ['start_time' => '10:00', 'end_time' => '12:00', 'activity_name' => 'Aktivitas Pendidikan 1', 'location' => $areaEdukasi, 'person_in_charge' => $fasilitator, 'description' => 'Pilih salah satu tema edukasi: (1) pertanian & ketahanan pangan, (2) lingkungan & konservasi, (3) kewirausahaan/UMKM, (4) seni & budaya lokal.'],
+                ['start_time' => '12:00', 'end_time' => '13:30', 'activity_name' => 'Makan Siang, Istirahat, dan Ibadah', 'location' => $homestay, 'person_in_charge' => $ota, 'description' => 'Makan siang, istirahat, dan ibadah di homestay.'],
+                ['start_time' => '13:30', 'end_time' => '15:30', 'activity_name' => 'Aktivitas Pendidikan 2', 'location' => $areaEdukasi, 'person_in_charge' => $fasilitator, 'description' => 'Pilih salah satu tema edukasi: (1) pertanian & ketahanan pangan, (2) lingkungan & konservasi, (3) kewirausahaan/UMKM, (4) seni & budaya lokal.'],
+                ['start_time' => '15:30', 'end_time' => '17:00', 'activity_name' => 'Kegiatan Bersama Orang Tua Asuh (Lanjutan)', 'location' => $areaDesa, 'person_in_charge' => $ota, 'description' => 'Opsi: membantu aktivitas harian orang tua asuh, belajar memasak kuliner lokal, atau bermain bersama anak-anak desa.'],
+                ['start_time' => '17:00', 'end_time' => '18:30', 'activity_name' => 'Makan Malam, Istirahat, dan Ibadah', 'location' => $homestay, 'person_in_charge' => $ota, 'description' => 'Makan malam, istirahat, dan ibadah di homestay.'],
+                ['start_time' => '19:00', 'end_time' => '21:00', 'activity_name' => 'Refleksi dan Malam Keakraban', 'location' => $pendopo, 'person_in_charge' => $panitia, 'description' => 'Sesi refleksi harian dan ice breaking. Opsi: permainan kelompok, berbagi cerita, atau pentas mini.'],
             ],
             // Hari 3
             3 => [
-                ['start_time' => '05:30', 'end_time' => '06:00', 'activity_name' => 'Bangun Pagi dan Ibadah', 'location' => $homestay],
-                ['start_time' => '06:00', 'end_time' => '07:00', 'activity_name' => 'Olahraga dan Piket Bersama Orang Tua Asuh', 'location' => $areaDesa],
-                ['start_time' => '07:00', 'end_time' => '08:00', 'activity_name' => 'Makan Pagi (Sarapan)', 'location' => $homestay],
-                ['start_time' => '08:00', 'end_time' => '10:00', 'activity_name' => 'Kegiatan Bersama Orang Tua Asuh', 'location' => $areaDesa],
-                ['start_time' => '10:00', 'end_time' => '12:00', 'activity_name' => 'Aktivitas Pendidikan 1', 'location' => $areaEdukasi, 'description' => '(Sesuaikan tema aktivitas pendidikan)'],
-                ['start_time' => '12:00', 'end_time' => '13:30', 'activity_name' => 'Makan Siang, Istirahat, dan Ibadah', 'location' => $homestay],
-                ['start_time' => '13:30', 'end_time' => '15:30', 'activity_name' => 'Aktivitas Pendidikan 2', 'location' => $areaEdukasi, 'description' => '(Sesuaikan tema aktivitas pendidikan)'],
-                ['start_time' => '15:30', 'end_time' => '17:00', 'activity_name' => 'Persiapan Acara Penutupan', 'location' => $pendopo],
-                ['start_time' => '17:00', 'end_time' => '18:30', 'activity_name' => 'Makan Malam, Istirahat, dan Ibadah', 'location' => $homestay],
-                ['start_time' => '19:00', 'end_time' => '21:00', 'activity_name' => 'Acara Penutupan dan Perpisahan', 'location' => $pendopo],
+                ['start_time' => '05:30', 'end_time' => '06:00', 'activity_name' => 'Bangun Pagi dan Ibadah', 'location' => $homestay, 'person_in_charge' => $ota, 'description' => 'Bangun pagi, ibadah, dan persiapan diri sebelum memulai kegiatan.'],
+                ['start_time' => '06:00', 'end_time' => '07:00', 'activity_name' => 'Olahraga dan Piket Bersama Orang Tua Asuh', 'location' => $areaDesa, 'person_in_charge' => $ota, 'description' => 'Opsi: senam pagi, jalan sehat, menyapu halaman, memberi makan ternak, atau membantu pekerjaan rumah bersama orang tua asuh.'],
+                ['start_time' => '07:00', 'end_time' => '08:00', 'activity_name' => 'Makan Pagi (Sarapan)', 'location' => $homestay, 'person_in_charge' => $ota, 'description' => 'Sarapan bersama keluarga homestay.'],
+                ['start_time' => '08:00', 'end_time' => '10:00', 'activity_name' => 'Kegiatan Bersama Orang Tua Asuh', 'location' => $areaDesa, 'person_in_charge' => $ota, 'description' => 'Opsi: membantu aktivitas harian orang tua asuh, belajar kerajinan lokal, atau mengikuti kegiatan warga setempat.'],
+                ['start_time' => '10:00', 'end_time' => '12:00', 'activity_name' => 'Aktivitas Pendidikan 1', 'location' => $areaEdukasi, 'person_in_charge' => $fasilitator, 'description' => 'Pilih salah satu tema edukasi: (1) pertanian & ketahanan pangan, (2) lingkungan & konservasi, (3) kewirausahaan/UMKM, (4) seni & budaya lokal.'],
+                ['start_time' => '12:00', 'end_time' => '13:30', 'activity_name' => 'Makan Siang, Istirahat, dan Ibadah', 'location' => $homestay, 'person_in_charge' => $ota, 'description' => 'Makan siang, istirahat, dan ibadah di homestay.'],
+                ['start_time' => '13:30', 'end_time' => '15:30', 'activity_name' => 'Aktivitas Pendidikan 2', 'location' => $areaEdukasi, 'person_in_charge' => $fasilitator, 'description' => 'Pilih salah satu tema edukasi: (1) pertanian & ketahanan pangan, (2) lingkungan & konservasi, (3) kewirausahaan/UMKM, (4) seni & budaya lokal.'],
+                ['start_time' => '15:30', 'end_time' => '17:00', 'activity_name' => 'Persiapan Acara Penutupan', 'location' => $pendopo, 'person_in_charge' => $panitia, 'description' => 'Persiapan dan gladi resik acara penutupan. Opsi: latihan pentas, menyiapkan dekorasi, dan merapikan perlengkapan.'],
+                ['start_time' => '17:00', 'end_time' => '18:30', 'activity_name' => 'Makan Malam, Istirahat, dan Ibadah', 'location' => $homestay, 'person_in_charge' => $ota, 'description' => 'Makan malam, istirahat, dan ibadah di homestay.'],
+                ['start_time' => '19:00', 'end_time' => '21:00', 'activity_name' => 'Acara Penutupan dan Perpisahan', 'location' => $pendopo, 'person_in_charge' => $panitia, 'description' => 'Sesi penutupan resmi: sambutan, presentasi hasil, pentas seni, penyerahan kenang-kenangan, dan foto bersama.'],
             ],
             // Hari 4 — Kepulangan
             4 => [
-                ['start_time' => '05:30', 'end_time' => '06:00', 'activity_name' => 'Bangun Pagi dan Ibadah', 'location' => $homestay],
-                ['start_time' => '06:00', 'end_time' => '07:00', 'activity_name' => 'Packing dan Berkemas', 'location' => $homestay],
-                ['start_time' => '07:00', 'end_time' => '08:00', 'activity_name' => 'Makan Pagi (Sarapan)', 'location' => $homestay],
-                ['start_time' => '08:00', 'end_time' => '09:00', 'activity_name' => 'Perpisahan dengan Orang Tua Asuh dan Check-out', 'location' => $pendopo],
-                ['start_time' => '09:00', 'end_time' => null, 'activity_name' => 'Kepulangan', 'location' => $pendopo],
+                ['start_time' => '05:30', 'end_time' => '06:00', 'activity_name' => 'Bangun Pagi dan Ibadah', 'location' => $homestay, 'person_in_charge' => $ota, 'description' => 'Bangun pagi, ibadah, dan persiapan diri.'],
+                ['start_time' => '06:00', 'end_time' => '07:00', 'activity_name' => 'Packing dan Berkemas', 'location' => $homestay, 'person_in_charge' => $ota, 'description' => 'Membereskan barang bawaan dan memastikan tidak ada barang tertinggal.'],
+                ['start_time' => '07:00', 'end_time' => '08:00', 'activity_name' => 'Makan Pagi (Sarapan)', 'location' => $homestay, 'person_in_charge' => $ota, 'description' => 'Sarapan bersama keluarga homestay untuk terakhir kalinya.'],
+                ['start_time' => '08:00', 'end_time' => '09:00', 'activity_name' => 'Perpisahan dengan Orang Tua Asuh dan Check-out', 'location' => $pendopo, 'person_in_charge' => $panitia, 'description' => 'Ucapan terima kasih dan perpisahan dengan orang tua asuh, dilanjutkan check-out homestay.'],
+                ['start_time' => '09:00', 'end_time' => null, 'activity_name' => 'Kepulangan', 'location' => $pendopo, 'person_in_charge' => $panitia, 'description' => 'Peserta kembali ke daerah asal masing-masing.'],
             ],
         ];
     }
