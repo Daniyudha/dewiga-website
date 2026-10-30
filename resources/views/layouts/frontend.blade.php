@@ -308,7 +308,7 @@
                 {{-- Mobile Hamburger --}}
                 <button
                     id="nav-toggle"
-                    class="lg:hidden text-3xl z-[1001] p-2 rounded-full shadow-md @if(request()->routeIs('peta') || request()->routeIs('peta.event')) bg-[#053d2c] text-white @else bg-transparent text-white @endif"
+                    class="lg:hidden text-3xl z-[1001] @if(request()->routeIs('peta') || request()->routeIs('peta.event')) !text-black @else bg-transparent text-white @endif"
                 >
                     <i class="bx bx-menu"></i>
                 </button>
@@ -688,12 +688,14 @@
             $('#nav-menu').removeClass('translate-x-full');
             $('#nav-overlay').removeClass('is-hidden');
             $('body').addClass('overflow-hidden');
+            $('#nav-toggle').addClass('hidden');
         });
 
         $('#nav-close, #nav-overlay').on('click', function() {
             $('#nav-menu').addClass('translate-x-full');
             $('#nav-overlay').addClass('is-hidden');
             $('body').removeClass('overflow-hidden');
+            $('#nav-toggle').removeClass('hidden');
         });
 
         const header = document.getElementById('header');
