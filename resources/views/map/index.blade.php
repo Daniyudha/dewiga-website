@@ -1,7 +1,7 @@
 @extends('layouts.frontend')
 
-@section('title', __('Peta Lokasi Lengkap') . ' - ' . config('app.name'))
-@section('meta_description', __('Lihat peta lokasi semua homestay dan kegiatan yang aktif di Desa Wisata Gabugan.'))
+@section('title', __('messages.map.full_title') . ' - ' . config('app.name'))
+@section('meta_description', __('messages.map.full_desc'))
 
 @push('style-alt')
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -14,8 +14,8 @@
     <section class="py-16 bg-white">
         <div class="container mx-auto px-6">
             <div class="text-center mb-12">
-                <h2 class="font-serif text-3xl md:text-5xl font-bold text-[#053d2c] mb-3">{{ __('Peta Lokasi Lengkap') }}</h2>
-                <p class="text-neutral-600 max-w-2xl mx-auto">{{ __('Semua homestay dan kegiatan ditampilkan pada peta berikut.') }}</p>
+                <h2 class="font-serif text-3xl md:text-5xl font-bold text-[#053d2c] mb-3">{{ __('messages.map.full_title') }}</h2>
+                <p class="text-neutral-600 max-w-2xl mx-auto">{{ __('messages.map.full_desc') }}</p>
             </div>
             <div class="grid lg:grid-cols-3 gap-8">
                 <!-- Peta: desktop di kiri (order-1), mobile/tablet di bawah (order-2) -->
@@ -35,28 +35,28 @@
                         <!-- Legend (selalu terbuka, tanpa accordion) -->
                         <div class="bg-[#053d2c]/5 rounded-xl p-3 border border-[#053d2c]/10 mb-6">
                             <h3 class="font-heading font-semibold text-[#053d2c] mb-2 flex items-center gap-2">
-                                {{ __('Legenda') }}
+                                {{ __('messages.map.legend') }}
                             </h3>
                             <div class="flex items-center gap-3 mb-2">
                                 <div style="background:#00a877;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:18px;border:2px solid #fff;"><i class="bx bx-home-alt"></i></div>
-                                <span class="text-sm font-medium text-gray-700">{{ __('Homestay') }}</span>
+                                <span class="text-sm font-medium text-gray-700">{{ __('messages.nav.homestay') }}</span>
                             </div>
                             <div class="flex items-center gap-3 mb-0">
                                 <div style="background:#e8a838;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:18px;border:2px solid #fff;"><i class="bx bx-run"></i></div>
-                                <span class="text-sm font-medium text-gray-700">{{ __('Kegiatan / Aktivitas') }}</span>
+                                <span class="text-sm font-medium text-gray-700">{{ __('messages.map.legend_activity') }}</span>
                             </div>
                         </div>
 
                         <!-- Daftar Homestay -->
                         <div onclick="toggleSection(this)" class="collapse-header flex items-center justify-between cursor-pointer p-3 bg-[#053d2c]/5 rounded-xl hover:bg-[#053d2c]/10 transition border border-[#053d2c]/10 mt-3 border-t border-neutral-100 lg:border-t-0">
                             <h3 class="font-heading font-semibold text-[#053d2c] mb-0 flex items-center gap-2">
-                                {{ __('Daftar Homestay') }}
+                                {{ __('messages.map.homestay_list') }}
                                 <i class="bx bx-chevron-down text-xs transform transition-transform duration-200"></i>
                             </h3>
                         </div>
                         <div class="collapse-content hidden overflow-hidden pt-3 pb-3">
-                            <input type="text" class="map-list-search" placeholder="Cari homestay..." onkeyup="filterList(this, 'homestay-list-index')">
-                            <div id="homestay-empty-index" class="search-empty text-center py-4">{{ __('Tidak ditemukan.') }}</div>
+                            <input type="text" class="map-list-search" placeholder="{{ __('messages.map.search_homestay') }}" onkeyup="filterList(this, 'homestay-list-index')">
+                            <div id="homestay-empty-index" class="search-empty text-center py-4">{{ __('messages.map.search_not_found') }}</div>
                             <ul id="homestay-list-index" class="space-y-2">
                                 @forelse($homestays as $h)
                                 <li class="text-sm text-gray-700 cursor-pointer hover:bg-gray-100 p-2" onclick="flyToMarker({{ $h->latitude }}, {{ $h->longitude }})" data-name="{{ $h->name_id }}">
@@ -66,7 +66,7 @@
                                     @endif
                                 </li>
                                 @empty
-                                <li class="text-sm text-gray-500">{{ __('Tidak ada data.') }}</li>
+                                <li class="text-sm text-gray-500">{{ __('messages.map.not_found') }}</li>
                                 @endforelse
                             </ul>
                         </div>
@@ -74,13 +74,13 @@
                         <!-- Daftar Kegiatan -->
                         <div onclick="toggleSection(this)" class="collapse-header flex items-center justify-between cursor-pointer p-3 bg-[#053d2c]/5 rounded-xl hover:bg-[#053d2c]/10 transition border border-[#053d2c]/10 mt-3 border-t border-neutral-100 lg:border-t-0">
                             <h3 class="font-heading font-semibold text-[#053d2c] mb-0 flex items-center gap-2">
-                                {{ __('Daftar Kegiatan') }}
+                                {{ __('messages.map.activity_list') }}
                                 <i class="bx bx-chevron-down text-xs transform transition-transform duration-200"></i>
                             </h3>
                         </div>
                         <div class="collapse-content hidden overflow-hidden pt-3 pb-3">
-                            <input type="text" class="map-list-search" placeholder="Cari kegiatan..." onkeyup="filterList(this, 'kegiatan-list-index')">
-                            <div id="kegiatan-empty-index" class="search-empty text-center py-4">{{ __('Tidak ditemukan.') }}</div>
+                            <input type="text" class="map-list-search" placeholder="{{ __('messages.map.search_activity') }}" onkeyup="filterList(this, 'kegiatan-list-index')">
+                            <div id="kegiatan-empty-index" class="search-empty text-center py-4">{{ __('messages.map.search_not_found') }}</div>
                             <ul id="kegiatan-list-index" class="space-y-2">
                                 @forelse($activities as $a)
                                 <li class="text-sm text-gray-700 cursor-pointer hover:bg-gray-100 p-2" onclick="flyToMarker({{ $a->latitude }}, {{ $a->longitude }})" data-name="{{ $a->title_id }}">
@@ -90,7 +90,7 @@
                                     @endif
                                 </li>
                                 @empty
-                                <li class="text-sm text-gray-500">{{ __('Tidak ada data.') }}</li>
+                                <li class="text-sm text-gray-500">{{ __('messages.map.not_found') }}</li>
                                 @endforelse
                             </ul>
                         </div>

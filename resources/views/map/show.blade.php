@@ -1,7 +1,7 @@
 @extends('layouts.frontend')
 
-@section('title', __('Peta Event') . ': ' . $schedule->event_name . ' - ' . config('app.name'))
-@section('meta_description', __('Peta lokasi homestay dan kegiatan untuk jadwal :event.', ['event' => $schedule->event_name]))
+@section('title', __('messages.map.event_title') . ': ' . $schedule->event_name . ' - ' . config('app.name'))
+@section('meta_description', __('messages.map.event_meta_desc', ['event' => $schedule->event_name]))
 
 @push('style-alt')
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -16,23 +16,23 @@
             <div class="mb-12">
                 <div class="inline-flex items-center gap-2 bg-[#053d2c]/80 border border-[#00a877]/30 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider text-[#00c887] uppercase mb-4">
                     <i class="fas fa-calendar-alt"></i>
-                    {{ __('Event Sedang Berjalan') }}
+                    {{ __('messages.map.event_active') }}
                 </div>
                 <h1 class="font-serif text-3xl md:text-5xl font-bold text-[#053d2c] mb-3">{{ $schedule->event_name }}</h1>
                 <p class="text-neutral-600 max-w-2xl">
                     {{ \Carbon\Carbon::parse($schedule->start_date)->format('d M Y') }}
                     - {{ \Carbon\Carbon::parse($schedule->end_date)->format('d M Y') }}
                     <span class="text-[#00a877] font-semibold mx-2">|</span>
-                    {{ $schedule->quota }} {{ __('orang') }}
+                    {{ $schedule->quota }} {{ __('messages.map.people') }}
                 </p>
             </div>
             <div class="grid lg:grid-cols-3 gap-8">
                 <!-- Peta: desktop di kiri (order-1), mobile/tablet di bawah (order-2) -->
                 <div class="lg:col-span-2 order-2 lg:order-1">
                     <div class="bg-[#f8fdfb] border border-neutral-100 p-6 rounded-[2rem] mb-6">
-                        <h3 class="font-heading font-semibold text-[#053d2c] mb-3">{{ __('Peta Event') }}</h3>
+                        <h3 class="font-heading font-semibold text-[#053d2c] mb-3">{{ __('messages.map.event_title') }}</h3>
                         <p class="text-sm text-neutral-600 mb-4">
-                            {{ __('Peta ini hanya menampilkan homestay dan kegiatan yang diaktifkan untuk event ini.') }}
+                            {{ __('messages.map.only_active') }}
                         </p>
                         @include('partials._map-canvas', [
                             'markersJson' => json_encode($markers),
@@ -49,21 +49,21 @@
                     <!-- Homestay untuk Event Ini -->
                     <div onclick="toggleSection(this)" class="collapse-header flex items-center justify-between cursor-pointer p-3 bg-[#053d2c]/5 rounded-xl hover:bg-[#053d2c]/10 transition border border-[#053d2c]/10 mb-0">
                         <h3 class="font-heading font-semibold text-[#053d2c] mb-0 flex items-center gap-2">
-                            {{ __('Homestay untuk Event Ini') }}
+                            {{ __('messages.map.homestays_active') }}
                             <i class="bx bx-chevron-down text-xs transform transition-transform duration-200"></i>
                         </h3>
                     </div>
                     <div class="collapse-content hidden overflow-hidden pt-3 pb-3 bg-[#f8fdfb] border border-neutral-100 p-6 rounded-[2rem]">
-                        <p class="text-sm text-neutral-600 mb-4">{{ __('Homestay berikut ditetapkan dan ditinggali oleh kelompok:') }}</p>
-                        <input type="text" class="map-list-search" placeholder="Cari homestay..." onkeyup="filterList(this, 'homestay-list-show')">
-                        <div id="homestay-empty-show" class="search-empty text-center py-4">{{ __('Tidak ditemukan.') }}</div>
+                        <p class="text-sm text-neutral-600 mb-4">{{ __('messages.map.assigned_homestays') }}</p>
+                        <input type="text" class="map-list-search" placeholder="{{ __('messages.map.search_homestay') }}" onkeyup="filterList(this, 'homestay-list-show')">
+                        <div id="homestay-empty-show" class="search-empty text-center py-4">{{ __('messages.map.search_not_found') }}</div>
                         <ul id="homestay-list-show" class="space-y-3">
                             @php $__locale = app()->getLocale(); @endphp
                             @forelse($homestays as $h)
                             <li class="p-3 border border-neutral-100 rounded-xl bg-white cursor-pointer" onclick="flyToMarker({{ $h->latitude }}, {{ $h->longitude }})" data-name="{{ $h->name_id }}">
                                 <div class="flex justify-between items-start mb-1">
                                     <span class="font-medium text-gray-800">{{ $h->name_id }}</span>
-                                    <span class="text-[10px] bg-primary-100 text-primary-700 px-2 py-0.5 rounded-full font-semibold">{{ __('Homestay') }}</span>
+                                    <span class="text-[10px] bg-primary-100 text-primary-700 px-2 py-0.5 rounded-full font-semibold">{{ __('messages.nav.homestay') }}</span>
                                 </div>
                                 <div class="text-sm text-gray-600 mb-2" data-lat="{{ $h->latitude }}" data-lng="{{ $h->longitude }}">{{ $h->address_id }}</div>
                                 @php
@@ -74,7 +74,7 @@
                                 @if($__groupName)
                                 <div class="flex items-center gap-2 mb-1">
                                     <i class="fas fa-users text-[#00a877] text-xs"></i>
-                                    <span class="text-sm font-medium text-[#053d2c]">{{ __('Occupied by') }}: <strong>{{ $__groupName }}</strong></span>
+                                    <span class="text-sm font-medium text-[#053d2c]">{{ __('messages.map.occupied_by_label') }}: <strong>{{ $__groupName }}</strong></span>
                                 </div>
                                 @endif
                                 @if($h->latitude && $h->longitude)
@@ -82,7 +82,7 @@
                                 @endif
                             </li>
                             @empty
-                            <li class="text-sm text-gray-500 text-center py-2">{{ __('Belum ada homestay yang ditetapkan.') }}</li>
+                            <li class="text-sm text-gray-500 text-center py-2">{{ __('messages.map.no_homestay') }}</li>
                             @endforelse
                         </ul>
                     </div>
@@ -90,14 +90,14 @@
                     <!-- Kegiatan yang Muncul -->
                     <div onclick="toggleSection(this)" class="collapse-header flex items-center justify-between cursor-pointer p-3 bg-[#053d2c]/5 rounded-xl hover:bg-[#053d2c]/10 transition border border-[#053d2c]/10 mt-6 border-t border-neutral-100 pt-6 lg:mt-0 lg:border-t-0 lg:pt-0">
                         <h3 class="font-heading font-semibold text-[#053d2c] mb-0 flex items-center gap-2">
-                            {{ __('Kegiatan yang Muncul') }}
+                            {{ __('messages.map.activities_active') }}
                             <i class="bx bx-chevron-down text-xs transform transition-transform duration-200"></i>
                         </h3>
                     </div>
                     <div class="collapse-content hidden overflow-hidden pt-3 pb-3 bg-[#f8fdfb] border border-neutral-100 p-6 rounded-[2rem]">
-                        <p class="text-sm text-neutral-600 mb-4">{{ __('Hanya kegiatan berikut yang ditampilkan untuk event ini:') }}</p>
-                        <input type="text" class="map-list-search" placeholder="Cari kegiatan..." onkeyup="filterList(this, 'kegiatan-list-show')">
-                        <div id="kegiatan-empty-show" class="search-empty text-center py-4">{{ __('Tidak ditemukan.') }}</div>
+                        <p class="text-sm text-neutral-600 mb-4">{{ __('messages.map.active_activities') }}</p>
+                        <input type="text" class="map-list-search" placeholder="{{ __('messages.map.search_activity') }}" onkeyup="filterList(this, 'kegiatan-list-show')">
+                        <div id="kegiatan-empty-show" class="search-empty text-center py-4">{{ __('messages.map.search_not_found') }}</div>
                         <ul id="kegiatan-list-show" class="space-y-2">
                             @forelse($activities as $a)
                             <li class="flex items-start gap-3 p-3 border border-neutral-100 rounded-xl bg-white cursor-pointer" onclick="flyToMarker({{ $a->latitude }}, {{ $a->longitude }})" data-name="{{ $a->title_id }}">
@@ -108,7 +108,7 @@
                                 </div>
                             </li>
                             @empty
-                            <li class="text-sm text-gray-500 text-center py-2">{{ __('Belum ada kegiatan yang ditetapkan.') }}</li>
+                            <li class="text-sm text-gray-500 text-center py-2">{{ __('messages.map.no_activity') }}</li>
                             @endforelse
                         </ul>
                     </div>
