@@ -27,7 +27,8 @@
                 </p>
             </div>
             <div class="grid lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2">
+                <!-- Peta: desktop di kiri (order-1), mobile/tablet di bawah (order-2) -->
+                <div class="lg:col-span-2 order-2 lg:order-1">
                     <div class="bg-[#f8fdfb] border border-neutral-100 p-6 rounded-[2rem] mb-6">
                         <h3 class="font-heading font-semibold text-[#053d2c] mb-3">{{ __('Peta Event') }}</h3>
                         <p class="text-sm text-neutral-600 mb-4">
@@ -42,7 +43,8 @@
                     </div>
                 </div>
 
-                <div class="lg:col-span-1">
+                <!-- Daftar: mobile/tablet di atas (order-1), desktop di kanan (order-2) -->
+                <div class="lg:col-span-1 order-1 lg:order-2 sticky top-24 lg:sticky-top-24">
 
                     <!-- Homestay untuk Event Ini -->
                     <div onclick="toggleSection(this)" class="collapse-header flex items-center justify-between cursor-pointer p-3 bg-[#053d2c]/5 rounded-xl hover:bg-[#053d2c]/10 transition border border-[#053d2c]/10 mb-0">
@@ -51,7 +53,7 @@
                             <i class="bx bx-chevron-down text-xs transform transition-transform duration-200"></i>
                         </h3>
                     </div>
-                    <div class="collapse-content hidden lg:block overflow-hidden pt-3 pb-3 bg-[#f8fdfb] border border-neutral-100 p-6 rounded-[2rem] sticky top-24 lg:sticky-top-24">
+                    <div class="collapse-content hidden overflow-hidden pt-3 pb-3 bg-[#f8fdfb] border border-neutral-100 p-6 rounded-[2rem]">
                         <p class="text-sm text-neutral-600 mb-4">{{ __('Homestay berikut ditetapkan dan ditinggali oleh kelompok:') }}</p>
                         <ul class="space-y-3">
                             @php $__locale = app()->getLocale(); @endphp
@@ -90,7 +92,7 @@
                             <i class="bx bx-chevron-down text-xs transform transition-transform duration-200"></i>
                         </h3>
                     </div>
-                    <div class="collapse-content hidden lg:block overflow-hidden pt-3 pb-3 bg-[#f8fdfb] border border-neutral-100 p-6 rounded-[2rem] sticky top-24 lg:sticky-top-24">
+                    <div class="collapse-content hidden overflow-hidden pt-3 pb-3 bg-[#f8fdfb] border border-neutral-100 p-6 rounded-[2rem]">
                         <p class="text-sm text-neutral-600 mb-4">{{ __('Hanya kegiatan berikut yang ditampilkan untuk event ini:') }}</p>
                         <ul class="space-y-2">
                             @forelse($activities as $a)

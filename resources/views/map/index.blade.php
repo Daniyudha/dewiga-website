@@ -15,10 +15,11 @@
         <div class="container mx-auto px-6">
             <div class="text-center mb-12">
                 <h2 class="font-serif text-3xl md:text-5xl font-bold text-[#053d2c] mb-3">{{ __('Peta Lokasi Lengkap') }}</h2>
-                <p class="text-neutral-600 max-w-2xl mx-auto">{{ __('Semua homestay dan kegiatan yang aktif ditampilkan pada peta berikut.') }}</p>
+                <p class="text-neutral-600 max-w-2xl mx-auto">{{ __('Semua homestay dan kegiatan ditampilkan pada peta berikut.') }}</p>
             </div>
             <div class="grid lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2">
+                <!-- Peta: desktop di kiri (order-1), mobile/tablet di bawah (order-2) -->
+                <div class="lg:col-span-2 order-2 lg:order-1">
                     @include('partials._map-canvas', [
                         'markersJson' => json_encode($markers),
                         'centerLat' => -7.75,
@@ -27,8 +28,9 @@
                     ])
                 </div>
 
-                <div class="lg:col-span-1">
-                    <div class="bg-[#f8fdfb] border border-neutral-100 p-6 rounded-[2rem] sticky top-24 lg:sticky-top-24">
+                <!-- Daftar: mobile/tablet di atas (order-1), desktop di kanan (order-2) -->
+                <div class="lg:col-span-1 order-1 lg:order-2 sticky top-24 lg:sticky-top-24">
+                    <div class="bg-[#f8fdfb] border border-neutral-100 p-6 rounded-[2rem]">
 
                         <!-- Legend -->
                         <div onclick="toggleSection(this)" class="collapse-header flex items-center justify-between cursor-pointer p-3 bg-[#053d2c]/5 rounded-xl hover:bg-[#053d2c]/10 transition border border-[#053d2c]/10 mb-0">
@@ -37,7 +39,7 @@
                                 <i class="bx bx-chevron-down text-xs transform transition-transform duration-200"></i>
                             </h3>
                         </div>
-                        <div class="collapse-content hidden lg:block overflow-hidden pt-3 pb-3">
+                        <div class="collapse-content hidden overflow-hidden pt-3 pb-3">
                             <div class="flex items-center gap-3 mb-4">
                                 <div style="background:#00a877;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:18px;border:2px solid #fff;"><i class="bx bx-home-alt"></i></div>
                                 <span class="text-sm font-medium text-gray-700">{{ __('Homestay') }}</span>
@@ -55,7 +57,7 @@
                                 <i class="bx bx-chevron-down text-xs transform transition-transform duration-200"></i>
                             </h3>
                         </div>
-                        <div class="collapse-content hidden lg:block overflow-hidden pt-3 pb-3">
+                        <div class="collapse-content hidden overflow-hidden pt-3 pb-3">
                             <ul class="space-y-2">
                                 @forelse($homestays as $h)
                                 <li class="text-sm text-gray-700 cursor-pointer hover:bg-gray-100 p-2" onclick="flyToMarker({{ $h->latitude }}, {{ $h->longitude }})">
@@ -77,7 +79,7 @@
                                 <i class="bx bx-chevron-down text-xs transform transition-transform duration-200"></i>
                             </h3>
                         </div>
-                        <div class="collapse-content hidden lg:block overflow-hidden pt-3 pb-3">
+                        <div class="collapse-content hidden overflow-hidden pt-3 pb-3">
                             <ul class="space-y-2">
                                 @forelse($activities as $a)
                                 <li class="text-sm text-gray-700 cursor-pointer hover:bg-gray-100 p-2" onclick="flyToMarker({{ $a->latitude }}, {{ $a->longitude }})">
