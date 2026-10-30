@@ -162,10 +162,12 @@
                                             class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
+                                        @if($schedule->schedule_code)
                                         <a href="{{ route('peta.event', $schedule) }}" target="_blank"
                                             class="text-purple-600 hover:text-purple-800 text-sm font-medium transition-colors" title="Lihat Peta">
                                             <i class="fas fa-map-marked-alt"></i>
                                         </a>
+                                        @endif
                                         <a href="{{ route('admin.schedules.assign-homestays', $schedule) }}"
                                             class="text-emerald-600 hover:text-emerald-800 text-sm font-medium transition-colors" title="Atur Homestay">
                                             <i class="fas fa-home"></i>

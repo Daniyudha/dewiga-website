@@ -159,6 +159,14 @@
             </a>
         </div>
         @endif
+        @if($user->hasAnyPermission(['events.manage', 'events.view']))
+        <div class="nav-item">
+            <a href="{{ route('admin.events.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-map-marked-alt"></i>
+                <span>{{ __('Events') }}</span>
+            </a>
+        </div>
+        @endif
     </div>
     @endif
 
