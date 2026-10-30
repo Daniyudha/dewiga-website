@@ -32,19 +32,16 @@
                 <div class="lg:col-span-1 order-1 lg:order-2 sticky top-24 lg:sticky-top-24">
                     <div class="bg-[#f8fdfb] border border-neutral-100 p-6 rounded-[2rem]">
 
-                        <!-- Legend -->
-                        <div onclick="toggleSection(this)" class="collapse-header flex items-center justify-between cursor-pointer p-3 bg-[#053d2c]/5 rounded-xl hover:bg-[#053d2c]/10 transition border border-[#053d2c]/10 mb-0">
-                            <h3 class="font-heading font-semibold text-[#053d2c] mb-0 flex items-center gap-2">
+                        <!-- Legend (selalu terbuka, tanpa accordion) -->
+                        <div class="bg-[#053d2c]/5 rounded-xl p-3 border border-[#053d2c]/10 mb-6">
+                            <h3 class="font-heading font-semibold text-[#053d2c] mb-3 flex items-center gap-2">
                                 {{ __('Legenda') }}
-                                <i class="bx bx-chevron-down text-xs transform transition-transform duration-200"></i>
                             </h3>
-                        </div>
-                        <div class="collapse-content hidden overflow-hidden pt-3 pb-3">
                             <div class="flex items-center gap-3 mb-4">
                                 <div style="background:#00a877;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:18px;border:2px solid #fff;"><i class="bx bx-home-alt"></i></div>
                                 <span class="text-sm font-medium text-gray-700">{{ __('Homestay') }}</span>
                             </div>
-                            <div class="flex items-center gap-3 mb-4">
+                            <div class="flex items-center gap-3 mb-0">
                                 <div style="background:#e8a838;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:18px;border:2px solid #fff;"><i class="bx bx-run"></i></div>
                                 <span class="text-sm font-medium text-gray-700">{{ __('Kegiatan / Aktivitas') }}</span>
                             </div>
