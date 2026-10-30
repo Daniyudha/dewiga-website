@@ -748,6 +748,58 @@
 }
 
 /* =========================
+   Accordion scrollable content
+========================= */
+.collapse-content {
+    max-height: 300px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.collapse-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.collapse-content::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+
+.collapse-content::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.collapse-content::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Search input styling */
+.map-list-search {
+    @apply w-full px-3 py-2 text-sm border border-neutral-200 rounded-xl focus:ring-2 focus:ring-[#00a877] focus:border-transparent outline-none transition mb-3 bg-white;
+}
+
+.map-list-search::placeholder {
+    @apply text-neutral-400;
+}
+
+/* Hide empty state when searching */
+.search-empty {
+    display: none;
+    text-align: center;
+    padding: 2rem;
+    color: #64748b;
+}
+
+/* Highlight matched text */
+.match-highlight {
+    background: #fef3c7;
+    font-weight: 600;
+    border-radius: 2px;
+}
+
+/* =========================
    Navbar khusus halaman Peta
    (background agar terlihat jelas tanpa banner/hero di atas)
 ========================= */

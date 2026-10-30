@@ -55,10 +55,12 @@
                     </div>
                     <div class="collapse-content hidden overflow-hidden pt-3 pb-3 bg-[#f8fdfb] border border-neutral-100 p-6 rounded-[2rem]">
                         <p class="text-sm text-neutral-600 mb-4">{{ __('Homestay berikut ditetapkan dan ditinggali oleh kelompok:') }}</p>
-                        <ul class="space-y-3">
+                        <input type="text" class="map-list-search" placeholder="Cari homestay..." onkeyup="filterList(this, 'homestay-list-show')">
+                        <div id="homestay-empty-show" class="search-empty text-center py-4">{{ __('Tidak ditemukan.') }}</div>
+                        <ul id="homestay-list-show" class="space-y-3">
                             @php $__locale = app()->getLocale(); @endphp
                             @forelse($homestays as $h)
-                            <li class="p-3 border border-neutral-100 rounded-xl bg-white cursor-pointer" onclick="flyToMarker({{ $h->latitude }}, {{ $h->longitude }})">
+                            <li class="p-3 border border-neutral-100 rounded-xl bg-white cursor-pointer" onclick="flyToMarker({{ $h->latitude }}, {{ $h->longitude }})" data-name="{{ $h->name_id }}">
                                 <div class="flex justify-between items-start mb-1">
                                     <span class="font-medium text-gray-800">{{ $h->name_id }}</span>
                                     <span class="text-[10px] bg-primary-100 text-primary-700 px-2 py-0.5 rounded-full font-semibold">{{ __('Homestay') }}</span>
@@ -94,9 +96,11 @@
                     </div>
                     <div class="collapse-content hidden overflow-hidden pt-3 pb-3 bg-[#f8fdfb] border border-neutral-100 p-6 rounded-[2rem]">
                         <p class="text-sm text-neutral-600 mb-4">{{ __('Hanya kegiatan berikut yang ditampilkan untuk event ini:') }}</p>
-                        <ul class="space-y-2">
+                        <input type="text" class="map-list-search" placeholder="Cari kegiatan..." onkeyup="filterList(this, 'kegiatan-list-show')">
+                        <div id="kegiatan-empty-show" class="search-empty text-center py-4">{{ __('Tidak ditemukan.') }}</div>
+                        <ul id="kegiatan-list-show" class="space-y-2">
                             @forelse($activities as $a)
-                            <li class="flex items-start gap-3 p-3 border border-neutral-100 rounded-xl bg-white cursor-pointer" onclick="flyToMarker({{ $a->latitude }}, {{ $a->longitude }})">
+                            <li class="flex items-start gap-3 p-3 border border-neutral-100 rounded-xl bg-white cursor-pointer" onclick="flyToMarker({{ $a->latitude }}, {{ $a->longitude }})" data-name="{{ $a->title_id }}">
                                 <div class="bg-emerald-100 text-emerald-700 rounded-lg p-2 shrink-0"><i class="fas fa-running text-sm"></i></div>
                                 <div>
                                     <div class="font-medium text-gray-800 text-sm" data-lat="{{ $a->latitude }}" data-lng="{{ $a->longitude }}">{{ $a->title_id }}</div>
@@ -119,6 +123,29 @@
                     content.classList.toggle('hidden');
                     if (icon) {
                         icon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+                    }
+                }
+
+                function filterList(input, listId) {
+                    const search = input.value.toLowerCase();
+                    const list = document.getElementById(listId);
+                    const empty = document.getElementById(listId.replace('-list-', '-empty-'));
+                    const items = list.getElementsByTagName('li');
+                    let visible = 0;
+
+                    for (let item of items) {
+                        if (item.classList.contains('text-gray-500')) continue;
+                        const name = item.getAttribute('data-name') || item.textContent;
+                        if (name.toLowerCase().includes(search)) {
+                            item.style.display = '';
+                            visible++;
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    }
+
+                    if (empty) {
+                        empty.style.display = visible === 0 ? 'block' : 'none';
                     }
                 }
                 </script>
