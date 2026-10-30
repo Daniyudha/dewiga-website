@@ -11,6 +11,25 @@ class Activity extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'latitude' => 'float',
+        'longitude' => 'float',
+        'is_active' => 'boolean',
+        'is_featured' => 'boolean',
+        'order' => 'integer',
+        'min_pax' => 'integer',
+    ];
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('order')->orderBy('id');
+    }
+
     public function getTitleAttribute($value)
     {
         $locale = app()->getLocale();

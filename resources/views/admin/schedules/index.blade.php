@@ -162,6 +162,18 @@
                                             class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
+                                        <a href="{{ route('peta.event', $schedule) }}" target="_blank"
+                                            class="text-purple-600 hover:text-purple-800 text-sm font-medium transition-colors" title="Lihat Peta">
+                                            <i class="fas fa-map-marked-alt"></i>
+                                        </a>
+                                        <a href="{{ route('admin.schedules.assign-homestays', $schedule) }}"
+                                            class="text-emerald-600 hover:text-emerald-800 text-sm font-medium transition-colors" title="Atur Homestay">
+                                            <i class="fas fa-home"></i>
+                                        </a>
+                                        <a href="{{ route('admin.schedules.assign-activities', $schedule) }}"
+                                            class="text-amber-600 hover:text-amber-800 text-sm font-medium transition-colors" title="Atur Kegiatan">
+                                            <i class="fas fa-running"></i>
+                                        </a>
                                         <form method="POST" action="{{ route('admin.schedules.destroy', $schedule) }}"
                                             onsubmit="return confirm('{{ __('Are you sure?') }}')" class="inline">
                                             @csrf
@@ -199,7 +211,8 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('calendarBody').style.display = 'none';
+    const calendarBody = document.getElementById('calendarBody');
+    if (calendarBody) calendarBody.style.display = 'none';
 });
 
 var calendarInitialized = false;

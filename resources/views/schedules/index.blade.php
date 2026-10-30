@@ -336,6 +336,11 @@
                                 {{ __('messages.schedules.Register_Now') }}
                             </button>
                             @endif
+
+                            <a href="{{ route('peta.event', $schedule) }}" target="_blank"
+                               class="mt-3 w-full inline-flex items-center justify-center gap-2 bg-[#053d2c]/5 hover:bg-[#053d2c]/10 text-[#053d2c] font-medium py-2 px-4 rounded-lg transition-colors text-sm border border-[#053d2c]/10">
+                                <i class="bx bx-map"></i> @lang('messages.map.view_event_map')
+                            </a>
                         </div>
                     </div>
                 @endforeach
@@ -411,6 +416,10 @@
             {{ __('messages.schedules.View_Package_Details') }}
         </a>
     </div>
+    <a href="#" id="mMapLink" target="_blank"
+       class="mt-3 block w-full text-center bg-[#053d2c]/5 hover:bg-[#053d2c]/10 text-[#053d2c] font-semibold py-3 px-6 rounded-xl transition-colors">
+        <i class="bx bx-map"></i> @lang('messages.map.view_event_map')
+    </a>
     <div id="mRegisterContainer" class="mt-3 is-hidden">
         <button type="button" id="mRegisterBtn" class="w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1 -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
@@ -587,6 +596,7 @@ function openModal(props) {
     }
     document.getElementById('mType').textContent = props.type_label || props.type || '-';
     document.getElementById('mCta').href = props.package_url || '#';
+    document.getElementById('mMapLink').href = props.map_url || '#';
     
     // Show register button for open_trip type (only if not past and available)
     var registerContainer = document.getElementById('mRegisterContainer');

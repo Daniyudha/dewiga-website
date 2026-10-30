@@ -50,6 +50,19 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="admin-form-group">
+                        <label for="latitude" class="admin-form-label">{{ __('Latitude') }}</label>
+                        <input type="number" id="latitude" name="latitude" value="{{ old('latitude') }}" step="any" class="admin-form-input" placeholder="-7.75">
+                        @error('latitude')<p class="admin-form-error">{{ $message }}</p>@enderror
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="longitude" class="admin-form-label">{{ __('Longitude') }}</label>
+                        <input type="number" id="longitude" name="longitude" value="{{ old('longitude') }}" step="any" class="admin-form-input" placeholder="110.23">
+                        @error('longitude')<p class="admin-form-error">{{ $message }}</p>@enderror
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="admin-form-group">
                         <label for="duration_id" class="admin-form-label">{{ __('Duration') }} (Indonesia)</label>
                         <input type="text" id="duration_id" name="duration_id" value="{{ old('duration_id') }}" class="admin-form-input" placeholder="e.g. 1-2 jam">
                         @error('duration_id')<p class="admin-form-error">{{ $message }}</p>@enderror
@@ -93,6 +106,10 @@
                             <input type="checkbox" name="is_featured" value="1" {{ old('is_featured') ? 'checked' : '' }} class="w-4 h-4 text-primary-600 rounded border-gray-300">
                             {{ __('Featured') }}
                         </label>
+                    </div>
+                    <div class="admin-form-group flex items-center">
+                        <input type="checkbox" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }} class="w-4 h-4 text-primary-600 rounded border-gray-300">
+                        <label class="ml-2 text-sm">{{ __('Is Active') }}</label>
                     </div>
                 </div>
 

@@ -127,6 +127,50 @@
         </div>
     </section>
 
+    {{-- SECTION: Daftar Homestay --}}
+    <section class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <span class="text-[#00a877] font-semibold text-sm uppercase tracking-wider block mb-3">@lang('messages.homestay.list_subtitle')</span>
+                <h2 class="font-serif text-3xl md:text-5xl font-bold text-[#053d2c]">@lang('messages.homestay.list_title')</h2>
+            </div>
+            <div class="max-h-[560px] overflow-y-auto pr-2 space-y-4">
+                @forelse($homestays as $homestay)
+                <div class="flex flex-col sm:flex-row gap-4 bg-[#f8fdfb] border border-neutral-100 rounded-2xl p-4 hover:shadow-md transition duration-300">
+                    <div class="w-full sm:w-44 h-32 shrink-0 rounded-xl overflow-hidden bg-neutral-100 flex items-center justify-center">
+                        @if($homestay->image)
+                            <img src="{{ asset('storage/' . $homestay->image) }}" alt="{{ $homestay->name }}" class="w-full h-full object-cover">
+                        @else
+                            <i class="bx bx-home-alt text-4xl text-[#00a877]/40"></i>
+                        @endif
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-start justify-between gap-3">
+                            <h3 class="font-semibold text-[#053d2c] text-lg">{{ $homestay->name }}</h3>
+                            <span class="inline-flex items-center gap-1 text-xs font-semibold bg-primary-100 text-primary-700 px-2.5 py-1 rounded-full shrink-0">
+                                <i class="bx bx-group"></i> {{ $homestay->capacity }}
+                            </span>
+                        </div>
+                        <p class="text-neutral-500 text-sm mt-1 flex items-start gap-2">
+                            <i class="bx bx-map text-[#00a877] mt-0.5"></i> {{ $homestay->address }}
+                        </p>
+                        @if($homestay->latitude && $homestay->longitude)
+                        <div class="mt-2">
+                            <a href="https://www.google.com/maps/search/?api=1&query={{ $homestay->latitude }},{{ $homestay->longitude }}" target="_blank" rel="noopener"
+                               class="inline-flex items-center gap-1.5 text-sm font-medium text-[#00a877] hover:underline">
+                                <i class="bx bx-map-pin"></i> @lang('messages.map.open_in_google_maps')
+                            </a>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+                @empty
+                <p class="text-center text-neutral-500 py-10">{{ __('Belum ada data homestay.') }}</p>
+                @endforelse
+            </div>
+        </div>
+    </section>
+
     {{-- CTA --}}
     <section class="pb-24 bg-[#e8fbf3]">
         <div class="container mx-auto px-6">

@@ -41,6 +41,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         // Schedules
         Route::resource('schedules', \App\Http\Controllers\Admin\ScheduleController::class)->except('show');
         Route::get('schedules/{schedule}/show', [\App\Http\Controllers\Admin\ScheduleController::class, 'show'])->name('schedules.show');
+        Route::get('schedules/{schedule}/homestays', [\App\Http\Controllers\Admin\ScheduleController::class, 'assignHomestays'])->name('schedules.assign-homestays');
+        Route::post('schedules/{schedule}/homestays', [\App\Http\Controllers\Admin\ScheduleController::class, 'storeAssignHomestays'])->name('schedules.store-assign-homestays');
+        Route::get('schedules/{schedule}/activities', [\App\Http\Controllers\Admin\ScheduleController::class, 'assignActivities'])->name('schedules.assign-activities');
+        Route::post('schedules/{schedule}/activities', [\App\Http\Controllers\Admin\ScheduleController::class, 'storeAssignActivities'])->name('schedules.store-assign-activities');
         Route::patch('schedules/{schedule}/toggle-active', [\App\Http\Controllers\Admin\ScheduleController::class, 'toggleActive'])->name('schedules.toggle-active');
         Route::patch('schedules/{schedule}/update-status', [\App\Http\Controllers\Admin\ScheduleController::class, 'updateStatus'])->name('schedules.update-status');
         Route::post('schedules/{schedule}/generate-midtrans-link', [\App\Http\Controllers\Admin\ScheduleController::class, 'generateMidtransPaymentLink'])->name('schedules.generate-midtrans-link');
@@ -65,6 +69,21 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         Route::resource('activities', \App\Http\Controllers\Admin\ActivityController::class)->except('show');
         Route::resource('activities.galleries', \App\Http\Controllers\Admin\ActivityGalleryController::class)->except(['create', 'index', 'show']);
         Route::post('activities/reorder', [\App\Http\Controllers\Admin\ActivityController::class, 'reorder'])->name('activities.reorder');
+
+        // Homestays
+        Route::resource('homestays', \App\Http\Controllers\Admin\HomestayController::class)->except('show');
+
+        // Homestay Import & Template
+        Route::post('homestays/import', [\App\Http\Controllers\Admin\HomestayController::class, 'import'])->name('homestay.import');
+        Route::get('homestays/template', [\App\Http\Controllers\Admin\HomestayController::class, 'template'])->name('homestay.template');
+
+        // Events & peta asignmen
+        Route::resource('events', \App\Http\Controllers\Admin\EventController::class)->except(['show']);
+        Route::get('events/{event}/homestays', [\App\Http\Controllers\Admin\EventController::class, 'assignHomestays'])->name('events.assign-homestays');
+        Route::post('events/{event}/homestays', [\App\Http\Controllers\Admin\EventController::class, 'storeAssignHomestays'])->name('events.store-assign-homestays');
+        Route::get('events/{event}/activities', [\App\Http\Controllers\Admin\EventController::class, 'assignActivities'])->name('events.assign-activities');
+        Route::post('events/{event}/activities', [\App\Http\Controllers\Admin\EventController::class, 'storeAssignActivities'])->name('events.store-assign-activities');
+
         // Site Gallery
         Route::get('site-galleries', [\App\Http\Controllers\Admin\SiteGalleryController::class, 'index'])->name('site-galleries.index');
         Route::post('site-galleries/upload', [\App\Http\Controllers\Admin\SiteGalleryController::class, 'upload'])->name('site-galleries.upload');
@@ -174,7 +193,15 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     // about-us
     Route::get('about-us', function() { return view('about-us'); })->name('about-us');
     // homestay
-    Route::get('homestay', function() { return view('homestay'); })->name('homestay');
+
+    // peta
+    Route::get('peta', [\App\Http\Controllers\MapController::class, 'index'])->name('peta');
+    Route::get('peta/{schedule:schedule_code}', [\App\Http\Controllers\MapController::class, 'show'])->name('peta.event');
+
+    Route::get('homestay', function() {
+        $homestays = \App\Models\Homestay::active()->ordered()->get();
+        return view('homestay', compact('homestays'));
+    })->name('homestay');
     // community impact
     Route::get('community-impact', function() { return view('impact'); })->name('impact');
     // booking

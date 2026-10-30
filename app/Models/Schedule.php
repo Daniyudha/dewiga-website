@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\ScheduleSourceType;
 use App\Enums\ScheduleStatus;
+use App\Models\Activity;
+use App\Models\Homestay;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -70,9 +72,37 @@ class Schedule extends Model
         return self::types()[$this->type] ?? $this->type;
     }
 
+    /**
+     * Nama event/jadwal untuk tampilan peta & publik.
+     */
+    public function getEventNameAttribute(): string
+    {
+        $parts = [];
+        if ($this->visitor_name) {
+            $parts[] = $this->visitor_name;
+        }
+        if ($this->travelPackage?->type) {
+            $parts[] = $this->travelPackage->type;
+        }
+        return implode(' - ', $parts) ?: ($this->schedule_code ?? 'Schedule #' . $this->id);
+    }
+
     public function travelPackage()
     {
         return $this->belongsTo(TravelPackage::class);
+    }
+
+    public function homestays()
+    {
+        return $this->belongsToMany(Homestay::class, 'schedule_homestay')
+            ->withPivot('group_name_id', 'group_name_en', 'notes')
+            ->withTimestamps();
+    }
+
+    public function activities()
+    {
+        return $this->belongsToMany(Activity::class, 'schedule_activity')
+            ->withTimestamps();
     }
 
     public function bookings()
@@ -210,6 +240,16 @@ class Schedule extends Model
     public function scopeUpcoming($query)
     {
         return $query->whereDate('start_date', '>=', now()->toDateString());
+    }
+
+    /**
+     * Scope: jadwal yang sedang berlangsung (start <= hari ini <= end).
+     */
+    public function scopeCurrent($query)
+    {
+        return $query->where('is_active', true)
+            ->whereDate('start_date', '<=', today())
+            ->whereDate('end_date', '>=', today());
     }
 
     /**

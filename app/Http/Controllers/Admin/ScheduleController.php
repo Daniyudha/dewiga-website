@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\ScheduleStatus;
+use App\Models\Activity;
+use App\Models\Homestay;
 use App\Models\Schedule;
 use App\Models\SchedulePayment;
 use App\Models\TravelPackage;
@@ -342,6 +344,69 @@ class ScheduleController extends Controller
 
         return redirect()->back()->with([
             'message' => 'Status jadwal diperbarui!',
+            'alert-type' => 'success',
+        ]);
+    }
+
+    /**
+     * Form untuk menentukan homestay yang digunakan jadwal ini dan
+     * oleh kelompok mana homestay tersebut ditempati (data peta event).
+     */
+    public function assignHomestays(Schedule $schedule)
+    {
+        $homestays = Homestay::active()->ordered()->get();
+        $assigned = $schedule->homestays()->active()->ordered()->get()->pluck('pivot.group_name_id', 'id');
+        return view('admin.schedules.assign-homestays', compact('schedule', 'homestays', 'assigned'));
+    }
+
+    public function storeAssignHomestays(Request $request, Schedule $schedule)
+    {
+        $request->validate([
+            'homestays' => 'nullable|array',
+            'homestays.*' => 'integer|exists:homestays,id',
+            'group_name_id' => 'nullable|array',
+            'group_name_id.*' => 'nullable|string',
+            'group_name_en' => 'nullable|array',
+            'group_name_en.*' => 'nullable|string',
+        ]);
+
+        $schedule->homestays()->detach();
+
+        foreach ($request->input('homestays', []) as $homestayId) {
+            $schedule->homestays()->attach($homestayId, [
+                'group_name_id' => $request->input("group_name_id.{$homestayId}"),
+                'group_name_en' => $request->input("group_name_en.{$homestayId}"),
+                'notes' => null,
+            ]);
+        }
+
+        return redirect()->route('admin.schedules.index')->with([
+            'message' => 'Pengaturan homestay jadwal berhasil disimpan!',
+            'alert-type' => 'success',
+        ]);
+    }
+
+    /**
+     * Form untuk menentukan aktivitas yang muncul untuk jadwal ini.
+     */
+    public function assignActivities(Schedule $schedule)
+    {
+        $activities = Activity::active()->ordered()->get();
+        $assigned = $schedule->activities()->pluck('activity_id');
+        return view('admin.schedules.assign-activities', compact('schedule', 'activities', 'assigned'));
+    }
+
+    public function storeAssignActivities(Request $request, Schedule $schedule)
+    {
+        $request->validate([
+            'activities' => 'nullable|array',
+            'activities.*' => 'integer|exists:activities,id',
+        ]);
+
+        $schedule->activities()->sync($request->input('activities', []));
+
+        return redirect()->route('admin.schedules.index')->with([
+            'message' => 'Pengaturan kegiatan jadwal berhasil disimpan!',
             'alert-type' => 'success',
         ]);
     }

@@ -59,6 +59,14 @@ class RolePermissionSeeder extends Seeder
             ['name' => 'Edit Tamu', 'slug' => 'guests.edit', 'group' => 'Database Tamu'],
             ['name' => 'Hapus Tamu', 'slug' => 'guests.delete', 'group' => 'Database Tamu'],
             
+            // Homestays
+            ['name' => 'Kelola Homestay', 'slug' => 'homestays.manage', 'group' => 'Homestay'],
+            ['name' => 'Lihat Homestay', 'slug' => 'homestays.view', 'group' => 'Homestay'],
+
+            // Events
+            ['name' => 'Kelola Event', 'slug' => 'events.manage', 'group' => 'Event'],
+            ['name' => 'Lihat Event', 'slug' => 'events.view', 'group' => 'Event'],
+
             // Content Management
             ['name' => 'Kelola Blog', 'slug' => 'blogs.manage', 'group' => 'Konten'],
             ['name' => 'Kelola Galeri', 'slug' => 'galleries.manage', 'group' => 'Konten'],
@@ -132,6 +140,8 @@ class RolePermissionSeeder extends Seeder
             'packages.view', 'packages.create', 'packages.edit',
             'proposals.view', 'proposals.create', 'proposals.edit',
             'guests.view', 'guests.create', 'guests.edit',
+            'homestays.manage', 'homestays.view',
+            'events.manage', 'events.view',
             'blogs.manage', 'galleries.manage', 'testimonials.manage',
             'hero.manage', 'partners.manage', 'categories.manage',
             'transactions.view',

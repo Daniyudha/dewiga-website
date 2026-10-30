@@ -151,6 +151,14 @@
                 <span>{{ __('Activities') }}</span>
             </a>
         </div>
+        @if($user->hasAnyPermission(['homestays.manage', 'homestays.view']))
+        <div class="nav-item">
+            <a href="{{ route('admin.homestays.index') }}" class="nav-link">
+                <i class="nav-icon fas fa-bed"></i>
+                <span>{{ __('Homestays') }}</span>
+            </a>
+        </div>
+        @endif
     </div>
     @endif
 

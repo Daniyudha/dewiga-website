@@ -36,11 +36,15 @@ class ActivityController extends Controller
             'includes_en' => 'nullable',
             'description_id' => 'required',
             'description_en' => 'nullable',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
+            'is_active' => 'nullable',
             'is_featured' => 'nullable',
         ]);
 
         $data['slug'] = Str::slug($data['title_id']);
         $data['is_featured'] = $request->has('is_featured');
+        $data['is_active'] = $request->has('is_active');
 
         // Auto-order: set to max order + 1
         $data['order'] = Activity::max('order') + 1;
@@ -92,11 +96,15 @@ class ActivityController extends Controller
             'includes_en' => 'nullable',
             'description_id' => 'required',
             'description_en' => 'nullable',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
+            'is_active' => 'nullable',
             'is_featured' => 'nullable',
         ]);
 
         $data['slug'] = Str::slug($data['title_id']);
         $data['is_featured'] = $request->has('is_featured');
+        $data['is_active'] = $request->has('is_active');
 
         // Validate featured limit (max 6)
         if ($data['is_featured'] && !$activity->is_featured) {

@@ -49,6 +49,8 @@ class RoleUserSeeder extends Seeder
             ['name' => 'Kelola Hero', 'slug' => 'hero.manage', 'group' => 'Konten'],
             ['name' => 'Kelola Partner Logo', 'slug' => 'partners.manage', 'group' => 'Konten'],
             ['name' => 'Kelola Kategori', 'slug' => 'categories.manage', 'group' => 'Konten'],
+            ['name' => 'Lihat Homestay', 'slug' => 'homestays.view', 'group' => 'Homestay'],
+            ['name' => 'Kelola Homestay', 'slug' => 'homestays.manage', 'group' => 'Homestay'],
             ['name' => 'Lihat Pengguna', 'slug' => 'users.view', 'group' => 'Pengguna'],
             ['name' => 'Tambah Pengguna', 'slug' => 'users.create', 'group' => 'Pengguna'],
             ['name' => 'Edit Pengguna', 'slug' => 'users.edit', 'group' => 'Pengguna'],
