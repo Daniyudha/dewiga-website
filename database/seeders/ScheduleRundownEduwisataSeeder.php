@@ -29,7 +29,6 @@ class ScheduleRundownEduwisataSeeder extends Seeder
                 'location' => 'Desa Wisata Gabugan',
                 'description' => 'Paket edukasi budaya dan alam Desa Wisata Gabugan',
                 'price' => 150000,
-                'capacity' => 50,
             ]);
 
         // --- Dependency: pastikan schedule untuk SMP Sekolah Alam Bintaro tersedia ---
@@ -50,19 +49,13 @@ class ScheduleRundownEduwisataSeeder extends Seeder
                 'booked' => 32,
                 'is_active' => true,
                 'notes' => 'Kunjungan eduwisata 32 orang (24 siswa + 8 guru)',
-                'created_by' => $user->id,
-                'updated_by' => $user->id,
             ]);
-            $this->command->info("Schedule dibuat: " . $schedule->visitor_name . " (" . $schedule->start_date . ")");
-        } else {
-            $this->command->info("Schedule sudah ada: " . $schedule->visitor_name . " (" . $schedule->start_date . ")");
         }
 
         // Hapus rundown lama jika ada (idempotent agar aman dijalankan berulang kali)
         if ($schedule->scheduleRundown) {
             $schedule->scheduleRundown->items()->delete();
             $schedule->scheduleRundown->delete();
-            $this->command->info("Rundown lama dihapus untuk jadwal ini.");
         }
 
         // --- Header rundown ---
@@ -76,8 +69,6 @@ class ScheduleRundownEduwisataSeeder extends Seeder
             'created_by' => $user->id,
             'updated_by' => $user->id,
         ]);
-
-        $this->command->info("Rundown dibuat: " . $rundown->rundown_number . " - " . $rundown->title);
 
         // --- Item rundown sesuai itinerary ---
         $items = [
@@ -152,14 +143,7 @@ class ScheduleRundownEduwisataSeeder extends Seeder
         foreach ($items as $item) {
             $item['schedule_rundown_id'] = $rundown->id;
             $item['schedule_id'] = $schedule->id;
-            $item['created_by'] = $user->id;
-            $item['updated_by'] = $user->id;
             ScheduleRundownItem::create($item);
         }
-
-        $this->command->info("Items rundown: ".count($items)." created.");
-        $this->command->info("\n=== SEED ITINERARY EDUWISATA SELESAI ===");
-        $this->command->info("ScheduleRundowns: ".ScheduleRundown::count());
-        $this->command->info("ScheduleRundownItems: ".ScheduleRundownItem::count());
     }
 }
