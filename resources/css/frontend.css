@@ -838,6 +838,22 @@
     color: #053d2c !important;
 }
 
+.map-header .lang-switcher {
+    background: #f8fafc !important;
+}
+
+.map-header .lang-switcher__link {
+    color: #64748b !important;
+}
+
+.map-header .lang-switcher__active {
+    color: #053d2c !important;
+}
+
+.map-header .lang-switcher__separator {
+    color: #cbd5e1 !important;
+}
+
 /* Jika ada body padding karena header fixed di halaman peta */
 body.map-page {
     padding-top: 80px !important;
