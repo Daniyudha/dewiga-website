@@ -21,13 +21,12 @@ class ScheduleRundownEduwisataSeeder extends Seeder
             'is_admin' => true,
         ]);
 
-        // --- Dependency: pastikan travel package tersedia ---
+        // --- Dependency: pastikan travel package tersedia (tanpa kolom 'duration' yang tidak ada di tabel) ---
         $travelPackage = TravelPackage::where('slug', 'paket-edukasi')->first()
             ?? TravelPackage::create([
                 'type' => 'Paket Wisata Edukasi',
                 'slug' => 'paket-edukasi',
                 'location' => 'Desa Wisata Gabugan',
-                'duration' => '1 Hari',
                 'description' => 'Paket edukasi budaya dan alam Desa Wisata Gabugan',
                 'price' => 150000,
                 'capacity' => 50,
