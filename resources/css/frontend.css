@@ -324,7 +324,7 @@
     transition: all .3s ease;
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 1440px) {
     .nav-link-desktop{
         padding: 0 0.7rem;
     }
@@ -745,4 +745,48 @@
 ========================= */
 .gslide-title{
     @apply text-lg font-semibold text-primary-900 mb-2 !important;
+}
+
+/* =========================
+   Navbar khusus halaman Peta
+   (background agar terlihat jelas tanpa banner/hero di atas)
+========================= */
+.map-header {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #ffffff !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08) !important;
+    z-index: 1000 !important;
+}
+
+.map-header .nav-link-desktop,
+.map-header .nav-dropdown-trigger {
+    color: #053d2c !important;
+}
+
+.map-header .logo-text h1 {
+    color: #053d2c !important;
+}
+
+.map-header .logo-text span {
+    color: rgba(5, 61, 44, 0.7) !important;
+}
+
+.map-header #logo-white {
+    display: none !important;
+}
+
+.map-header #logo-dark {
+    display: block !important;
+}
+
+.map-header .bx.bx-chevron-down {
+    color: #053d2c !important;
+}
+
+/* Jika ada body padding karena header fixed di halaman peta */
+body.map-page {
+    padding-top: 80px !important;
 }

@@ -95,7 +95,7 @@
     @yield('schema')
 </head>
 
-<body class="{{ App::getLocale() === 'en' ? '' : '' }}">
+<body class="{{ App::getLocale() === 'en' ? '' : '' }} @if(request()->routeIs('peta') || request()->routeIs('peta.event')) map-page @endif">
 
     {{-- Global: Make date inputs clickable on whole field --}}
     <script>
@@ -119,7 +119,7 @@
     {{-- HEADER --}}
     <header
         id="header"
-        class="absolute top-0 left-0 w-full z-50 transition-all duration-500"
+        class="absolute top-0 left-0 w-full z-50 transition-all duration-500 @if(request()->routeIs('peta') || request()->routeIs('peta.event')) map-header @endif"
     >
         <nav class="container mx-auto px-6 xl:px-0 flex items-center justify-between h-16 lg:h-20">
 
@@ -217,6 +217,31 @@
                 class="nav-link-desktop {{ request()->routeIs('activities.*') ? 'active-nav' : '' }}">
                     @lang('messages.nav.activities')
                 </a>
+
+                {{-- Map Dropdown --}}
+                <div class="nav-dropdown relative">
+                    <button
+                        class="nav-link-desktop nav-dropdown-trigger flex items-center gap-1 {{ request()->routeIs('peta') || request()->routeIs('peta.event') ? 'active-nav' : '' }}"
+                    >
+                        @lang('messages.nav.map')
+                        <i class="bx bx-chevron-down text-sm transition-transform duration-300"></i>
+                    </button>
+                    <div class="nav-dropdown-menu absolute top-full left-0 mt-1 bg-white rounded-2xl shadow-xl border border-stone-100 py-2 w-[230px] opacity-0 invisible translate-y-2 transition-all duration-300">
+                        <a href="{{ route('peta') }}"
+                        class="block px-5 py-3 text-sm text-primary-700 hover:text-primary hover:bg-primary/15 transition rounded-lg mx-2 {{ request()->routeIs('peta') ? 'text-primary font-medium bg-primary-50/60' : '' }}">
+                            <i class="bx bx-map mr-2"></i>
+                            @lang('messages.nav.map_full')
+                        </a>
+                        @php $__activeSchedule = \App\Models\Schedule::current()->first(); @endphp
+                        @if($__activeSchedule)
+                        <a href="{{ route('peta.event', $__activeSchedule) }}"
+                        class="block px-5 py-3 text-sm text-primary-700 hover:text-primary hover:bg-primary/15 transition rounded-lg mx-2 {{ request()->routeIs('peta.event') ? 'text-primary font-medium bg-primary-50/60' : '' }}">
+                            <i class="bx bx-map-pin mr-2"></i>
+                            @lang('messages.nav.map_event')
+                        </a>
+                        @endif
+                    </div>
+                </div>
 
                 <a href="{{ route('gallery') }}"
                 class="nav-link-desktop {{ request()->routeIs('gallery') ? 'active-nav' : '' }}">
@@ -364,6 +389,25 @@
                             @lang('messages.nav.activities')
                         </a>
                     </li>
+
+                    {{-- Mobile Map Links --}}
+                    <li>
+                        <a href="{{ route('peta') }}"
+                        class="mobile-nav-link {{ request()->routeIs('peta') ? 'text-primary font-medium bg-primary-50/60' : '' }}">
+                            <i class="bx bx-map"></i>
+                            @lang('messages.nav.map_full')
+                        </a>
+                    </li>
+                    @php $__activeScheduleMobile = \App\Models\Schedule::current()->first(); @endphp
+                    @if($__activeScheduleMobile)
+                    <li>
+                        <a href="{{ route('peta.event', $__activeScheduleMobile) }}"
+                        class="mobile-nav-link {{ request()->routeIs('peta.event') ? 'text-primary font-medium bg-primary-50/60' : '' }}">
+                            <i class="bx bx-map-pin"></i>
+                            @lang('messages.nav.map_event')
+                        </a>
+                    </li>
+                    @endif
 
                     <li>
                         <a href="{{ route('gallery') }}"
