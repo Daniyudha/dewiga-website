@@ -133,14 +133,14 @@
                     id="logo-white"
                     src="{{ asset('frontend/assets/img/brand-logo-white.png') }}"
                     alt="Desa Wisata Gabugan"
-                    class="h-8 lg:h-10 w-auto block"
+                    class="h-8 lg:h-10 w-auto block @if(request()->routeIs('peta') || request()->routeIs('peta.event')) hidden @endif"
                 >
                 {{-- Logo gelap untuk scroll --}}
                 <img
                     id="logo-dark"
                     src="{{ asset('frontend/assets/img/brand-logo.png') }}"
                     alt="Desa Wisata Gabugan"
-                    class="h-8 lg:h-10 w-auto hidden"
+                    class="h-8 lg:h-10 w-auto hidden @if(request()->routeIs('peta') || request()->routeIs('peta.event')) block @endif"
                 >
 
                 <div class="hidden sm:block logo-text transition-all duration-300">
@@ -308,7 +308,7 @@
                 {{-- Mobile Hamburger --}}
                 <button
                     id="nav-toggle"
-                    class="lg:hidden text-white text-3xl"
+                    class="lg:hidden text-3xl @if(request()->routeIs('peta') || request()->routeIs('peta.event')) text-[#053d2c] @else text-white @endif"
                 >
                     <i class="bx bx-menu"></i>
                 </button>
