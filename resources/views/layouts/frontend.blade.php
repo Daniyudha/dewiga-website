@@ -308,7 +308,7 @@
                 {{-- Mobile Hamburger --}}
                 <button
                     id="nav-toggle"
-                    class="lg:hidden text-3xl @if(request()->routeIs('peta') || request()->routeIs('peta.event')) text-[#053d2c] @else text-white @endif"
+                    class="lg:hidden text-3xl z-[1001] p-2 rounded-full shadow-md @if(request()->routeIs('peta') || request()->routeIs('peta.event')) bg-[#053d2c] text-white @else bg-transparent text-white @endif"
                 >
                     <i class="bx bx-menu"></i>
                 </button>
