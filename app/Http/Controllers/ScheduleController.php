@@ -53,7 +53,7 @@ class ScheduleController extends Controller
                         'package_slug' => $s->travelPackage->slug,
                         'package_id' => $s->travelPackage->id,
                         'package_url' => route('travel_package.show', $s->travelPackage->slug ?? $s->travelPackage->id),
-                        'map_url' => route('peta.event', $s),
+                        'map_url' => $s->schedule_code ? route('peta.event', $s) : null,
                         'quota' => $s->quota,
                         'booked' => $s->booked,
                         'remaining' => $s->remainingQuota(),
