@@ -106,12 +106,30 @@
                     <input type="file" id="importFile" name="file" accept=".xlsx,.xls,.csv" class="hidden">
                 </div>
 
-                <form id="importForm" action="{{ route('admin.homestay.import') }}" method="POST" enctype="multipart/form-data" class="mt-4">
+                <!-- File Preview (shown after file selected) -->
+                <div id="filePreview" class="hidden mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-center gap-3">
+                    <div class="flex-shrink-0"><i class="fas fa-file-excel text-2xl text-blue-600"></i></div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate" id="previewFileName">file.xlsx</p>
+                        <p class="text-xs text-gray-500" id="previewFileSize"></p>
+                    </div>
+                    <button type="button" onclick="resetFileSelection()" class="text-xs text-red-600 hover:text-red-800 underline">Ganti</button>
+                </div>
+
+                <button id="btnImport" type="button" class="hidden mt-4 admin-btn-primary w-full flex items-center justify-center gap-2" onclick="startImport()">
+                    <i class="fas fa-upload"></i> Import Data
+                </button>
+
+                <div id="importLoading" class="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center hidden">
+                    <div class="bg-white p-6 rounded-2xl shadow-xl flex flex-col items-center gap-3">
+                        <div class="flex-1 h-1 w-12 rounded-full bg-primary-200"><div class="h-full w-1/3 rounded-full bg-primary-600 animate-[ping_2s_cubic-bezier(0.75,0,0.25,1)_infinite]"></div></div>
+                        <p class="text-sm font-medium text-gray-700">Sedang mengimpor...</p>
+                    </div>
+                </div>
+
+                <form id="importForm" action="{{ route('admin.homestay.import') }}" method="POST" enctype="multipart/form-data" class="hidden">
                     @csrf
                     <input type="file" name="file" id="formImportFile" accept=".xlsx,.xls,.csv" class="hidden">
-                    <button type="submit" class="admin-btn-primary w-full">
-                        <i class="fas fa-upload me-1"></i> Import Data
-                    </button>
                 </form>
             </div>
         </div>
@@ -128,6 +146,8 @@
             document.body.style.overflow = '';
             document.getElementById('importFile').value = '';
             document.getElementById('formImportFile').value = '';
+            document.getElementById('filePreview').classList.add('hidden');
+            document.getElementById('btnImport').classList.add('hidden');
         }
 
         document.addEventListener('keydown', function(e) {
@@ -140,12 +160,55 @@
         const importFile = document.getElementById('importFile');
         const formImportFile = document.getElementById('formImportFile');
 
-        function submitImport(fileList) {
-            if (fileList.length > 0) {
-                const dt = new DataTransfer();
-                dt.items.add(fileList[0]);
-                formImportFile.files = dt.files;
-                document.getElementById('importForm').submit();
+        function showFilePreview(file) {
+            document.getElementById('previewFileName').textContent = file.name;
+            document.getElementById('previewFileSize').textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+            document.getElementById('filePreview').classList.remove('hidden');
+            document.getElementById('btnImport').classList.remove('hidden');
+        }
+
+        function resetFileSelection() {
+            importFile.value = '';
+            formImportFile.value = '';
+            document.getElementById('filePreview').classList.add('hidden');
+            document.getElementById('btnImport').classList.add('hidden');
+        }
+
+        async function startImport() {
+            const file = importFile.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Show loading
+            document.getElementById('importLoading').classList.remove('hidden');
+            document.getElementById('btnImport').disabled = true;
+
+            try {
+                const response = await fetch('{{ route('admin.homestay.import') }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    closeImportModal();
+                    window.location.reload();
+                } else {
+                    alert(result.message || 'Gagal mengimpor data.');
+                }
+            } catch (err) {
+                alert('Terjadi kesalahan saat mengimpor.');
+            } finally {
+                document.getElementById('importLoading').classList.add('hidden');
+                document.getElementById('btnImport').disabled = false;
             }
         }
 
@@ -163,11 +226,16 @@
         dropzoneImport.addEventListener('drop', (e) => {
             e.preventDefault();
             dropzoneImport.classList.remove('border-primary-500', 'bg-primary-50/50');
-            submitImport(e.dataTransfer.files);
+            if (e.dataTransfer.files.length > 0) {
+                importFile.files = e.dataTransfer.files;
+                showFilePreview(e.dataTransfer.files[0]);
+            }
         });
 
         importFile.addEventListener('change', () => {
-            submitImport(importFile.files);
+            if (importFile.files.length > 0) {
+                showFilePreview(importFile.files[0]);
+            }
         });
     </script>
  @endsection

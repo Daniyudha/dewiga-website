@@ -112,11 +112,29 @@ class HomestayController extends Controller
             'file' => 'required|mimes:xlsx,xls,csv',
         ]);
 
-        // Kirimkan objek UploadedFile langsung (bukan getRealPath) agar
-        // PhpSpreadsheet bisa mendeteksi tipe file dari ekstensi aslinya.
-        Excel::import(new HomestayImport, $request->file('file'));
+        try {
+            // Kirimkan objek UploadedFile langsung agar PhpSpreadsheet
+            // mendeteksi tipe file dari ekstensi aslinya.
+            Excel::import(new HomestayImport, $request->file('file'));
 
-        return back()->with(['message' => 'Homestay berhasil diimport!', 'alert-type' => 'success']);
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Homestay berhasil diimport!',
+                ]);
+            }
+
+            return back()->with(['message' => 'Homestay berhasil diimport!', 'alert-type' => 'success']);
+        } catch (\Exception $e) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage() ?: 'Gagal mengimpor data homestay.',
+                ], 422);
+            }
+
+            return back()->withErrors(['import' => $e->getMessage() ?: 'Gagal mengimpor data homestay.'])->withInput();
+        }
     }
 
     public function template()
