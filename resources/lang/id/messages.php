@@ -5,7 +5,7 @@ return [
     'nav' => [
         'home' => 'Beranda',
         'about' => 'Tentang',
-        'packages' => 'Wisata',
+        'packages' => 'Paket',
         'blog' => 'Blog',
         'gallery' => 'Galeri',
         'contact' => 'Kontak',
