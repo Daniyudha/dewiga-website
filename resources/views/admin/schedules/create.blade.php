@@ -129,14 +129,15 @@
                         @enderror
                     </div>
 
-                    {{-- Quota --}}
+                    {{-- Jumlah Tamu / Quota --}}
                     <div>
                         <label for="quota" class="block text-sm font-medium text-gray-700 mb-1">
-                            {{ __('Quota (Max Participants)') }} <span class="text-red-500">*</span>
+                            <span id="quotaLabel">{{ __('Jumlah Tamu') }}</span> <span class="text-red-500">*</span>
                         </label>
                         <input type="number" name="quota" id="quota"
                             class="admin-input w-full @error('quota') border-red-500 @enderror"
                             min="1" value="{{ old('quota', 100) }}" required>
+                        <p id="quotaHint" class="text-xs text-gray-400 mt-1">{{ __('Jumlah total tamu/rombongan') }}</p>
                         @error('quota')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
@@ -172,5 +173,23 @@
     document.getElementById('start_date').addEventListener('change', function() {
         document.getElementById('end_date').min = this.value;
     });
+
+    // Toggle label Jumlah Tamu vs Quota berdasarkan tipe schedule
+    const typeSelect = document.getElementById('type');
+    const quotaLabel = document.getElementById('quotaLabel');
+    const quotaHint = document.getElementById('quotaHint');
+
+    function updateQuotaLabel() {
+        if (typeSelect.value === 'open_trip') {
+            quotaLabel.textContent = '{{ __('Quota (Maksimal Peserta)') }}';
+            quotaHint.textContent = '{{ __('Kuota hanya berlaku untuk open trip') }}';
+        } else {
+            quotaLabel.textContent = '{{ __('Jumlah Tamu') }}';
+            quotaHint.textContent = '{{ __('Jumlah total tamu/rombongan') }}';
+        }
+    }
+
+    typeSelect.addEventListener('change', updateQuotaLabel);
+    updateQuotaLabel();
 </script>
 @endpush

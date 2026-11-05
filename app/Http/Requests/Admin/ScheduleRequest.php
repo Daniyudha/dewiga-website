@@ -45,9 +45,9 @@ class ScheduleRequest extends FormRequest
             'start_date.unique' => 'Jadwal untuk paket ini pada tanggal tersebut sudah ada',
             'end_date.date' => 'Tanggal selesai tidak valid',
             'end_date.after_or_equal' => 'Tanggal selesai harus setelah atau sama dengan tanggal mulai',
-            'quota.required' => 'Kuota wajib diisi',
-            'quota.integer' => 'Kuota harus berupa angka',
-            'quota.min' => 'Kuota minimal 1',
+            'quota.required' => 'Jumlah tamu/kuota wajib diisi',
+            'quota.integer' => 'Jumlah tamu/kuota harus berupa angka',
+            'quota.min' => 'Jumlah tamu/kuota minimal 1',
         ];
     }
 }

@@ -88,9 +88,9 @@
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Visitor') }}</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Start Date') }}</th>
                             <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('End Date') }}</th>
-                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Quota') }}</th>
-                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Booked') }}</th>
-                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Remaining') }}</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Jumlah Tamu') }}</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Terisi') }}</th>
+                            <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Sisa Kuota') }}</th>
                             <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Status') }}</th>
                             <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Actions') }}</th>
                         </tr>
@@ -131,13 +131,26 @@
                                 <td class="px-4 py-3 text-sm text-gray-700">
                                     {{ $schedule->end_date ? $schedule->end_date->format('d M Y') : '-' }}
                                 </td>
-                                <td class="px-4 py-3 text-sm text-center font-medium">{{ $schedule->quota }}</td>
-                                <td class="px-4 py-3 text-sm text-center">{{ $schedule->booked }}</td>
-                                <td class="px-4 py-3 text-sm text-center">
-                                    @if($schedule->remainingQuota() > 0)
-                                        <span class="text-green-600 font-medium">{{ $schedule->remainingQuota() }}</span>
+                                <td class="px-4 py-3 text-sm text-center font-medium">
+                                    {{ $schedule->quota }}
+                                    @if($schedule->type === 'open_trip')
+                                        <span class="block text-[10px] text-gray-400">kuota</span>
                                     @else
-                                        <span class="text-red-600 font-medium">{{ __('Full') }}</span>
+                                        <span class="block text-[10px] text-gray-400">orang</span>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3 text-sm text-center">
+                                    {{ $schedule->type === 'open_trip' ? $schedule->booked : '-' }}
+                                </td>
+                                <td class="px-4 py-3 text-sm text-center">
+                                    @if($schedule->type === 'open_trip')
+                                        @if($schedule->remainingQuota() > 0)
+                                            <span class="text-green-600 font-medium">{{ $schedule->remainingQuota() }}</span>
+                                        @else
+                                            <span class="text-red-600 font-medium">{{ __('Full') }}</span>
+                                        @endif
+                                    @else
+                                        <span class="text-gray-400">-</span>
                                     @endif
                                 </td>
                                 <td class="px-4 py-3 text-center">
