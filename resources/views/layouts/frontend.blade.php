@@ -233,7 +233,7 @@
                             @lang('messages.nav.map_full')
                         </a>
                         @php $__activeSchedule = \App\Models\Schedule::current()->first(); @endphp
-                        @if($__activeSchedule)
+                        @if($__activeSchedule && $__activeSchedule->schedule_code)
                         <a href="{{ route('peta.event', $__activeSchedule) }}"
                         class="block px-5 py-3 text-sm text-primary-700 hover:text-primary hover:bg-primary/15 transition rounded-lg mx-2 {{ request()->routeIs('peta.event') ? 'text-primary font-medium bg-primary-50/60' : '' }}">
                             <i class="bx bx-map-pin mr-2"></i>
@@ -399,7 +399,7 @@
                         </a>
                     </li>
                     @php $__activeScheduleMobile = \App\Models\Schedule::current()->first(); @endphp
-                    @if($__activeScheduleMobile)
+                    @if($__activeScheduleMobile && $__activeScheduleMobile->schedule_code)
                     <li>
                         <a href="{{ route('peta.event', $__activeScheduleMobile) }}"
                         class="mobile-nav-link {{ request()->routeIs('peta.event') ? 'text-primary font-medium bg-primary-50/60' : '' }}">

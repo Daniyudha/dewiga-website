@@ -337,10 +337,12 @@
                             </button>
                             @endif
 
+                            @if($schedule->schedule_code)
                             <a href="{{ route('peta.event', $schedule) }}" target="_blank"
                                class="mt-3 w-full inline-flex items-center justify-center gap-2 bg-[#053d2c]/5 hover:bg-[#053d2c]/10 text-[#053d2c] font-medium py-2 px-4 rounded-lg transition-colors text-sm border border-[#053d2c]/10">
                                 <i class="bx bx-map"></i> @lang('messages.map.view_event_map')
                             </a>
+                            @endif
                         </div>
                     </div>
                 @endforeach
