@@ -112,9 +112,9 @@ class HomestayController extends Controller
             'file' => 'required|mimes:xlsx,xls,csv',
         ]);
 
-        $path = $request->file('file')->getRealPath();
-
-        Excel::import(new HomestayImport, $path);
+        // Kirimkan objek UploadedFile langsung (bukan getRealPath) agar
+        // PhpSpreadsheet bisa mendeteksi tipe file dari ekstensi aslinya.
+        Excel::import(new HomestayImport, $request->file('file'));
 
         return back()->with(['message' => 'Homestay berhasil diimport!', 'alert-type' => 'success']);
     }
