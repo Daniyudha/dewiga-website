@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Http\JsonResponse;
+use Maatwebsite\Excel\Facades\Excel;
 
 class HomestayController extends Controller
 {
@@ -113,13 +114,13 @@ class HomestayController extends Controller
 
         $path = $request->file('file')->getRealPath();
 
-        \Excel::import(new HomestayImport, $path);
+        Excel::import(new HomestayImport, $path);
 
         return back()->with(['message' => 'Homestay berhasil diimport!', 'alert-type' => 'success']);
     }
 
     public function template()
     {
-        return \Excel::download(new HomestayExport, 'homestay_template.xlsx');
+        return Excel::download(new HomestayExport, 'homestay_template.xlsx');
     }
 }
